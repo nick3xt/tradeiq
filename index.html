@@ -249,16 +249,16 @@ img{display:block;max-width:100%}
 .my-roster.show{display:block}
 .my-roster header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap}
 .my-roster h3{margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
-.my-roster .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.my-roster .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
 .r-card{
   display:flex;align-items:center;gap:10px;background:var(--panel-2);border:1px solid var(--line);
   border-radius:8px;padding:8px 10px;cursor:pointer;transition:all .15s
 }
 .r-card:hover{border-color:var(--green);transform:translateY(-1px)}
-.r-card .av{width:30px;height:30px;border-radius:50%;background:#2a3960;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.r-card .av{width:30px;height:30px;border-radius:50%;background:#2a3960;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
 .r-card .info{flex:1;min-width:0}
-.r-card .nm{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.r-card .sub{font-size:10px;color:var(--ink-3)}
+.r-card .nm{font-size:12px;font-weight:600;white-space:normal;line-height:1.25;word-break:break-word}
+.r-card .sub{font-size:10px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .r-card .vl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);font-weight:700}
 
 /* Modal */
@@ -2132,6 +2132,13 @@ function showToast(msg, kind){
   clearTimeout(showToast._t);
   showToast._t = setTimeout(()=>{ t.className = "toast"; }, 2400);
 }
+function hideToast(){
+  const t = $("#toast");
+  if(!t) return;
+  t.className = "toast";
+  t.textContent = "";
+  clearTimeout(showToast._t);
+}
 
 // =================================================================
 // TICKER
@@ -2883,18 +2890,43 @@ bindOptGroup("sleeper-modal","season");
 
 let sleeperUserId = null;
 let sleeperPlayersCache = null;
+let sleeperLeaguesCache = {}; // league_id -> full league object
 
 async function fetchSleeperPlayers(){
   if(sleeperPlayersCache) return sleeperPlayersCache;
-  try{
-    const r = await fetch("https://api.sleeper.app/v1/players/nfl");
-    if(!r.ok) throw new Error("players fetch failed");
-    sleeperPlayersCache = await r.json();
-    return sleeperPlayersCache;
-  } catch(e){
-    showToast("Couldn't load Sleeper player db", "err");
-    return null;
-  }
+  const r = await fetch("https://api.sleeper.app/v1/players/nfl");
+  if(!r.ok) throw new Error(`Sleeper player DB fetch failed (HTTP ${r.status})`);
+  sleeperPlayersCache = await r.json();
+  return sleeperPlayersCache;
+}
+
+// Map Sleeper league settings → app PROFILE shape.
+function detectProfileFromLeague(league){
+  const out = {};
+  // Team count
+  const tc = parseInt((league.settings && league.settings.num_teams) || league.total_rosters || 12, 10);
+  if([8,10,12,14].includes(tc)) out.teams = tc;
+  else if(tc <= 9) out.teams = 8;
+  else if(tc === 11) out.teams = 10;
+  else if(tc === 13) out.teams = 12;
+  else out.teams = 14;
+  // Format: superflex if any roster slot is SUPER_FLEX or QB count > 1
+  const positions = league.roster_positions || [];
+  const qbSlots = positions.filter(p => p === "QB").length;
+  const hasSF   = positions.includes("SUPER_FLEX");
+  out.format = (hasSF || qbSlots > 1) ? "superflex" : "standard";
+  // Scoring: rec value
+  const ss  = league.scoring_settings || {};
+  const rec = Number(ss.rec || 0);
+  if(rec >= 0.9)      out.scoring = "ppr";
+  else if(rec >= 0.4) out.scoring = "half";
+  else                out.scoring = "standard";
+  // TE Premium: bonus_rec_te is the *extra* per-rec for TEs
+  const teBonus = Number(ss.bonus_rec_te || 0);
+  if(teBonus >= 0.9)      out.tep = "1";
+  else if(teBonus >= 0.4) out.tep = "0.5";
+  else                    out.tep = "0";
+  return out;
 }
 
 $("#btn-fetch-sleeper").onclick = async () => {
@@ -2906,23 +2938,25 @@ $("#btn-fetch-sleeper").onclick = async () => {
   btn.disabled = true;
   try{
     const userR = await fetch(`https://api.sleeper.app/v1/user/${encodeURIComponent(username)}`);
-    if(!userR.ok) throw new Error("User not found");
+    if(!userR.ok) throw new Error(userR.status === 404 ? `User "${username}" not found` : `User lookup failed (HTTP ${userR.status})`);
     const user = await userR.json();
     if(!user || !user.user_id){
       throw new Error(`Sleeper returned no user_id for "${username}"`);
     }
     sleeperUserId = String(user.user_id);
     const lgR = await fetch(`https://api.sleeper.app/v1/user/${sleeperUserId}/leagues/nfl/${season}`);
-    if(!lgR.ok) throw new Error("Leagues fetch failed");
+    if(!lgR.ok) throw new Error(`Leagues fetch failed (HTTP ${lgR.status})`);
     const leagues = await lgR.json();
+    sleeperLeaguesCache = {};
+    leagues.forEach(l => { sleeperLeaguesCache[l.league_id] = l; });
     if(!leagues.length){
-      $("#sleeper-leagues").innerHTML = `<div class="empty-state" style="margin-top:10px">No ${season} dynasty leagues found for that user. Try the other season toggle.</div>`;
+      $("#sleeper-leagues").innerHTML = `<div class="empty-state" style="margin-top:10px">No ${season} leagues found for that user. Try the other season toggle.</div>`;
     } else {
       $("#sleeper-leagues").innerHTML = `
         <label style="display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:14px 0 8px;font-weight:700">Pick a League</label>
         <div class="league-list">
         ${leagues.map(l => `
-          <div class="league-row" data-id="${l.league_id}" data-name="${l.name.replace(/"/g,'&quot;')}">
+          <div class="league-row" data-id="${l.league_id}">
             <div>
               <div class="lg-name">${l.name}</div>
               <div class="lg-meta">${l.total_rosters} teams • ${l.season} • ${l.settings && l.settings.type === 2 ? "Dynasty" : "Redraft"}</div>
@@ -2931,9 +2965,10 @@ $("#btn-fetch-sleeper").onclick = async () => {
           </div>`).join("")}
         </div>
       `;
-      $$(".league-row").forEach(r => r.onclick = () => loadSleeperRoster(r.dataset.id, r.dataset.name));
+      $$(".league-row").forEach(r => r.onclick = () => loadSleeperRoster(r.dataset.id));
     }
   } catch(e){
+    console.error("[Sleeper] fetch leagues failed", e);
     showToast(e.message || "Sleeper fetch failed", "err");
   } finally {
     btn.innerHTML = "Fetch Leagues";
@@ -2941,71 +2976,171 @@ $("#btn-fetch-sleeper").onclick = async () => {
   }
 };
 
-async function loadSleeperRoster(leagueId, leagueName){
+async function loadSleeperRoster(leagueId){
+  const league = sleeperLeaguesCache[leagueId];
+  if(!league){ showToast("League info missing — re-fetch leagues", "err"); return; }
+  const leagueName = league.name;
   const btn = $("#btn-fetch-sleeper");
+  const leaguesEl = $("#sleeper-leagues");
+  const prevLeaguesHTML = leaguesEl.innerHTML;
+  // Clear any stale toast from a prior attempt — prevents "Roster load failed"
+  // from a previous click lingering into a new successful load.
+  hideToast();
   btn.innerHTML = '<span class="spinner"></span> Loading roster…';
   btn.disabled = true;
+  leaguesEl.innerHTML = `<div class="empty-state" style="margin-top:14px;display:flex;align-items:center;gap:10px;justify-content:center"><span class="spinner"></span> Loading roster from ${leagueName}…</div>`;
+
+  // Step 1: rosters
+  let rosters;
   try{
-    const [rostersR, tradedPicksR, players] = await Promise.all([
-      fetch(`https://api.sleeper.app/v1/league/${leagueId}/rosters`).then(r=>r.ok?r.json():Promise.reject("rosters")),
-      fetch(`https://api.sleeper.app/v1/league/${leagueId}/traded_picks`).then(r=>r.ok?r.json():[]).catch(()=>[]),
-      fetchSleeperPlayers()
-    ]);
-    // Robust owner match — coerce both sides to string and also check co_owners
-    const wantId = String(sleeperUserId);
-    const mine = rostersR.find(r => {
-      if(String(r.owner_id) === wantId) return true;
-      if(Array.isArray(r.co_owners) && r.co_owners.map(String).includes(wantId)) return true;
-      return false;
-    });
-    if(!mine){
-      const ownerIds = rostersR.map(r => r.owner_id).join(", ");
-      console.warn("[Sleeper] roster match failed", {wantId, rosters:rostersR.map(r=>({owner:r.owner_id,co:r.co_owners}))});
-      showToast(`Found ${rostersR.length} rosters, none matched user_id ${wantId}. Owners: ${ownerIds.slice(0,80)}${ownerIds.length>80?"…":""}`, "err");
-      return;
+    const r = await fetch(`https://api.sleeper.app/v1/league/${leagueId}/rosters`);
+    if(!r.ok) throw new Error(`Rosters fetch failed (HTTP ${r.status})`);
+    rosters = await r.json();
+    if(!Array.isArray(rosters) || rosters.length === 0){
+      throw new Error("Sleeper returned no rosters for this league");
     }
-    const ids = mine.players || [];
-    const myPlayers = [];
-    for(const id of ids){
-      const sp = players && players[id];
-      if(!sp) continue;
-      const fullName = sp.full_name || ((sp.first_name||"")+" "+(sp.last_name||"")).trim();
-      const norm = slug(fullName);
-      const match = PLAYERS.find(p => slug(p.n) === norm);
-      if(match){
-        myPlayers.push({...match, type:"player"});
-      } else if(["QB","RB","WR","TE"].includes(sp.position)){
-        // unknown player — synthesize stub with low value
-        myPlayers.push({
-          n: fullName,
-          p: sp.position,
-          t: sp.team || "FA",
-          a: sp.age || 26,
-          ktc: 1200, fc:1200, dp:1200, sleeper:1200,
-          type:"player",
-          stub:true
-        });
+  } catch(e){
+    console.error("[Sleeper] rosters fetch error", e);
+    showToast(`Roster load failed: ${e.message || e}`, "err");
+    leaguesEl.innerHTML = prevLeaguesHTML;
+    btn.innerHTML = "Fetch Leagues"; btn.disabled = false;
+    return;
+  }
+
+  // Step 2: match owner — try direct, then co_owners, then users API by display_name
+  const wantId = String(sleeperUserId);
+  let mine = rosters.find(r => {
+    if(String(r.owner_id) === wantId) return true;
+    if(Array.isArray(r.co_owners) && r.co_owners.map(String).includes(wantId)) return true;
+    return false;
+  });
+  if(!mine){
+    try{
+      const uR = await fetch(`https://api.sleeper.app/v1/league/${leagueId}/users`);
+      if(uR.ok){
+        const users = await uR.json();
+        const me = users.find(u => String(u.user_id) === wantId);
+        if(me){
+          // Re-attempt owner match via the user record we found
+          mine = rosters.find(r => String(r.owner_id) === String(me.user_id));
+        }
+        if(!mine){
+          const names = users.slice(0,10).map(u => u.display_name).filter(Boolean).join(", ");
+          console.warn("[Sleeper] no roster owned by user", {wantId, users});
+          showToast(`No roster owned by user_id ${wantId} in this league (members: ${names}…)`, "err");
+          leaguesEl.innerHTML = prevLeaguesHTML;
+          btn.innerHTML = "Fetch Leagues"; btn.disabled = false;
+          return;
+        }
+      }
+    } catch(e){
+      console.warn("[Sleeper] users fallback failed", e);
+    }
+  }
+  if(!mine){
+    const ownerIds = rosters.map(r => r.owner_id).filter(Boolean).join(", ");
+    showToast(`Found ${rosters.length} rosters, none matched user_id ${wantId}.`, "err");
+    console.warn("[Sleeper] roster match failed", {wantId, ownerIds});
+    leaguesEl.innerHTML = prevLeaguesHTML;
+    btn.innerHTML = "Fetch Leagues"; btn.disabled = false;
+    return;
+  }
+
+  // Step 3: player DB (cached after first call). Big payload — show spinner.
+  let players;
+  try{
+    leaguesEl.innerHTML = `<div class="empty-state" style="margin-top:14px;display:flex;align-items:center;gap:10px;justify-content:center"><span class="spinner"></span> Fetching player database (~5MB, first load only)…</div>`;
+    players = await fetchSleeperPlayers();
+  } catch(e){
+    console.error("[Sleeper] player db fetch error", e);
+    showToast(`Roster load failed: ${e.message || e}`, "err");
+    leaguesEl.innerHTML = prevLeaguesHTML;
+    btn.innerHTML = "Fetch Leagues"; btn.disabled = false;
+    return;
+  }
+
+  // Step 4: traded picks (best-effort)
+  let tradedPicks = [];
+  try{
+    const r = await fetch(`https://api.sleeper.app/v1/league/${leagueId}/traded_picks`);
+    if(r.ok) tradedPicks = await r.json();
+  } catch(e){
+    console.warn("[Sleeper] traded_picks fetch failed (non-fatal)", e);
+  }
+
+  // Step 5: map player IDs → names → app PLAYERS (last-name fuzzy fallback)
+  const ids = mine.players || [];
+  const myPlayers = [];
+  let unmatched = 0;
+  for(const id of ids){
+    const sp = players && players[id];
+    if(!sp) continue;
+    const fullName = sp.full_name || ((sp.first_name||"")+" "+(sp.last_name||"")).trim();
+    if(!fullName) continue;
+    const norm = slug(fullName);
+    let match = PLAYERS.find(p => slug(p.n) === norm);
+    if(!match && sp.last_name && sp.position){
+      // fuzzy: same position + last name match
+      const lastSlug = slug(sp.last_name);
+      match = PLAYERS.find(p => p.p === sp.position && slug(p.n.split(/\s+/).slice(-1)[0]) === lastSlug);
+    }
+    if(match){
+      myPlayers.push({...match, type:"player"});
+    } else if(["QB","RB","WR","TE"].includes(sp.position)){
+      myPlayers.push({
+        n: fullName,
+        p: sp.position,
+        t: sp.team || "FA",
+        a: sp.age || 26,
+        ktc: 1200, fc:1200, dp:1200, sleeper:1200,
+        type:"player",
+        stub:true
+      });
+      unmatched++;
+    }
+  }
+
+  const myPicks = (Array.isArray(tradedPicks) ? tradedPicks : [])
+    .filter(p => String(p.owner_id) === String(mine.roster_id))
+    .map(p => {
+      const base = { type:"pick", year: Number(p.season), round: Number(p.round), slot: "mid" };
+      return { ...base, value: pickValue(base) };
+    });
+
+  state.myRoster = { leagueName, leagueId, players: myPlayers, picks: myPicks };
+  try{ localStorage.setItem(ROSTER_KEY, JSON.stringify(state.myRoster)); } catch(e){}
+
+  // Auto-detect league format from Sleeper settings and apply to PROFILE
+  try{
+    const detected = detectProfileFromLeague(league);
+    PROFILE = { ...PROFILE, ...detected };
+    saveProfile(PROFILE);
+    profileBar();
+  } catch(e){
+    console.warn("[Sleeper] profile auto-detect failed (non-fatal)", e);
+  }
+
+  // Make imported roster available to YOU GIVE / YOU GET search via the global PLAYERS list
+  // (stub players that aren't in the static DB are added so search can find them).
+  if(unmatched > 0){
+    for(const mp of myPlayers){
+      if(mp.stub && !PLAYERS.some(p => slug(p.n) === slug(mp.n))){
+        PLAYERS.push({ n:mp.n, p:mp.p, t:mp.t, a:mp.a, ktc:mp.ktc, fc:mp.fc, dp:mp.dp, sleeper:mp.sleeper });
       }
     }
-    const myPicks = (Array.isArray(tradedPicksR) ? tradedPicksR : [])
-      .filter(p => String(p.owner_id) === String(mine.roster_id))
-      .map(p => {
-        const base = { type:"pick", year: Number(p.season), round: Number(p.round), slot: "mid" };
-        return { ...base, value: pickValue(base) };
-      });
-    state.myRoster = { leagueName, leagueId, players: myPlayers, picks: myPicks };
-    localStorage.setItem(ROSTER_KEY, JSON.stringify(state.myRoster));
-    analyzeTeamNeeds();
-    renderRoster();
-    closeModal("#sleeper-modal");
-    const pickMsg = myPicks.length ? ` + ${myPicks.length} picks` : "";
-    showToast(`Imported ${myPlayers.length} players${pickMsg} from ${leagueName}`, "ok");
-  } catch(e){
-    showToast("Roster load failed", "err");
-  } finally {
-    btn.innerHTML = "Fetch Leagues";
-    btn.disabled = false;
   }
+
+  analyzeTeamNeeds();
+  rerenderAll();
+  renderRoster();
+  closeModal("#sleeper-modal");
+
+  const pickMsg = myPicks.length ? ` + ${myPicks.length} picks` : "";
+  const stubMsg = unmatched ? ` (${unmatched} not in DB)` : "";
+  showToast(`✓ Roster loaded — ${myPlayers.length} players${pickMsg}${stubMsg}`, "ok");
+
+  btn.innerHTML = "Fetch Leagues";
+  btn.disabled = false;
 }
 
 function renderRoster(){
@@ -3016,7 +3151,8 @@ function renderRoster(){
   $("#my-roster-title").innerHTML = `My Roster <span style="color:var(--ink-3);font-weight:500;letter-spacing:0;text-transform:none;margin-left:6px;font-size:11px">${r.leagueName} · click an asset to add to "You Give"</span>`;
   const all = [...(r.players||[]), ...(r.picks||[])];
   const sorted = all.sort((a,b)=>assetValue(b)-assetValue(a));
-  $("#roster-grid").innerHTML = sorted.map((a,i) => {
+  const grid = $("#roster-grid");
+  grid.innerHTML = sorted.map((a,i) => {
     if(a.type === "pick"){
       return `
     <div class="r-card" data-i="${i}">
@@ -3032,15 +3168,16 @@ function renderRoster(){
       <div class="vl">${num(assetValue(a))}</div>
     </div>`;
   }).join("");
-  $$(".r-card","#roster-grid").forEach(card => {
-    card.onclick = () => {
-      const i = parseInt(card.dataset.i,10);
-      const a = sorted[i];
-      addAsset("give", {...a});
-      const label = a.type === "pick" ? `${a.year} R${a.round}` : a.n;
-      showToast(`Added ${label} to "You Give"`, "ok");
-    };
-  });
+  grid.onclick = (ev) => {
+    const card = ev.target.closest(".r-card");
+    if(!card || !grid.contains(card)) return;
+    const i = parseInt(card.dataset.i,10);
+    const a = sorted[i];
+    if(!a) return;
+    addAsset("give", {...a});
+    const label = a.type === "pick" ? `${a.year} R${a.round}` : a.n;
+    showToast(`Added ${label} to "You Give"`, "ok");
+  };
 }
 
 $("#btn-roster-clear").onclick = () => {
