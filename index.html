@@ -88,6 +88,8 @@ img{display:block;max-width:100%}
 .btn:hover{background:var(--panel-2);border-color:#3a4d7c}
 .btn.primary{background:var(--green);color:#04140a;border-color:var(--green)}
 .btn.primary:hover{background:#00e878;border-color:#00e878}
+.btn.settings{background:var(--panel);color:#fff;border:1px solid rgba(255,255,255,.55);font-weight:700}
+.btn.settings:hover{background:var(--panel-2);border-color:#fff}
 .btn.danger{background:transparent;color:var(--red);border-color:rgba(255,71,87,.4)}
 .btn.danger:hover{background:rgba(255,71,87,.1)}
 .btn.ghost{background:transparent}
@@ -595,9 +597,11 @@ img{display:block;max-width:100%}
 .movers-head h3{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-2);margin:0;font-weight:700}
 .movers-head h3 .subtitle{font-size:11px;color:var(--ink-3);margin-left:10px;text-transform:none;letter-spacing:0;font-weight:400}
 .movers-strip{
-  display:flex;flex-wrap:nowrap;gap:10px;overflow-x:auto;padding:6px 2px 14px;
+  display:flex;flex-wrap:nowrap;gap:10px;overflow-x:auto;overflow-y:hidden;padding:6px 2px 14px;
   scrollbar-width:thin;scrollbar-color:var(--line-2) transparent;
-  -webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;touch-action:pan-x
+  -webkit-overflow-scrolling:touch;touch-action:pan-x;
+  width:100%;max-width:100%;min-width:0;
+  overscroll-behavior-x:contain
 }
 .movers-strip::-webkit-scrollbar{height:8px}
 .movers-strip::-webkit-scrollbar-track{background:transparent}
@@ -618,6 +622,7 @@ img{display:block;max-width:100%}
 .mover-card .trend.up{color:var(--green)}
 .mover-card .trend.down{color:var(--red)}
 .mover-section-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.mover-bucket{min-width:0;overflow:hidden}
 .mover-bucket .bucket-label{
   font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
   color:var(--ink-3);margin:0 0 8px 2px;display:flex;align-items:center;gap:6px
@@ -870,7 +875,7 @@ img{display:block;max-width:100%}
   .asset .num { font-size: 17px; }
   .side-total .val { font-size: 19px; }
   .tiers-grid { grid-template-columns: 1fr; }
-  #btn-import { display: none; }   /* hide on very narrow, still accessible via ⚙ League */
+  #btn-import { font-size: 11px; padding: 8px 9px; }
 }
 
 
@@ -992,7 +997,10 @@ img{display:block;max-width:100%}
   border-radius:10px;
   margin:0 0 18px;
   overflow:hidden;
+  min-width:0;
 }
+.alerts-buckets{ min-width:0; }
+.alert-card{ flex-shrink:0; }
 .alerts-head{
   padding:14px 18px 10px;
   border-bottom:1px solid #1a2540;
@@ -1021,11 +1029,19 @@ img{display:block;max-width:100%}
 .alert-bucket-label.buy{ color:#00ff88; }
 .alerts-strip{
   display:flex;
+  flex-wrap:nowrap;
   gap:10px;
   overflow-x:auto;
+  overflow-y:hidden;
   padding-bottom:6px;
   scrollbar-width:thin;
   scrollbar-color:#1e2d45 transparent;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-x;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overscroll-behavior-x:contain;
 }
 .alerts-strip::-webkit-scrollbar{ height:4px; }
 .alerts-strip::-webkit-scrollbar-track{ background:transparent; }
@@ -1083,7 +1099,7 @@ img{display:block;max-width:100%}
   <div class="header-row">
     <div class="spacer"></div>
     <button class="btn ghost" id="btn-import"><span>⬇</span> Import from Sleeper</button>
-    <button class="btn primary" id="btn-profile">⚙ Set League Format</button>
+    <button class="btn settings" id="btn-profile">⚙ Set League Format</button>
     <button class="btn ghost" id="btn-howitworks">How We Grade</button>
     <button class="btn ghost" id="btn-clear">Reset</button>
   </div>
@@ -1529,12 +1545,12 @@ const PLAYERS = [
 {n:"Shedeur Sanders",p:"QB",t:"CLE",a:25,ktc:5400,fc:5300,dp:5500,sleeper:5400},
 
 // RBs
-{n:"Bijan Robinson",p:"RB",t:"ATL",a:24,ktc:8550,fc:8600,dp:8500,sleeper:8500},
-{n:"Jahmyr Gibbs",p:"RB",t:"DET",a:24,ktc:8400,fc:8350,dp:8450,sleeper:8400},
-{n:"Saquon Barkley",p:"RB",t:"PHI",a:30,ktc:6660,fc:6750,dp:6390,sleeper:6660},
-{n:"Breece Hall",p:"RB",t:"NYJ",a:26,ktc:8200,fc:8150,dp:8100,sleeper:8200},
-{n:"De'Von Achane",p:"RB",t:"MIA",a:23,ktc:8100,fc:8050,dp:8000,sleeper:8100},
-{n:"Ashton Jeanty",p:"RB",t:"LV",a:23,ktc:9270,fc:9218,dp:9373,sleeper:9270},
+{n:"Bijan Robinson",p:"RB",t:"ATL",a:24,ktc:11250,fc:11150,dp:11200,sleeper:11200},
+{n:"Jahmyr Gibbs",p:"RB",t:"DET",a:24,ktc:10850,fc:10750,dp:10800,sleeper:10800},
+{n:"Saquon Barkley",p:"RB",t:"PHI",a:30,ktc:7400,fc:7300,dp:7350,sleeper:7400},
+{n:"Breece Hall",p:"RB",t:"NYJ",a:26,ktc:9150,fc:9050,dp:9100,sleeper:9100},
+{n:"De'Von Achane",p:"RB",t:"MIA",a:23,ktc:9250,fc:9150,dp:9200,sleeper:9200},
+{n:"Ashton Jeanty",p:"RB",t:"LV",a:23,ktc:11250,fc:11150,dp:11250,sleeper:11200},
 {n:"Omarion Hampton",p:"RB",t:"LAC",a:23,ktc:7931,fc:7880,dp:8034,sleeper:7931},
 {n:"TreVeyon Henderson",p:"RB",t:"NE",a:23,ktc:7725,fc:7622,dp:7828,sleeper:7725},
 {n:"Quinshon Judkins",p:"RB",t:"CLE",a:23,ktc:7416,fc:7364,dp:7519,sleeper:7416},
@@ -1566,18 +1582,18 @@ const PLAYERS = [
 
 // WRs
 {n:"Ja'Marr Chase",p:"WR",t:"CIN",a:26,ktc:11500,fc:11450,dp:11350,sleeper:11500},
-{n:"Justin Jefferson",p:"WR",t:"MIN",a:26,ktc:9050,fc:9100,dp:8950,sleeper:9050},
-{n:"CeeDee Lamb",p:"WR",t:"DAL",a:26,ktc:8824,fc:8872,dp:8726,sleeper:8824},
-{n:"Malik Nabers",p:"WR",t:"NYG",a:24,ktc:9064,fc:9012,dp:9167,sleeper:9064},
-{n:"Puka Nacua",p:"WR",t:"LAR",a:24,ktc:7200,fc:7100,dp:7000,sleeper:7100},
-{n:"Brian Thomas Jr",p:"WR",t:"JAX",a:23,ktc:6500,fc:6400,dp:6300,sleeper:6400},
-{n:"Marvin Harrison Jr",p:"WR",t:"ARI",a:22,ktc:8000,fc:7900,dp:8200,sleeper:8000},
-{n:"Drake London",p:"WR",t:"ATL",a:26,ktc:7900,fc:7850,dp:7950,sleeper:7900},
-{n:"Amon-Ra St. Brown",p:"WR",t:"DET",a:28,ktc:7898,fc:7995,dp:7800,sleeper:7898},
-{n:"Garrett Wilson",p:"WR",t:"NYJ",a:27,ktc:7600,fc:7700,dp:7500,sleeper:7600},
-{n:"Rome Odunze",p:"WR",t:"CHI",a:25,ktc:7300,fc:7250,dp:7400,sleeper:7300},
-{n:"Tetairoa McMillan",p:"WR",t:"CAR",a:24,ktc:8446,fc:8394,dp:8549,sleeper:8446},
-{n:"Travis Hunter",p:"WR",t:"JAX",a:24,ktc:8755,fc:8704,dp:8858,sleeper:8755},
+{n:"Justin Jefferson",p:"WR",t:"MIN",a:26,ktc:10550,fc:10450,dp:10550,sleeper:10500},
+{n:"CeeDee Lamb",p:"WR",t:"DAL",a:26,ktc:10050,fc:9950,dp:10050,sleeper:10000},
+{n:"Malik Nabers",p:"WR",t:"NYG",a:24,ktc:9050,fc:8950,dp:9050,sleeper:9000},
+{n:"Puka Nacua",p:"WR",t:"LAR",a:24,ktc:9350,fc:9250,dp:9350,sleeper:9300},
+{n:"Brian Thomas Jr",p:"WR",t:"JAX",a:23,ktc:8850,fc:8750,dp:8850,sleeper:8800},
+{n:"Marvin Harrison Jr",p:"WR",t:"ARI",a:22,ktc:8850,fc:8750,dp:8850,sleeper:8800},
+{n:"Drake London",p:"WR",t:"ATL",a:26,ktc:8450,fc:8350,dp:8450,sleeper:8400},
+{n:"Amon-Ra St. Brown",p:"WR",t:"DET",a:28,ktc:9350,fc:9250,dp:9350,sleeper:9300},
+{n:"Garrett Wilson",p:"WR",t:"NYJ",a:27,ktc:8050,fc:7950,dp:8050,sleeper:8000},
+{n:"Rome Odunze",p:"WR",t:"CHI",a:25,ktc:7750,fc:7650,dp:7750,sleeper:7700},
+{n:"Tetairoa McMillan",p:"WR",t:"CAR",a:24,ktc:8250,fc:8150,dp:8250,sleeper:8200},
+{n:"Travis Hunter",p:"WR",t:"JAX",a:24,ktc:8050,fc:7950,dp:8050,sleeper:8000},
 {n:"Luther Burden III",p:"WR",t:"CHI",a:23,ktc:7313,fc:7262,dp:7416,sleeper:7313},
 {n:"Emeka Egbuka",p:"WR",t:"TB",a:24,ktc:7210,fc:7158,dp:7313,sleeper:7210},
 {n:"Matthew Golden",p:"WR",t:"GB",a:23,ktc:7622,fc:7570,dp:7725,sleeper:7622},
