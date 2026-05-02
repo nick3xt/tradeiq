@@ -398,6 +398,24 @@ img{display:block;max-width:100%}
   text-align:center
 }
 .share-preview canvas{max-width:100%;border-radius:8px;border:1px solid var(--line-2)}
+
+/* Pick Value Chart (Bloomberg-style heat map) */
+.pick-chart-section{margin:32px auto 0;max-width:1200px;padding:0 16px;color:var(--ink)}
+.pick-chart-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.pick-chart-header h3{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-2);margin:0;font-weight:700}
+.pick-chart-header h3 .subtitle{font-size:11px;color:var(--ink-3);margin-left:10px;text-transform:none;letter-spacing:0;font-weight:400}
+.pick-chart-meta{font-size:11px;color:var(--ink-3);font-family:ui-monospace,'SF Mono','Menlo',monospace;letter-spacing:0.5px}
+.pick-chart-grid{display:grid;grid-template-columns:90px repeat(4,1fr);gap:1px;background:#000;padding:1px;border:1px solid #1a2238;border-radius:6px;overflow:hidden}
+.pick-chart-cell{padding:14px 10px;background:#0c1322;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:64px;transition:background .25s ease}
+.pick-chart-cell.header-cell{background:#06091a;color:var(--ink-3);font-size:10px;letter-spacing:1.2px;text-transform:uppercase;font-weight:700;font-family:ui-monospace,'SF Mono','Menlo',monospace}
+.pick-chart-cell.row-label{background:#06091a;color:var(--ink-2);font-size:11px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;font-family:ui-monospace,'SF Mono','Menlo',monospace}
+.pick-chart-cell.value-cell .cell-value{font-size:17px;font-weight:800;color:#fff;letter-spacing:-0.4px;font-family:ui-monospace,'SF Mono','Menlo',monospace;line-height:1}
+.pick-chart-cell.value-cell .cell-sub{font-size:9px;color:rgba(255,255,255,0.7);margin-top:4px;letter-spacing:0.4px;font-family:ui-monospace,'SF Mono','Menlo',monospace}
+.pick-chart-legend{margin-top:10px;display:flex;align-items:center;gap:6px;font-size:10px;color:var(--ink-3);letter-spacing:0.4px;flex-wrap:wrap}
+.pick-chart-legend .legend-swatch{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid rgba(255,255,255,0.08)}
+.pick-chart-legend .legend-label{margin-right:8px;color:var(--ink-3)}
+.pick-chart-legend .legend-spacer{flex:1}
+
 </style>
 </head>
 <body>
@@ -478,6 +496,27 @@ img{display:block;max-width:100%}
     </header>
     <div class="grid" id="roster-grid"></div>
   </div>
+
+  <!-- PICK VALUE CHART -->
+  <section class="pick-chart-section" id="pick-chart-section">
+    <header class="pick-chart-header">
+      <h3>Pick Values <span class="subtitle">Live Futures · Round × Year Heat Map · Mid pick value</span></h3>
+      <div class="pick-chart-meta" id="pick-chart-meta"></div>
+    </header>
+    <div class="pick-chart-grid" id="pick-chart-grid"></div>
+    <div class="pick-chart-legend">
+      <span class="legend-label">MID shown · TOP / LATE in subscript ·</span>
+      <span class="legend-swatch" style="background:#0a4d28"></span><span>Premium</span>
+      <span class="legend-swatch" style="background:#1f6b32"></span><span>High</span>
+      <span class="legend-swatch" style="background:#3a8a47"></span><span>Mid</span>
+      <span class="legend-swatch" style="background:#7a8c3d"></span><span>Fade</span>
+      <span class="legend-swatch" style="background:#8a5a30"></span><span>Low</span>
+      <span class="legend-swatch" style="background:#5a2828"></span><span>Distant</span>
+      <span class="legend-spacer"></span>
+      <span>Recalculates live on league setting changes</span>
+    </div>
+  </section>
+
 </main>
 
 <!-- PROFILE MODAL -->
@@ -974,7 +1013,83 @@ const PLAYERS = [
 {n:"Harold Fannin Jr",p:"TE",t:"CLE",a:21,ktc:3700,fc:3650,dp:3800,sleeper:3700},
 {n:"Logan Thomas",p:"TE",t:"FA",a:34,ktc:200,fc:300,dp:100,sleeper:200},
 {n:"Taysom Hill",p:"TE",t:"NO",a:35,ktc:1100,fc:1200,dp:1000,sleeper:1100},
-{n:"Noah Gray",p:"TE",t:"KC",a:27,ktc:800,fc:850,dp:750,sleeper:800}
+{n:"Noah Gray",p:"TE",t:"KC",a:27,ktc:800,fc:850,dp:750,sleeper:800},
+// --- Newly added: depth QBs & 2025 holdovers not yet listed ---
+{n:"Justin Fields",p:"QB",t:"NYJ",a:27,ktc:3200,fc:3300,dp:3100,sleeper:3200},
+{n:"Hendon Hooker",p:"QB",t:"DET",a:28,ktc:1400,fc:1500,dp:1300,sleeper:1400},
+{n:"Spencer Rattler",p:"QB",t:"NO",a:25,ktc:1900,fc:2000,dp:1800,sleeper:1900},
+{n:"Gardner Minshew",p:"QB",t:"KC",a:30,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Tyler Shough",p:"QB",t:"NO",a:26,ktc:4800,fc:4750,dp:4900,sleeper:4800},
+{n:"Jalen Milroe",p:"QB",t:"SEA",a:23,ktc:3800,fc:3750,dp:3900,sleeper:3800},
+{n:"Dillon Gabriel",p:"QB",t:"CLE",a:25,ktc:1600,fc:1550,dp:1700,sleeper:1600},
+{n:"Quinn Ewers",p:"QB",t:"MIA",a:23,ktc:2400,fc:2350,dp:2500,sleeper:2400},
+{n:"Will Howard",p:"QB",t:"PIT",a:24,ktc:2200,fc:2150,dp:2300,sleeper:2200},
+// --- Newly added: depth RBs & rotational pieces ---
+{n:"Brian Robinson Jr",p:"RB",t:"WAS",a:26,ktc:3100,fc:3200,dp:3000,sleeper:3100},
+{n:"Zamir White",p:"RB",t:"LV",a:26,ktc:1300,fc:1400,dp:1200,sleeper:1300},
+{n:"Jerome Ford",p:"RB",t:"CLE",a:26,ktc:1900,fc:2000,dp:1800,sleeper:1900},
+{n:"Jordan Mason",p:"RB",t:"MIN",a:27,ktc:2800,fc:2900,dp:2700,sleeper:2800},
+{n:"Emanuel Wilson",p:"RB",t:"GB",a:26,ktc:1600,fc:1700,dp:1500,sleeper:1600},
+{n:"Jaleel McLaughlin",p:"RB",t:"DEN",a:26,ktc:1300,fc:1400,dp:1200,sleeper:1300},
+{n:"Ty Chandler",p:"RB",t:"MIN",a:27,ktc:1100,fc:1200,dp:1000,sleeper:1100},
+{n:"Samaje Perine",p:"RB",t:"KC",a:30,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Jarquez Hunter",p:"RB",t:"LAR",a:23,ktc:2900,fc:2850,dp:3000,sleeper:2900},
+{n:"Kyle Monangai",p:"RB",t:"CHI",a:23,ktc:2400,fc:2350,dp:2500,sleeper:2400},
+{n:"Devin Neal",p:"RB",t:"NO",a:23,ktc:2300,fc:2250,dp:2400,sleeper:2300},
+// --- Newly added: depth WRs ---
+{n:"Jaylin Hyatt",p:"WR",t:"NYG",a:25,ktc:1500,fc:1600,dp:1400,sleeper:1500},
+{n:"Jaylen Waddle",p:"WR",t:"MIA",a:27,ktc:6500,fc:6600,dp:6400,sleeper:6500},
+{n:"Jermaine Burton",p:"WR",t:"CIN",a:25,ktc:2000,fc:1950,dp:2100,sleeper:2000},
+{n:"Brenden Rice",p:"WR",t:"LAC",a:25,ktc:1500,fc:1450,dp:1600,sleeper:1500},
+{n:"Malik Washington",p:"WR",t:"MIA",a:25,ktc:2100,fc:2050,dp:2200,sleeper:2100},
+{n:"Mike Williams",p:"WR",t:"PIT",a:31,ktc:700,fc:800,dp:600,sleeper:700},
+{n:"Hollywood Brown",p:"WR",t:"KC",a:28,ktc:1800,fc:1900,dp:1700,sleeper:1800},
+{n:"Jalen Tolbert",p:"WR",t:"DAL",a:27,ktc:1500,fc:1600,dp:1400,sleeper:1500},
+{n:"Calvin Austin III",p:"WR",t:"PIT",a:27,ktc:1600,fc:1700,dp:1500,sleeper:1600},
+{n:"DeMario Douglas",p:"WR",t:"NE",a:25,ktc:2000,fc:2100,dp:1900,sleeper:2000},
+{n:"Joshua Palmer",p:"WR",t:"BUF",a:26,ktc:1600,fc:1700,dp:1500,sleeper:1600},
+{n:"Dyami Brown",p:"WR",t:"JAX",a:26,ktc:1500,fc:1600,dp:1400,sleeper:1500},
+{n:"Kalif Raymond",p:"WR",t:"DET",a:31,ktc:500,fc:600,dp:400,sleeper:500},
+{n:"Alec Pierce",p:"WR",t:"IND",a:26,ktc:2100,fc:2200,dp:2000,sleeper:2100},
+{n:"Kyle Williams",p:"WR",t:"NE",a:23,ktc:4300,fc:4250,dp:4400,sleeper:4300},
+{n:"Elic Ayomanor",p:"WR",t:"TEN",a:23,ktc:4500,fc:4450,dp:4600,sleeper:4500},
+{n:"Kayshon Boutte",p:"WR",t:"NE",a:25,ktc:1700,fc:1800,dp:1600,sleeper:1700},
+{n:"Devaughn Vele",p:"WR",t:"DEN",a:28,ktc:1400,fc:1500,dp:1300,sleeper:1400},
+// --- Newly added: depth TEs & 2025 rookies ---
+{n:"Connor Heyward",p:"TE",t:"PIT",a:27,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Dawson Knox",p:"TE",t:"BUF",a:30,ktc:1100,fc:1200,dp:1000,sleeper:1100},
+{n:"Daniel Bellinger",p:"TE",t:"NYG",a:26,ktc:700,fc:800,dp:600,sleeper:700},
+{n:"Elijah Arroyo",p:"TE",t:"SEA",a:24,ktc:2800,fc:2750,dp:2900,sleeper:2800},
+{n:"Terrance Ferguson",p:"TE",t:"LAR",a:24,ktc:2700,fc:2650,dp:2800,sleeper:2700},
+// --- 2026 Draft Class (verified prospects, t:"DRFT" placeholder for landing spot) ---
+{n:"Arch Manning",p:"QB",t:"DRFT",a:21,ktc:5500,fc:5400,dp:5600,sleeper:5500},
+{n:"Drew Allar",p:"QB",t:"DRFT",a:22,ktc:5800,fc:5750,dp:5900,sleeper:5800},
+{n:"Cade Klubnik",p:"QB",t:"DRFT",a:22,ktc:5400,fc:5350,dp:5500,sleeper:5400},
+{n:"Garrett Nussmeier",p:"QB",t:"DRFT",a:23,ktc:5200,fc:5150,dp:5300,sleeper:5200},
+{n:"LaNorris Sellers",p:"QB",t:"DRFT",a:21,ktc:5600,fc:5550,dp:5700,sleeper:5600},
+{n:"Dante Moore",p:"QB",t:"DRFT",a:21,ktc:4700,fc:4650,dp:4800,sleeper:4700},
+{n:"DJ Lagway",p:"QB",t:"DRFT",a:20,ktc:4900,fc:4850,dp:5000,sleeper:4900},
+{n:"Ahmad Hardy",p:"RB",t:"DRFT",a:21,ktc:4200,fc:4150,dp:4300,sleeper:4200},
+{n:"Jeremiyah Love",p:"RB",t:"DRFT",a:21,ktc:4800,fc:4750,dp:4900,sleeper:4800},
+{n:"Nicholas Singleton",p:"RB",t:"DRFT",a:22,ktc:3800,fc:3750,dp:3900,sleeper:3800},
+{n:"Kaytron Allen",p:"RB",t:"DRFT",a:22,ktc:3500,fc:3450,dp:3600,sleeper:3500},
+{n:"Justice Haynes",p:"RB",t:"DRFT",a:21,ktc:3700,fc:3650,dp:3800,sleeper:3700},
+{n:"Jordan Marshall",p:"RB",t:"DRFT",a:21,ktc:3400,fc:3350,dp:3500,sleeper:3400},
+{n:"Jadarian Price",p:"RB",t:"DRFT",a:22,ktc:3200,fc:3150,dp:3300,sleeper:3200},
+{n:"Jeremiah Smith",p:"WR",t:"DRFT",a:20,ktc:7800,fc:7750,dp:7900,sleeper:7800},
+{n:"Carnell Tate",p:"WR",t:"DRFT",a:21,ktc:6500,fc:6450,dp:6600,sleeper:6500},
+{n:"Ryan Williams",p:"WR",t:"DRFT",a:20,ktc:6800,fc:6750,dp:6900,sleeper:6800},
+{n:"Eric Singleton Jr",p:"WR",t:"DRFT",a:21,ktc:5400,fc:5350,dp:5500,sleeper:5400},
+{n:"Makai Lemon",p:"WR",t:"DRFT",a:22,ktc:5200,fc:5150,dp:5300,sleeper:5200},
+{n:"Cam Coleman",p:"WR",t:"DRFT",a:21,ktc:5500,fc:5450,dp:5600,sleeper:5500},
+{n:"Denzel Boston",p:"WR",t:"DRFT",a:22,ktc:4900,fc:4850,dp:5000,sleeper:4900},
+{n:"Antonio Williams",p:"WR",t:"DRFT",a:23,ktc:4500,fc:4450,dp:4600,sleeper:4500},
+{n:"Aaron Anderson",p:"WR",t:"DRFT",a:22,ktc:4200,fc:4150,dp:4300,sleeper:4200},
+{n:"Nyck Harbor",p:"WR",t:"DRFT",a:21,ktc:5300,fc:5250,dp:5400,sleeper:5300},
+{n:"Eli Stowers",p:"TE",t:"DRFT",a:23,ktc:3500,fc:3450,dp:3600,sleeper:3500},
+{n:"Max Klare",p:"TE",t:"DRFT",a:22,ktc:3200,fc:3150,dp:3300,sleeper:3200},
+{n:"Kenyon Sadiq",p:"TE",t:"DRFT",a:22,ktc:3800,fc:3750,dp:3900,sleeper:3800}
+
 ];
 
 // =================================================================
@@ -1264,11 +1379,75 @@ function refreshAnalyzeBtn(){
   $("#btn-analyze").disabled = !ok;
 }
 
+
+
+// =================================================================
+// PICK VALUE CHART (Bloomberg-style 4x4 heat map)
+// =================================================================
+function pickHeatColor(t){
+  if(t >= 0.85) return "#0a4d28";
+  if(t >= 0.65) return "#1f6b32";
+  if(t >= 0.45) return "#3a8a47";
+  if(t >= 0.28) return "#7a8c3d";
+  if(t >= 0.15) return "#8a5a30";
+  if(t >= 0.06) return "#6b3a2a";
+  return "#5a2828";
+}
+function renderPickChart(){
+  const grid = document.getElementById("pick-chart-grid");
+  if(!grid) return;
+  const years = [2026, 2027, 2028, 2029];
+  const rounds = [
+    { label: "1ST",  round: 1 },
+    { label: "2ND",  round: 2 },
+    { label: "3RD",  round: 3 },
+    { label: "4TH",  round: 4 }
+  ];
+  const mids = [];
+  for(const r of rounds){
+    for(const y of years){
+      mids.push(pickValue({ type:"pick", round:r.round, year:y, slot:"mid" }));
+    }
+  }
+  const maxV = Math.max.apply(null, mids);
+  const minV = Math.min.apply(null, mids);
+  const range = Math.max(1, maxV - minV);
+
+  let html = '<div class="pick-chart-cell header-cell">RD \\ YR</div>';
+  for(const y of years){
+    html += '<div class="pick-chart-cell header-cell">' + y + '</div>';
+  }
+  for(const r of rounds){
+    html += '<div class="pick-chart-cell row-label">' + r.label + '</div>';
+    for(const y of years){
+      const top  = pickValue({ type:"pick", round:r.round, year:y, slot:"top3" });
+      const mid  = pickValue({ type:"pick", round:r.round, year:y, slot:"mid"  });
+      const late = pickValue({ type:"pick", round:r.round, year:y, slot:"late" });
+      const t = (mid - minV) / range;
+      const bg = pickHeatColor(t);
+      html += '<div class="pick-chart-cell value-cell" style="background:' + bg + '">' +
+        '<div class="cell-value">' + num(mid) + '</div>' +
+        '<div class="cell-sub">' + num(top) + ' / ' + num(late) + '</div>' +
+        '</div>';
+    }
+  }
+  grid.innerHTML = html;
+
+  const meta = document.getElementById("pick-chart-meta");
+  if(meta){
+    const fmt = PROFILE.format === "superflex" ? "SF" : "1QB";
+    const tepLabel = PROFILE.tep === "0" ? "Std TE" : (PROFILE.tep + " TEP");
+    const scoreLabel = PROFILE.scoring === "ppr" ? "Full PPR" : (PROFILE.scoring === "half" ? "Half PPR" : "Non-PPR");
+    meta.textContent = PROFILE.teams + "-team · " + fmt + " · " + scoreLabel + " · " + tepLabel;
+  }
+}
+
 function rerenderAll(){
   renderAssets("get");
   renderAssets("give");
   renderTicker();
   if(state.myRoster) renderRoster();
+  renderPickChart();
 }
 
 // =================================================================
