@@ -536,6 +536,49 @@ img{display:block;max-width:100%}
 }
 .share-preview canvas{max-width:100%;border-radius:8px;border:1px solid var(--line-2)}
 
+/* How We Grade modal */
+.hiw-modal{max-width:760px;width:96%}
+.hiw-modal .body{padding:8px 4px 4px}
+.hiw-section{display:flex;gap:14px;padding:18px 4px;border-top:1px solid var(--line-2)}
+.hiw-section:first-child{border-top:none;padding-top:8px}
+.hiw-num{flex:0 0 36px;height:36px;border-radius:50%;background:rgba(74,158,255,0.12);border:1px solid rgba(74,158,255,0.35);color:#4a9eff;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:16px}
+.hiw-content{flex:1;min-width:0}
+.hiw-content h3{margin:4px 0 6px;font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink);text-transform:uppercase}
+.hiw-lead{margin:0 0 12px;color:var(--ink-2);font-size:13px;line-height:1.5}
+.hiw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.hiw-tile{background:rgba(255,255,255,0.03);border:1px solid var(--line-2);border-radius:8px;padding:12px 8px;text-align:center}
+.hiw-tile-pct{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;color:var(--gold);line-height:1}
+.hiw-tile-lbl{margin-top:4px;font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.04em}
+.hiw-table{width:100%;border-collapse:collapse;font-size:13px}
+.hiw-table th{text-align:left;color:var(--ink-3);font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--line-2)}
+.hiw-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--ink-2)}
+.hiw-table td:first-child{color:var(--ink);font-weight:600}
+.hiw-table .up{color:#3ee68f;font-family:'JetBrains Mono',monospace;font-weight:700}
+.hiw-table .dn{color:#ff7884;font-family:'JetBrains Mono',monospace;font-weight:700}
+.hiw-note{margin:10px 0 0;font-size:12px;color:var(--ink-3);font-style:italic}
+.hiw-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.hiw-mode{background:rgba(255,255,255,0.03);border:1px solid var(--line-2);border-radius:8px;padding:12px}
+.hiw-mode.rebuild{border-color:rgba(74,158,255,0.35)}
+.hiw-mode.contend{border-color:rgba(255,215,0,0.35)}
+.hiw-mode.winnow{border-color:rgba(0,210,106,0.35)}
+.hiw-mode-h{font-size:11px;font-weight:800;letter-spacing:.12em;margin-bottom:8px;color:var(--ink)}
+.hiw-mode.rebuild .hiw-mode-h{color:#4a9eff}
+.hiw-mode.contend .hiw-mode-h{color:var(--gold)}
+.hiw-mode.winnow .hiw-mode-h{color:var(--green)}
+.hiw-mode ul{margin:0;padding:0 0 0 14px;font-size:12px;line-height:1.6;color:var(--ink-2)}
+.hiw-mode .up{color:#3ee68f;font-family:'JetBrains Mono',monospace;font-weight:700}
+.hiw-mode .dn{color:#ff7884;font-family:'JetBrains Mono',monospace;font-weight:700}
+.hiw-grades td:first-child{font-weight:700}
+.g-elite{color:#3ee68f;font-weight:800;letter-spacing:.04em}
+.g-strong{color:#7ee7a4;font-weight:800;letter-spacing:.04em}
+.g-fair{color:var(--gold);font-weight:800;letter-spacing:.04em}
+.g-close{color:#ff9f43;font-weight:800;letter-spacing:.04em}
+.g-bad{color:#ff7884;font-weight:800;letter-spacing:.04em}
+@media (max-width:680px){
+  .hiw-grid{grid-template-columns:repeat(2,1fr)}
+  .hiw-modes{grid-template-columns:1fr}
+}
+
 /* Pick Value Chart (Bloomberg-style heat map) */
 .pick-chart-section{margin:32px auto 0;max-width:1200px;padding:0 16px;color:var(--ink)}
 .pick-chart-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;flex-wrap:wrap;gap:8px}
@@ -868,6 +911,7 @@ img{display:block;max-width:100%}
     <div class="spacer"></div>
     <button class="btn ghost" id="btn-import"><span>⬇</span> Import from Sleeper</button>
     <button class="btn primary" id="btn-profile">⚙ Set League Format</button>
+    <button class="btn ghost" id="btn-howitworks">How We Grade</button>
     <button class="btn ghost" id="btn-clear">Reset</button>
   </div>
   <div class="profile-bar" id="profile-bar"></div>
@@ -1112,6 +1156,126 @@ img{display:block;max-width:100%}
     <div class="footer">
       <button class="btn ghost" data-close>Cancel</button>
       <button class="btn primary" id="btn-fetch-sleeper">Fetch Leagues</button>
+    </div>
+  </div>
+</div>
+
+<!-- HOW WE GRADE MODAL -->
+<div class="modal-bg" id="howitworks-modal">
+  <div class="modal hiw-modal" role="dialog">
+    <header><h2>How We Grade Trades</h2><button class="close" data-close>×</button></header>
+    <div class="body">
+      <div class="hiw-section">
+        <div class="hiw-num">1</div>
+        <div class="hiw-content">
+          <h3>Player Values</h3>
+          <p class="hiw-lead">Pulled from a consensus of 4 dynasty sources, blended into a single score for every player.</p>
+          <div class="hiw-grid">
+            <div class="hiw-tile"><div class="hiw-tile-pct">30%</div><div class="hiw-tile-lbl">KTC</div></div>
+            <div class="hiw-tile"><div class="hiw-tile-pct">25%</div><div class="hiw-tile-lbl">FantasyCalc</div></div>
+            <div class="hiw-tile"><div class="hiw-tile-pct">20%</div><div class="hiw-tile-lbl">DynastyProcess</div></div>
+            <div class="hiw-tile"><div class="hiw-tile-pct">25%</div><div class="hiw-tile-lbl">Sleeper ADP</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hiw-section">
+        <div class="hiw-num">2</div>
+        <div class="hiw-content">
+          <h3>League Settings Adjustments</h3>
+          <p class="hiw-lead">How each setting shifts the consensus value.</p>
+          <table class="hiw-table">
+            <tr><th>Setting</th><th>Effect</th></tr>
+            <tr><td>Superflex</td><td><span class="up">QBs +40%</span></td></tr>
+            <tr><td>Standard (1QB)</td><td><span class="dn">QBs −30%</span></td></tr>
+            <tr><td>1.0 TEP</td><td><span class="up">TEs +35%</span></td></tr>
+            <tr><td>0.5 TEP</td><td><span class="up">TEs +18%</span></td></tr>
+            <tr><td>Full PPR</td><td>WRs slight premium · RBs slight discount</td></tr>
+            <tr><td>Non-PPR</td><td>WRs slight discount · RBs slight premium</td></tr>
+            <tr><td>14-team</td><td><span class="up">RBs +6%</span> (scarcity)</td></tr>
+            <tr><td>8-team</td><td><span class="dn">RBs −20%</span></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="hiw-section">
+        <div class="hiw-num">3</div>
+        <div class="hiw-content">
+          <h3>Draft Pick Values</h3>
+          <p class="hiw-lead">Based on round, year, and slot. KTC-calibrated.</p>
+          <table class="hiw-table">
+            <tr><th>Pick</th><th>Early</th><th>Mid</th><th>Late</th></tr>
+            <tr><td>2026 1st</td><td>9,300</td><td>6,000</td><td>3,600</td></tr>
+            <tr><td>2026 2nd</td><td>3,410</td><td>2,200</td><td>1,320</td></tr>
+            <tr><td>2027 1st</td><td>7,750</td><td>5,000</td><td>3,000</td></tr>
+            <tr><td>2028 1st</td><td>6,510</td><td>4,200</td><td>2,520</td></tr>
+          </table>
+          <p class="hiw-note">Values decay ~15% per year further out. Superflex adds +10% to 1st &amp; 2nd round picks.</p>
+        </div>
+      </div>
+
+      <div class="hiw-section">
+        <div class="hiw-num">4</div>
+        <div class="hiw-content">
+          <h3>Team Mode Impact</h3>
+          <p class="hiw-lead">Mode reshapes valuation — it changes the math, not just the verdict text.</p>
+          <div class="hiw-modes">
+            <div class="hiw-mode rebuild">
+              <div class="hiw-mode-h">REBUILDER</div>
+              <ul>
+                <li>Young (≤22): <span class="up">×1.15</span></li>
+                <li>Aging vets (30+): <span class="dn">×0.85</span></li>
+                <li>All future picks: <span class="up">×1.10</span></li>
+                <li>Declining 27–29 RB/WR: <span class="dn">×0.92</span></li>
+              </ul>
+            </div>
+            <div class="hiw-mode contend">
+              <div class="hiw-mode-h">CONTENDER</div>
+              <ul>
+                <li>Prime age (25–29): <span class="up">×1.12</span></li>
+                <li>Raw prospects ≤22: <span class="dn">×0.90</span></li>
+                <li>2026 picks: ×1.00</li>
+                <li>2027+ picks: <span class="dn">×0.88</span></li>
+                <li>Elite WR1/RB1: <span class="up">×1.08</span></li>
+              </ul>
+            </div>
+            <div class="hiw-mode winnow">
+              <div class="hiw-mode-h">WIN-NOW</div>
+              <ul>
+                <li>Prime age (25–29): <span class="up">×1.18</span></li>
+                <li>Rookies/raw prospects: <span class="dn">×0.80</span></li>
+                <li>2026 picks: <span class="dn">×0.92</span></li>
+                <li>2027+ picks: <span class="dn">×0.75</span></li>
+                <li>Elite proven 26–30: <span class="up">×1.15</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hiw-section">
+        <div class="hiw-num">5</div>
+        <div class="hiw-content">
+          <h3>How Grades Are Calculated</h3>
+          <p class="hiw-lead">Compare side totals, compute the % gap, map to a label.</p>
+          <table class="hiw-table hiw-grades">
+            <tr><th>Label</th><th>Gap (winning side)</th></tr>
+            <tr><td><span class="g-elite">ELITE</span></td><td>30%+ advantage</td></tr>
+            <tr><td><span class="g-elite">EXCELLENT</span></td><td>20–30%</td></tr>
+            <tr><td><span class="g-strong">GREAT</span></td><td>15–20%</td></tr>
+            <tr><td><span class="g-strong">SOLID</span></td><td>10–15%</td></tr>
+            <tr><td><span class="g-fair">GOOD</span></td><td>7–10%</td></tr>
+            <tr><td><span class="g-fair">FAIR</span></td><td>4–7%</td></tr>
+            <tr><td><span class="g-fair">SLIGHT EDGE</span></td><td>2–4%</td></tr>
+            <tr><td><span class="g-close">CLOSE</span></td><td>0–2%</td></tr>
+            <tr><td><span class="g-close">EVEN</span></td><td>essentially equal</td></tr>
+            <tr><td><span class="g-bad">WEAK / POOR</span></td><td>same gaps, losing side</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <button class="btn primary" data-close>Got it</button>
     </div>
   </div>
 </div>
@@ -1683,10 +1847,46 @@ function pickValue(pick){
   return Math.round(v);
 }
 
+// Mode-aware multipliers — these reshape the trade math, not just the verdict text.
+// Applied AFTER consensus/format adjustments so mode shifts which side actually wins.
+function modeAdjust(asset, val){
+  const mode = PROFILE.mode || "contender";
+  if(mode === "rebuilder"){
+    if(asset.type === "pick") return Math.round(val * 1.10);
+    if(asset.a <= 22) return Math.round(val * 1.15);
+    if(asset.a >= 30) return Math.round(val * 0.85);
+    if((asset.p === "RB" || asset.p === "WR") && asset.a >= 27 && asset.a <= 29){
+      return Math.round(val * 0.92);
+    }
+    return val;
+  }
+  if(mode === "winnow"){
+    if(asset.type === "pick"){
+      if(asset.year >= 2027) return Math.round(val * 0.75);
+      return Math.round(val * 0.92);
+    }
+    if(asset.a >= 25 && asset.a <= 29) val = Math.round(val * 1.18);
+    if(asset.a <= 22) val = Math.round(val * 0.80);
+    if(asset.a >= 26 && asset.a <= 30 && val >= 7500) val = Math.round(val * 1.15);
+    return val;
+  }
+  // contender (default)
+  if(asset.type === "pick"){
+    if(asset.year >= 2027) return Math.round(val * 0.88);
+    return val;
+  }
+  if(asset.a >= 25 && asset.a <= 29) val = Math.round(val * 1.12);
+  if(asset.a <= 22 && val < 4000) val = Math.round(val * 0.90);
+  if((asset.p === "WR" || asset.p === "RB") && val >= 7500) val = Math.round(val * 1.08);
+  return val;
+}
+
 // Asset helpers
 function assetValue(asset){
-  if(asset.type === "pick") return pickValue(asset);
-  return adjustedConsensus(asset);
+  let v;
+  if(asset.type === "pick") v = pickValue(asset);
+  else v = adjustedConsensus(asset);
+  return modeAdjust(asset, v);
 }
 function assetSpread(asset){
   if(asset.type === "pick") return 100;
@@ -2181,6 +2381,7 @@ function openProfile(){
   openModal("#profile-modal");
 }
 $("#btn-profile").onclick = openProfile;
+$("#btn-howitworks").onclick = () => openModal("#howitworks-modal");
 $("#btn-save-profile").onclick = () => {
   PROFILE = {
     teams: parseInt(getGroupVal("profile-modal","teams"),10),
