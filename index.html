@@ -1214,6 +1214,14 @@ img{display:block;max-width:100%}
     <div class="mover-section-grid" id="movers-grid"></div>
   </section>
 
+  <!-- MARKET ALERTS — Feature 10 -->
+  <section class="alerts-section" id="alerts-section">
+    <header class="alerts-head">
+      <h3>Market Alerts <span class="subtitle">Sell-high &amp; buy-low signals based on age vs. current value</span></h3>
+    </header>
+    <div class="alerts-buckets" id="alerts-grid"></div>
+  </section>
+
   <!-- POSITION VALUE TIERS -->
   <section class="tiers-section" id="tiers-section">
     <header class="tiers-head">
@@ -2535,8 +2543,239 @@ function rerenderAll(){
   if(state.myRoster) renderRoster();
   renderPickChart();
   renderMovers();
+  renderMarketAlerts();
   renderTiers();
   renderFeatured();
+}
+
+// =================================================================
+// FEATURE 6 — NATURAL LANGUAGE TRADE PARSER
+// =================================================================
+(function setupNLParser(){
+  const input  = document.getElementById("nl-trade-input");
+  const status = document.getElementById("qp-status");
+  if(!input) return;
+
+  // Ordinal word → round number
+  const ORD_MAP = {
+    "first":1, "1st":1, "second":2, "2nd":2,
+    "third":3, "3rd":3, "fourth":4, "4th":4
+  };
+
+  function parsePick(token){
+    // Patterns: "2027 first", "early 2026 1st", "late 2027 2nd", "2028 2nd round"
+    const t = token.toLowerCase().trim();
+    const yearM = t.match(/20(2[5-9]|3\d)/);
+    if(!yearM) return null;
+    const year = parseInt(yearM[0], 10);
+
+    let round = null;
+    for(const [word, r] of Object.entries(ORD_MAP)){
+      if(t.includes(word)){ round = r; break; }
+    }
+    if(!round) return null;
+
+    let slot = "mid";
+    if(/\b(early|top|top3|top-3)\b/.test(t)) slot = "top3";
+    else if(/\b(late|back|end)\b/.test(t)) slot = "late";
+    return { type:"pick", year, round, slot };
+  }
+
+  function fuzzyMatchPlayer(token){
+    const t = token.toLowerCase().trim();
+    if(t.length < 2) return null;
+    // 1. exact substring on full name
+    let m = PLAYERS.find(p => p.n.toLowerCase().includes(t));
+    if(m) return m;
+    // 2. last name only
+    const tokens = t.split(/\s+/);
+    const lastName = tokens[tokens.length - 1];
+    if(lastName.length >= 3){
+      m = PLAYERS.find(p => {
+        const parts = p.n.toLowerCase().split(/\s+/);
+        return parts[parts.length-1] === lastName;
+      });
+      if(m) return m;
+    }
+    // 3. first name only
+    const firstName = tokens[0];
+    if(firstName.length >= 3){
+      m = PLAYERS.find(p => p.n.toLowerCase().split(/\s+/)[0] === firstName);
+      if(m) return m;
+    }
+    return null;
+  }
+
+  function parseTokens(str){
+    const parts = str.split(/[,+]|\band\b/i).map(s => s.trim()).filter(Boolean);
+    const parsed = [];
+    const unknown = [];
+    for(const part of parts){
+      const pick = parsePick(part);
+      if(pick){
+        const ord = pick.round===1?"1st":pick.round===2?"2nd":pick.round===3?"3rd":pick.round+"th";
+        const slotLabel = pick.slot==="top3"?"(early)":pick.slot==="late"?"(late)":"";
+        parsed.push({ asset: pick, label: `${pick.year} ${ord} ${slotLabel}`.trim() });
+      } else {
+        const player = fuzzyMatchPlayer(part);
+        if(player){
+          parsed.push({ asset: {...player, type:"player"}, label: player.n });
+        } else {
+          if(part.length >= 2) unknown.push(part);
+        }
+      }
+    }
+    return { parsed, unknown };
+  }
+
+  function setStatus(msg, cls){
+    status.textContent = msg;
+    status.className = "qp-status " + cls;
+  }
+
+  function runParse(raw){
+    const text = raw.trim();
+    if(!text){ status.textContent = ""; status.className = "qp-status"; return; }
+
+    // Split on " for " (case-insensitive)
+    const forMatch = text.match(/^(.+?)\s+for\s+(.+)$/i);
+    if(!forMatch){
+      setStatus("⚠ Couldn't find "for" separator. Try: [give assets] for [get assets]", "warn");
+      return;
+    }
+    const giveSide = forMatch[1];
+    const getSide  = forMatch[2];
+
+    const { parsed: parsedGive, unknown: unknownGive } = parseTokens(giveSide);
+    const { parsed: parsedGet,  unknown: unknownGet  } = parseTokens(getSide);
+
+    const allUnknown = [...unknownGive, ...unknownGet];
+
+    if(!parsedGive.length && !parsedGet.length){
+      setStatus("✗ Could not recognize any players or picks. Check spelling.", "err");
+      return;
+    }
+
+    // Populate state
+    state.give = parsedGive.map(x => x.asset);
+    state.get  = parsedGet.map(x => x.asset);
+    rerenderAll();
+    refreshAnalyzeBtn();
+
+    const giveStr = parsedGive.map(x => x.label).join(" + ") || "—";
+    const getStr  = parsedGet.map(x => x.label).join(" + ") || "—";
+    let msg = `✓ Parsed: ${giveStr} → ${getStr}`;
+    if(allUnknown.length){
+      msg += `  ·  ⚠ Could not parse: ${allUnknown.join(", ")}`;
+      setStatus(msg, "warn");
+    } else {
+      setStatus(msg, "ok");
+    }
+  }
+
+  let debounce;
+  input.addEventListener("input", () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => runParse(input.value), 420);
+  });
+  input.addEventListener("keydown", e => {
+    if(e.key === "Enter"){ clearTimeout(debounce); runParse(input.value); }
+  });
+})();
+
+// =================================================================
+// FEATURE 10 — MARKET ALERTS: SELL HIGH / BUY LOW
+// =================================================================
+function renderMarketAlerts(){
+  const grid = document.getElementById("alerts-grid");
+  if(!grid) return;
+
+  // Position peak age ranges: [peakStart, peakEnd]
+  const PEAK = { QB:[26,32], RB:[23,26], WR:[24,28], TE:[25,29] };
+
+  // Bucket players by position with adjusted values
+  const byPos = {};
+  for(const p of PLAYERS){
+    if(!PEAK[p.p]) continue;
+    const v = adjustedConsensus(p);
+    if(!byPos[p.p]) byPos[p.p] = [];
+    byPos[p.p].push({ p, v });
+  }
+
+  const sellCandidates = [];
+  const buyCandidates  = [];
+
+  for(const [pos, arr] of Object.entries(byPos)){
+    if(!arr.length) continue;
+    arr.sort((a,b) => b.v - a.v);
+    const n = arr.length;
+    const [peakStart, peakEnd] = PEAK[pos];
+    const top40cutoff  = arr[Math.floor(n * 0.40)]?.v ?? 0;  // top 40% threshold
+    const bot50cutoff  = arr[Math.floor(n * 0.50)]?.v ?? 0;  // bottom 50% threshold
+
+    for(const { p, v } of arr){
+      const age = p.a;
+      // Sell High: value in top 40%, age is post-peak (>= peakEnd+1)
+      if(v >= top40cutoff && age >= peakEnd + 1){
+        const reason = age >= peakEnd + 3 ? "AGE CLIFF" : "POST-PEAK";
+        sellCandidates.push({ p, v, reason });
+      }
+      // Buy Low: value in bottom 50% of position, age < peak start (undervalued youth)
+      if(v <= bot50cutoff && age < peakStart){
+        const reason = age <= 22 ? "PRIME SOON" : "YOUNG VALUE";
+        buyCandidates.push({ p, v, reason });
+      }
+      // Rising Star: age ≤ 23, KTC value > FC (trending up signal)
+      if(age <= 23 && p.ktc > p.fc && v > bot50cutoff){
+        buyCandidates.push({ p, v, reason: "RISING STAR" });
+      }
+    }
+  }
+
+  // Dedupe buy candidates by player name
+  const seenBuy = new Set();
+  const uniqueBuy = buyCandidates.filter(x => {
+    if(seenBuy.has(x.p.n)) return false;
+    seenBuy.add(x.p.n);
+    return true;
+  });
+
+  // Sort: sell by value desc (highest value = most to lose), buy by age asc (youngest first)
+  sellCandidates.sort((a,b) => b.v - a.v);
+  uniqueBuy.sort((a,b) => a.p.a - b.p.a);
+
+  const topSell = sellCandidates.slice(0, 6);
+  const topBuy  = uniqueBuy.slice(0, 6);
+
+  function alertCard(entry, cls){
+    const { p, v, reason } = entry;
+    return `<div class="alert-card ${cls}">
+      <div class="nm">${p.n}</div>
+      <div class="meta">${p.p} · ${p.t} · Age ${p.a}</div>
+      <div class="row">
+        <span class="val">${num(v)}</span>
+        <span class="reason">${reason}</span>
+      </div>
+    </div>`;
+  }
+
+  const sellHTML = topSell.length
+    ? topSell.map(e => alertCard(e, "sell")).join("")
+    : `<div style="color:var(--ink-3);font-size:12px;padding:4px">No strong sell-high candidates at current values.</div>`;
+  const buyHTML = topBuy.length
+    ? topBuy.map(e => alertCard(e, "buy")).join("")
+    : `<div style="color:var(--ink-3);font-size:12px;padding:4px">No strong buy-low candidates at current values.</div>`;
+
+  grid.innerHTML = `
+    <div>
+      <div class="alert-bucket-label sell">🔴 SELL HIGH · Market hasn't caught up to age yet</div>
+      <div class="alerts-strip">${sellHTML}</div>
+    </div>
+    <div>
+      <div class="alert-bucket-label buy">🟢 BUY WINDOW · Young talent at a discount</div>
+      <div class="alerts-strip">${buyHTML}</div>
+    </div>
+  `;
 }
 
 // =================================================================
@@ -2757,6 +2996,7 @@ async function loadSleeperRoster(leagueId, leagueName){
       });
     state.myRoster = { leagueName, leagueId, players: myPlayers, picks: myPicks };
     localStorage.setItem(ROSTER_KEY, JSON.stringify(state.myRoster));
+    analyzeTeamNeeds();
     renderRoster();
     closeModal("#sleeper-modal");
     const pickMsg = myPicks.length ? ` + ${myPicks.length} picks` : "";
@@ -2806,8 +3046,10 @@ function renderRoster(){
 
 $("#btn-roster-clear").onclick = () => {
   state.myRoster = null;
+  window.teamNeeds = [];
   localStorage.removeItem(ROSTER_KEY);
   renderRoster();
+  renderTeamNeedsBar();
 };
 
 // restore roster
@@ -2815,6 +3057,111 @@ try{
   const saved = JSON.parse(localStorage.getItem(ROSTER_KEY) || "null");
   if(saved){ state.myRoster = saved; }
 }catch(e){}
+window.teamNeeds = [];
+
+// =================================================================
+// FEATURE 7 — TEAM NEEDS ANALYSIS
+// =================================================================
+function analyzeTeamNeeds(){
+  const roster = state.myRoster;
+  if(!roster || !roster.players || !roster.players.length){
+    window.teamNeeds = [];
+    renderTeamNeedsBar();
+    return;
+  }
+
+  const positions = ["QB","RB","WR","TE"];
+  const posData = {};
+  for(const pos of positions){
+    const players = roster.players.filter(p => p.p === pos);
+    if(!players.length){
+      posData[pos] = { count: 0, avgValue: 0, total: 0 };
+      continue;
+    }
+    const vals = players.map(p => adjustedConsensus(p));
+    const total = vals.reduce((s,v)=>s+v, 0);
+    posData[pos] = {
+      count: players.length,
+      avgValue: total / players.length,
+      total,
+      players
+    };
+  }
+
+  // Normalize avg values within positions to find relative weaknesses
+  // Weak = low avg value relative to own position's typical range
+  // Score each position by: 0 (no players) is weakest; else avgValue
+  const scores = positions.map(pos => ({ pos, score: posData[pos].avgValue, count: posData[pos].count }));
+  // Positions with 0 players get score 0 (most needed), then sort ascending
+  scores.sort((a,b) => a.score - b.score);
+
+  // Two weakest by avg value
+  const weakest = scores.slice(0, 2).map(x => x.pos);
+  window.teamNeeds = weakest;
+
+  // Build descriptive labels
+  function needLabel(pos, pd){
+    if(pd.count === 0) return `${pos} STARTER`;
+    if(pd.count === 1) return `${pos} DEPTH`;
+    if(pd.avgValue < 3000) return `${pos} UPGRADE`;
+    return `${pos}2`;
+  }
+  window.teamNeedsLabels = {};
+  for(const pos of weakest){
+    window.teamNeedsLabels[pos] = needLabel(pos, posData[pos]);
+  }
+  // Also store all 4 for pill filtering
+  window.teamNeedsAll = scores.map(s => ({
+    pos: s.pos,
+    label: needLabel(s.pos, posData[s.pos]),
+    score: s.score
+  }));
+
+  renderTeamNeedsBar();
+}
+
+function renderTeamNeedsBar(){
+  const bar  = document.getElementById("team-needs-bar");
+  const pills = document.getElementById("tn-pills");
+  if(!bar || !pills) return;
+
+  if(!window.teamNeeds || !window.teamNeeds.length){
+    bar.classList.remove("show");
+    pills.innerHTML = "";
+    return;
+  }
+
+  bar.classList.add("show");
+  // Show top 3 needs as pills
+  const topNeeds = (window.teamNeedsAll || []).slice(0, 3);
+  pills.innerHTML = topNeeds.map(({ pos, label }) => {
+    return `<button class="tn-pill pos-${pos}" data-pos="${pos}" title="Filter search to ${pos}">${label}</button>`;
+  }).join("");
+
+  // Pill click: filter player search to that position
+  pills.querySelectorAll(".tn-pill").forEach(pill => {
+    pill.onclick = () => {
+      const pos = pill.dataset.pos;
+      const isActive = pill.classList.contains("active");
+      // toggle off if already active
+      pills.querySelectorAll(".tn-pill").forEach(p => p.classList.remove("active"));
+      if(!isActive){
+        pill.classList.add("active");
+        // Pre-fill search inputs with position filter
+        const giveInput = document.getElementById("search-give");
+        const getInput  = document.getElementById("search-get");
+        if(giveInput){ giveInput.value = pos; giveInput.dispatchEvent(new Event("input")); }
+        if(getInput){  getInput.value  = pos; getInput.dispatchEvent(new Event("input")); }
+      } else {
+        // Clear search filter
+        const giveInput = document.getElementById("search-give");
+        const getInput  = document.getElementById("search-get");
+        if(giveInput){ giveInput.value = ""; giveInput.dispatchEvent(new Event("input")); }
+        if(getInput){  getInput.value  = ""; getInput.dispatchEvent(new Event("input")); }
+      }
+    };
+  });
+}
 
 // =================================================================
 // ANALYZE
@@ -3282,7 +3629,57 @@ function renderVerdict(v){
     </div>
   `;
 
-  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + spreadHTML + marketBand + ctxHTML;
+  // === Section G — ROSTER FIT (Feature 7) ===
+  let rosterFitHTML = "";
+  {
+    const needs = window.teamNeeds || [];
+    const hasRoster = !!(state.myRoster && state.myRoster.players && state.myRoster.players.length);
+    if(!hasRoster){
+      rosterFitHTML = `
+        <div class="v2-section">
+          <div class="v2-section-head">ROSTER FIT <span class="sub">requires Sleeper connection</span></div>
+          <div class="v2-section-body">
+            <div class="v2-connect-prompt">📡 Connect Sleeper to see how this trade fits your roster needs.</div>
+          </div>
+        </div>
+      `;
+    } else {
+      const allTradeAssets = [
+        ...state.get.map(a => ({ ...a, side: "get" })),
+        ...state.give.map(a => ({ ...a, side: "give" }))
+      ].filter(a => a.type !== "pick");
+
+      const fitRows = allTradeAssets.map(a => {
+        const inNeed = needs.includes(a.p);
+        const isGetting = a.side === "get";
+        let tagHTML = `<span class="v2-rf-neutral">—</span>`;
+        if(inNeed && isGetting)  tagHTML = `<span class="v2-rf-tag-fills">✓ FILLS NEED</span>`;
+        if(inNeed && !isGetting) tagHTML = `<span class="v2-rf-tag-loses">⚠ LOSING A NEED</span>`;
+        const sideLabel = isGetting ? "GET" : "GIVE";
+        return `<div class="v2-roster-fit-row">
+          <span class="v2-rf-name">${a.n} <span style="color:var(--ink-3);font-size:10px;font-weight:500">(${sideLabel})</span></span>
+          <span style="color:var(--ink-3);font-size:11px;margin-right:6px">${a.p}</span>
+          ${tagHTML}
+        </div>`;
+      }).join("");
+
+      const needsStr = needs.length
+        ? needs.map(p => `<span style="font-weight:700;color:var(--blue)">${p}</span>`).join(", ")
+        : `<span style="color:var(--ink-3)">All positions covered</span>`;
+
+      rosterFitHTML = `
+        <div class="v2-section">
+          <div class="v2-section-head">ROSTER FIT <span class="sub">based on your Sleeper roster</span></div>
+          <div class="v2-section-body">
+            <div style="font-size:11px;color:var(--ink-3);margin-bottom:10px">Your biggest needs: ${needsStr}</div>
+            ${fitRows || `<div style="color:var(--ink-3);font-size:12px;font-style:italic">No players in this trade to evaluate.</div>`}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + rosterFitHTML + spreadHTML + marketBand + ctxHTML;
 
   // attach last analysis for share
   window.__lastAnalysis = v;
@@ -3576,6 +3973,8 @@ function boot(){
   setupSearch("give");
   profileBar();
   rerenderAll();
+  // Re-run team needs analysis if roster was restored from localStorage
+  if(state.myRoster) analyzeTeamNeeds();
   // first-run profile prompt
   if(!localStorage.getItem(PROFILE_KEY)){
     setTimeout(openProfile, 350);
