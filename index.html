@@ -174,6 +174,12 @@ img{display:block;max-width:100%}
   display:flex;align-items:center;justify-content:center;gap:6px
 }
 .add-pick-btn:hover{border-color:var(--green);color:var(--green)}
+.rookies-btn{
+  width:100%;padding:9px;margin-top:6px;background:transparent;border:1px dashed var(--line-2);
+  border-radius:8px;color:var(--ink-2);font-size:12px;font-weight:600;letter-spacing:.04em;
+  display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer
+}
+.rookies-btn:hover,.rookies-btn.active{border-color:var(--gold);color:var(--gold)}
 
 .assets{display:flex;flex-direction:column;gap:8px;min-height:120px}
 .empty-state{
@@ -455,6 +461,7 @@ img{display:block;max-width:100%}
         <div class="dropdown" id="dropdown-get"></div>
       </div>
       <button class="add-pick-btn" data-side="get">+ ADD DRAFT PICK</button>
+      <button class="rookies-btn" data-side="get">★ 2026 ROOKIES</button>
       <div class="side-total">
         <span class="lbl">Total Value</span>
         <span class="val mono" id="total-get">0</span>
@@ -474,6 +481,7 @@ img{display:block;max-width:100%}
         <div class="dropdown" id="dropdown-give"></div>
       </div>
       <button class="add-pick-btn" data-side="give">+ ADD DRAFT PICK</button>
+      <button class="rookies-btn" data-side="give">★ 2026 ROOKIES</button>
       <div class="side-total">
         <span class="lbl">Total Value</span>
         <span class="val mono" id="total-give">0</span>
@@ -1061,34 +1069,54 @@ const PLAYERS = [
 {n:"Daniel Bellinger",p:"TE",t:"NYG",a:26,ktc:700,fc:800,dp:600,sleeper:700},
 {n:"Elijah Arroyo",p:"TE",t:"SEA",a:24,ktc:2800,fc:2750,dp:2900,sleeper:2800},
 {n:"Terrance Ferguson",p:"TE",t:"LAR",a:24,ktc:2700,fc:2650,dp:2800,sleeper:2700},
-// --- 2026 Draft Class (verified prospects, t:"DRFT" placeholder for landing spot) ---
-{n:"Arch Manning",p:"QB",t:"DRFT",a:21,ktc:5500,fc:5400,dp:5600,sleeper:5500},
-{n:"Drew Allar",p:"QB",t:"DRFT",a:22,ktc:5800,fc:5750,dp:5900,sleeper:5800},
-{n:"Cade Klubnik",p:"QB",t:"DRFT",a:22,ktc:5400,fc:5350,dp:5500,sleeper:5400},
-{n:"Garrett Nussmeier",p:"QB",t:"DRFT",a:23,ktc:5200,fc:5150,dp:5300,sleeper:5200},
-{n:"LaNorris Sellers",p:"QB",t:"DRFT",a:21,ktc:5600,fc:5550,dp:5700,sleeper:5600},
-{n:"Dante Moore",p:"QB",t:"DRFT",a:21,ktc:4700,fc:4650,dp:4800,sleeper:4700},
-{n:"DJ Lagway",p:"QB",t:"DRFT",a:20,ktc:4900,fc:4850,dp:5000,sleeper:4900},
-{n:"Ahmad Hardy",p:"RB",t:"DRFT",a:21,ktc:4200,fc:4150,dp:4300,sleeper:4200},
-{n:"Jeremiyah Love",p:"RB",t:"DRFT",a:21,ktc:4800,fc:4750,dp:4900,sleeper:4800},
-{n:"Nicholas Singleton",p:"RB",t:"DRFT",a:22,ktc:3800,fc:3750,dp:3900,sleeper:3800},
-{n:"Kaytron Allen",p:"RB",t:"DRFT",a:22,ktc:3500,fc:3450,dp:3600,sleeper:3500},
-{n:"Justice Haynes",p:"RB",t:"DRFT",a:21,ktc:3700,fc:3650,dp:3800,sleeper:3700},
-{n:"Jordan Marshall",p:"RB",t:"DRFT",a:21,ktc:3400,fc:3350,dp:3500,sleeper:3400},
-{n:"Jadarian Price",p:"RB",t:"DRFT",a:22,ktc:3200,fc:3150,dp:3300,sleeper:3200},
-{n:"Jeremiah Smith",p:"WR",t:"DRFT",a:20,ktc:7800,fc:7750,dp:7900,sleeper:7800},
-{n:"Carnell Tate",p:"WR",t:"DRFT",a:21,ktc:6500,fc:6450,dp:6600,sleeper:6500},
-{n:"Ryan Williams",p:"WR",t:"DRFT",a:20,ktc:6800,fc:6750,dp:6900,sleeper:6800},
-{n:"Eric Singleton Jr",p:"WR",t:"DRFT",a:21,ktc:5400,fc:5350,dp:5500,sleeper:5400},
-{n:"Makai Lemon",p:"WR",t:"DRFT",a:22,ktc:5200,fc:5150,dp:5300,sleeper:5200},
-{n:"Cam Coleman",p:"WR",t:"DRFT",a:21,ktc:5500,fc:5450,dp:5600,sleeper:5500},
-{n:"Denzel Boston",p:"WR",t:"DRFT",a:22,ktc:4900,fc:4850,dp:5000,sleeper:4900},
-{n:"Antonio Williams",p:"WR",t:"DRFT",a:23,ktc:4500,fc:4450,dp:4600,sleeper:4500},
-{n:"Aaron Anderson",p:"WR",t:"DRFT",a:22,ktc:4200,fc:4150,dp:4300,sleeper:4200},
-{n:"Nyck Harbor",p:"WR",t:"DRFT",a:21,ktc:5300,fc:5250,dp:5400,sleeper:5300},
-{n:"Eli Stowers",p:"TE",t:"DRFT",a:23,ktc:3500,fc:3450,dp:3600,sleeper:3500},
-{n:"Max Klare",p:"TE",t:"DRFT",a:22,ktc:3200,fc:3150,dp:3300,sleeper:3200},
-{n:"Kenyon Sadiq",p:"TE",t:"DRFT",a:22,ktc:3800,fc:3750,dp:3900,sleeper:3800}
+// --- 2026 Rookie Class (FantasyPros Dynasty rookie rankings) ---
+{n:"Jeremiyah Love",p:"RB",t:"ARI",a:20,ktc:9000,fc:8800,dp:9100,sleeper:8900,draft:2026},
+{n:"Carnell Tate",p:"WR",t:"TEN",a:21,ktc:8500,fc:8300,dp:8600,sleeper:8400,draft:2026},
+{n:"Jordyn Tyson",p:"WR",t:"NO",a:21,ktc:7800,fc:7600,dp:7900,sleeper:7700,draft:2026},
+{n:"Makai Lemon",p:"WR",t:"PHI",a:21,ktc:7400,fc:7200,dp:7500,sleeper:7300,draft:2026},
+{n:"Jadarian Price",p:"RB",t:"SEA",a:22,ktc:7000,fc:6800,dp:7100,sleeper:6900,draft:2026},
+{n:"KC Concepcion",p:"WR",t:"CLE",a:21,ktc:6500,fc:6300,dp:6600,sleeper:6400,draft:2026},
+{n:"Omar Cooper Jr.",p:"WR",t:"NYJ",a:22,ktc:6200,fc:6000,dp:6300,sleeper:6100,draft:2026},
+{n:"Kenyon Sadiq",p:"TE",t:"NYJ",a:21,ktc:6000,fc:5800,dp:6100,sleeper:5900,draft:2026},
+{n:"Eli Stowers",p:"TE",t:"PHI",a:23,ktc:5500,fc:5300,dp:5600,sleeper:5400,draft:2026},
+{n:"Fernando Mendoza",p:"QB",t:"LV",a:22,ktc:5200,fc:5000,dp:5300,sleeper:5100,draft:2026},
+{n:"Denzel Boston",p:"WR",t:"CLE",a:22,ktc:4800,fc:4600,dp:4900,sleeper:4700,draft:2026},
+{n:"Jonah Coleman",p:"RB",t:"DEN",a:22,ktc:4500,fc:4300,dp:4600,sleeper:4400,draft:2026},
+{n:"Antonio Williams",p:"WR",t:"WAS",a:21,ktc:4200,fc:4000,dp:4300,sleeper:4100,draft:2026},
+{n:"Chris Bell",p:"WR",t:"MIA",a:21,ktc:4000,fc:3800,dp:4100,sleeper:3900,draft:2026},
+{n:"Germie Bernard",p:"WR",t:"PIT",a:22,ktc:3800,fc:3600,dp:3900,sleeper:3700,draft:2026},
+{n:"Nicholas Singleton",p:"RB",t:"TEN",a:22,ktc:3600,fc:3400,dp:3700,sleeper:3500,draft:2026},
+{n:"Ty Simpson",p:"QB",t:"LAR",a:23,ktc:3400,fc:3200,dp:3500,sleeper:3300,draft:2026},
+{n:"Chris Brazzell II",p:"WR",t:"CAR",a:22,ktc:3200,fc:3000,dp:3300,sleeper:3100,draft:2026},
+{n:"Zachariah Branch",p:"WR",t:"ATL",a:22,ktc:3100,fc:2900,dp:3200,sleeper:3000,draft:2026},
+{n:"Emmett Johnson",p:"RB",t:"KC",a:22,ktc:3000,fc:2800,dp:3100,sleeper:2900,draft:2026},
+{n:"Kaytron Allen",p:"RB",t:"WAS",a:23,ktc:2900,fc:2700,dp:3000,sleeper:2800,draft:2026},
+{n:"Ted Hurst",p:"WR",t:"TB",a:21,ktc:2800,fc:2600,dp:2900,sleeper:2700,draft:2026},
+{n:"Elijah Sarratt",p:"WR",t:"BAL",a:22,ktc:2700,fc:2500,dp:2800,sleeper:2600,draft:2026},
+{n:"Malachi Fields",p:"WR",t:"NYG",a:22,ktc:2600,fc:2400,dp:2700,sleeper:2500,draft:2026},
+{n:"Mike Washington Jr.",p:"RB",t:"LV",a:22,ktc:2500,fc:2300,dp:2600,sleeper:2400,draft:2026},
+{n:"De'Zhaun Stribling",p:"WR",t:"SF",a:23,ktc:2400,fc:2200,dp:2500,sleeper:2300,draft:2026},
+{n:"Max Klare",p:"TE",t:"LAR",a:22,ktc:2300,fc:2100,dp:2400,sleeper:2200,draft:2026},
+{n:"Ja'Kobi Lane",p:"WR",t:"BAL",a:22,ktc:2200,fc:2000,dp:2300,sleeper:2100,draft:2026},
+{n:"Skyler Bell",p:"WR",t:"BUF",a:23,ktc:2100,fc:1900,dp:2200,sleeper:2000,draft:2026},
+{n:"Demond Claiborne",p:"RB",t:"MIN",a:22,ktc:2000,fc:1800,dp:2100,sleeper:1900,draft:2026},
+{n:"Carson Beck",p:"QB",t:"ARI",a:23,ktc:1900,fc:1700,dp:2000,sleeper:1800,draft:2026},
+{n:"Oscar Delp",p:"TE",t:"NO",a:22,ktc:1800,fc:1600,dp:1900,sleeper:1700,draft:2026},
+{n:"Adam Randall",p:"RB",t:"BAL",a:21,ktc:1700,fc:1500,dp:1800,sleeper:1600,draft:2026},
+{n:"Kaelon Black",p:"RB",t:"SF",a:24,ktc:1600,fc:1400,dp:1700,sleeper:1500,draft:2026},
+{n:"Drew Allar",p:"QB",t:"PIT",a:22,ktc:1500,fc:1300,dp:1600,sleeper:1400,draft:2026},
+{n:"Seth McGowan",p:"RB",t:"IND",a:24,ktc:1400,fc:1200,dp:1500,sleeper:1300,draft:2026},
+{n:"Bryce Lance",p:"WR",t:"NO",a:23,ktc:1325,fc:1125,dp:1425,sleeper:1225,draft:2026},
+{n:"Justin Joly",p:"TE",t:"DEN",a:22,ktc:1250,fc:1050,dp:1350,sleeper:1150,draft:2026},
+{n:"Eli Raridon",p:"TE",t:"NE",a:22,ktc:1175,fc:975,dp:1275,sleeper:1075,draft:2026},
+{n:"Kevin Coleman Jr.",p:"WR",t:"MIA",a:22,ktc:1100,fc:900,dp:1200,sleeper:1000,draft:2026},
+{n:"Cade Klubnik",p:"QB",t:"NYJ",a:22,ktc:1000,fc:800,dp:1100,sleeper:900,draft:2026},
+{n:"Cole Payton",p:"QB",t:"PHI",a:23,ktc:950,fc:750,dp:1050,sleeper:850,draft:2026},
+{n:"Eli Heidenreich",p:"RB",t:"PIT",a:22,ktc:900,fc:700,dp:1000,sleeper:800,draft:2026},
+{n:"Garrett Nussmeier",p:"QB",t:"KC",a:24,ktc:850,fc:650,dp:950,sleeper:750,draft:2026},
+{n:"Brenen Thompson",p:"WR",t:"LAC",a:22,ktc:800,fc:600,dp:900,sleeper:700,draft:2026},
+{n:"Deion Burks",p:"WR",t:"IND",a:23,ktc:750,fc:550,dp:850,sleeper:650,draft:2026},
+{n:"Caleb Douglas",p:"WR",t:"MIA",a:22,ktc:700,fc:500,dp:800,sleeper:600,draft:2026}
 
 ];
 
@@ -1276,25 +1304,18 @@ function profileBar(){
 function setupSearch(side){
   const inp = $(`#search-${side}`);
   const dd  = $(`#dropdown-${side}`);
+  const rookiesBtn = document.querySelector(`.rookies-btn[data-side="${side}"]`);
 
   function close(){ dd.classList.remove("open"); }
   function open(){ dd.classList.add("open"); }
 
-  inp.addEventListener("input", () => {
-    const q = inp.value.trim().toLowerCase();
-    if(q.length < 1){ close(); return; }
-    const results = PLAYERS
-      .filter(p => p.n.toLowerCase().includes(q) || p.t.toLowerCase().includes(q))
-      .map(p => ({p, v: adjustedConsensus(p)}))
-      .sort((a,b)=>b.v-a.v)
-      .slice(0,12);
-    if(!results.length){ dd.innerHTML = `<div class="empty">No players match "${q}"</div>`; open(); return; }
+  function renderRows(results){
     dd.innerHTML = results.map(({p,v}) => `
       <div class="row" data-name="${p.n}">
         <div class="av" style="background:${avatarColor(p.n)}">${p.n.split(/\s+/).map(s=>s[0]).slice(0,2).join("")}</div>
         <div class="meta">
           <div class="nm">${p.n}</div>
-          <div class="sub">${posTag(p.p)} ${p.t} • Age ${p.a}</div>
+          <div class="sub">${posTag(p.p)} ${p.t} • Age ${p.a}${p.draft===2026?' • <span style="color:var(--gold)">ROOKIE</span>':''}</div>
         </div>
         <div class="vl">${num(v)}</div>
       </div>
@@ -1308,10 +1329,35 @@ function setupSearch(side){
         close();
       };
     });
+  }
+
+  inp.addEventListener("input", () => {
+    const q = inp.value.trim().toLowerCase();
+    if(q.length < 1){ close(); return; }
+    const results = PLAYERS
+      .filter(p => p.n.toLowerCase().includes(q) || p.t.toLowerCase().includes(q))
+      .map(p => ({p, v: adjustedConsensus(p)}))
+      .sort((a,b)=>b.v-a.v)
+      .slice(0,12);
+    if(!results.length){ dd.innerHTML = `<div class="empty">No players match "${q}"</div>`; open(); return; }
+    renderRows(results);
     open();
   });
   inp.addEventListener("blur", () => setTimeout(close, 150));
   inp.addEventListener("focus", () => { if(inp.value) inp.dispatchEvent(new Event("input")); });
+
+  if(rookiesBtn){
+    rookiesBtn.addEventListener("mousedown", (e) => { e.preventDefault(); });
+    rookiesBtn.addEventListener("click", () => {
+      const results = PLAYERS
+        .filter(p => p.draft === 2026)
+        .map(p => ({p, v: adjustedConsensus(p)}))
+        .sort((a,b)=>b.v-a.v);
+      if(!results.length){ dd.innerHTML = `<div class="empty">No 2026 rookies loaded</div>`; open(); return; }
+      renderRows(results);
+      open();
+    });
+  }
 }
 
 // =================================================================
