@@ -1240,14 +1240,14 @@ async function loadSleeperRoster(leagueId, leagueName){
   btn.innerHTML = '<span class="spinner"></span> Loading roster…';
   btn.disabled = true;
   try{
-    const [rostersR, players] = await Promise.all([
+    const [rostersR, tradedPicksR, players] = await Promise.all([
       fetch(`https://api.sleeper.app/v1/league/${leagueId}/rosters`).then(r=>r.ok?r.json():Promise.reject("rosters")),
+      fetch(`https://api.sleeper.app/v1/league/${leagueId}/traded_picks`).then(r=>r.ok?r.json():[]).catch(()=>[]),
       fetchSleeperPlayers()
     ]);
     const mine = rostersR.find(r => r.owner_id === sleeperUserId);
     if(!mine){ showToast("Couldn't find your roster in that league","err"); return; }
     const ids = mine.players || [];
-    const draftPicks = mine.metadata && mine.metadata.draft_picks || [];
     const myPlayers = [];
     for(const id of ids){
       const sp = players && players[id];
@@ -1270,11 +1270,18 @@ async function loadSleeperRoster(leagueId, leagueName){
         });
       }
     }
-    state.myRoster = { leagueName, leagueId, players: myPlayers };
+    const myPicks = (Array.isArray(tradedPicksR) ? tradedPicksR : [])
+      .filter(p => p.owner_id === mine.roster_id)
+      .map(p => {
+        const base = { type:"pick", year: Number(p.season), round: p.round, slot: "mid" };
+        return { ...base, value: pickValue(base) };
+      });
+    state.myRoster = { leagueName, leagueId, players: myPlayers, picks: myPicks };
     localStorage.setItem(ROSTER_KEY, JSON.stringify(state.myRoster));
     renderRoster();
     closeModal("#sleeper-modal");
-    showToast(`Imported ${myPlayers.length} players from ${leagueName}`, "ok");
+    const pickMsg = myPicks.length ? ` + ${myPicks.length} picks` : "";
+    showToast(`Imported ${myPlayers.length} players${pickMsg} from ${leagueName}`, "ok");
   } catch(e){
     showToast("Roster load failed", "err");
   } finally {
@@ -1288,21 +1295,32 @@ function renderRoster(){
   const wrap = $("#my-roster");
   if(!r){ wrap.classList.remove("show"); return; }
   wrap.classList.add("show");
-  $("#my-roster-title").innerHTML = `My Roster <span style="color:var(--ink-3);font-weight:500;letter-spacing:0;text-transform:none;margin-left:6px;font-size:11px">${r.leagueName} · click a player to add to "You Give"</span>`;
-  const sorted = [...r.players].sort((a,b)=>adjustedConsensus(b)-adjustedConsensus(a));
-  $("#roster-grid").innerHTML = sorted.map((p,i) => `
+  $("#my-roster-title").innerHTML = `My Roster <span style="color:var(--ink-3);font-weight:500;letter-spacing:0;text-transform:none;margin-left:6px;font-size:11px">${r.leagueName} · click an asset to add to "You Give"</span>`;
+  const all = [...(r.players||[]), ...(r.picks||[])];
+  const sorted = all.sort((a,b)=>assetValue(b)-assetValue(a));
+  $("#roster-grid").innerHTML = sorted.map((a,i) => {
+    if(a.type === "pick"){
+      return `
     <div class="r-card" data-i="${i}">
-      <div class="av" style="background:${avatarColor(p.n)}">${p.n.split(/\s+/).map(s=>s[0]).slice(0,2).join("")}</div>
-      <div class="info"><div class="nm">${p.n}</div><div class="sub">${posTag(p.p)}${p.t} • Age ${p.a}</div></div>
-      <div class="vl">${num(adjustedConsensus(p))}</div>
-    </div>
-  `).join("");
+      <div class="av">${a.year}<br>R${a.round}</div>
+      <div class="info"><div class="nm">${a.year} Round ${a.round}</div><div class="sub">Pick • ${a.slot}</div></div>
+      <div class="vl">${num(assetValue(a))}</div>
+    </div>`;
+    }
+    return `
+    <div class="r-card" data-i="${i}">
+      <div class="av" style="background:${avatarColor(a.n)}">${a.n.split(/\s+/).map(s=>s[0]).slice(0,2).join("")}</div>
+      <div class="info"><div class="nm">${a.n}</div><div class="sub">${posTag(a.p)}${a.t} • Age ${a.a}</div></div>
+      <div class="vl">${num(assetValue(a))}</div>
+    </div>`;
+  }).join("");
   $$(".r-card","#roster-grid").forEach(card => {
     card.onclick = () => {
       const i = parseInt(card.dataset.i,10);
-      const p = sorted[i];
-      addAsset("give", {...p, type:"player"});
-      showToast(`Added ${p.n} to "You Give"`, "ok");
+      const a = sorted[i];
+      addAsset("give", {...a});
+      const label = a.type === "pick" ? `${a.year} R${a.round}` : a.n;
+      showToast(`Added ${label} to "You Give"`, "ok");
     };
   });
 }
