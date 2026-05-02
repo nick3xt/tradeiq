@@ -2554,24 +2554,25 @@ function renderTiers(){
   for(const k of Object.keys(byPos)) byPos[k].sort((a,b)=>b.v-a.v);
 
   // Tier bands in adjusted-value space (post-format/scoring/team multipliers applied by adjustedConsensus).
-  // Thresholds calibrated against natural value clusters in the actual data — no round numbers.
+  // Recalibrated for the new KTC/FantasyCalc consensus scale — top WR ~12,600 adj (raw KTC ~11,500),
+  // top RB ~10,100 adj (Jeanty/Bijan), top TE ~9,150 adj (Bowers).
   // QB thresholds split by format: SF inflates QB values ×1.40; 1QB deflates ×0.70.
   // RB/WR/TE thresholds are format-neutral (format only shifts QB values).
   //
   // Key anchors (PPR, 12-team defaults):
-  //   QB SF  — Dart 9,816 → QB1 | Penix 8,673 → QB2 | Young 8,130 → QB2
-  //   QB 1QB — Daniels 6,542 → QB1 | Stroud 6,317 → QB1 | Hurts 6,210 → QB1 | Mahomes 5,638 → QB1 | Dart 4,908 → QB2
-  //   RB     — Jeanty 8,350 → RB1 | Love 8,292 → RB1 | Bijan 7,686 → RB1 | Gibbs 7,558 → RB1 | Hall 7,351 → RB1 | Achane 7,261 → RB1 | Cook 5,484 → RB2
-  //   WR     — Chase 12,598 → WR1 | Jefferson 9,941 → WR1 | Nabers 9,979 → WR1 | Lamb 9,698 → WR1 | Hunter 9,639 → WR1 | McMillan 9,299 → WR1
-  //   TE     — Bowers 9,159 → TE1 | McBride 7,593 → TE1 | LaPorta 7,108 → TE1 | Warren 5,982 → TE2
+  //   QB SF  — Daniels 13,083 → QB1 | Mahomes 11,267 → QB1 | Purdy 9,790 → QB1 | McCarthy 9,510 → QB2 | Penix 8,673 → QB2
+  //   QB 1QB — Daniels 6,542 → QB1 | Mahomes 5,634 → QB1 | Purdy 4,895 → QB1 | McCarthy 4,755 → QB2 | Penix 4,337 → QB2
+  //   RB     — Jeanty 10,092 → RB1 | Bijan 10,083 → RB1 | Achane 8,283 → RB1 | Bucky 6,311 → RB1 | Kyren 5,675 → RB2 | McCaffrey 4,460 → RB2
+  //   WR     — Chase 12,604 → WR1 | Jefferson 11,564 → WR1 | Lamb 11,014 → WR1 | ARSB 10,244 → WR1 | McMillan 9,034 → WR1 | Garrett Wilson 8,814 → WR2
+  //   TE     — Bowers 9,159 → TE1 | McBride 7,593 → TE1 | LaPorta 7,108 → TE1 | Loveland 5,570 → TE1 | Kincaid 4,405 → TE2
   const fmtSF = PROFILE.format === "superflex";
   const tierDefs = {
     QB: fmtSF
-      ? [["QB1",8800,99999],["QB2",6600,8799],["QB3",4200,6599],["Streamers",0,4199]]
-      : [["QB1",5200,99999],["QB2",4300,5199],["QB3",2600,4299],["Streamers",0,2599]],
-    RB: [["RB1",7200,99999],["RB2",5000,7199],["RB3",3200,4999],["Depth",0,3199]],
-    WR: [["WR1",9100,99999],["WR2",7200,9099],["WR3",4500,7199],["Depth",0,4499]],
-    TE: [["TE1",7000,99999],["TE2",5200,6999],["TE3",2300,5199],["Streamers",0,2299]]
+      ? [["QB1",9500,99999],["QB2",7000,9499],["QB3",4500,6999],["Streamers",0,4499]]
+      : [["QB1",4800,99999],["QB2",3000,4799],["QB3",1500,2999],["Streamers",0,1499]],
+    RB: [["RB1",6000,99999],["RB2",4000,5999],["RB3",2500,3999],["Depth",0,2499]],
+    WR: [["WR1",9000,99999],["WR2",6500,8999],["WR3",3500,6499],["Depth",0,3499]],
+    TE: [["TE1",5500,99999],["TE2",3000,5499],["TE3",1500,2999],["Streamers",0,1499]]
   };
   function colHTML(pos, defs){
     const ctx = pos === "QB" ? (fmtSF ? "Superflex" : "1QB") : "all formats";
