@@ -39,7 +39,7 @@ img{display:block;max-width:100%}
 
 /* Ticker */
 .ticker{
-  position:sticky;top:0;z-index:1;
+  position:sticky;top:0;z-index:20;
   background:linear-gradient(180deg,#0d1322 0%,#080c18 100%);
   border-bottom:1px solid var(--line);
   overflow:hidden;
@@ -51,7 +51,7 @@ img{display:block;max-width:100%}
   padding:0 12px;height:100%;display:flex;align-items:center;flex:0 0 auto;text-transform:uppercase;
 }
 .ticker .track{
-  display:flex;gap:32px;white-space:nowrap;animation:scroll 120s linear infinite;padding-left:16px;
+  display:flex;gap:32px;white-space:nowrap;animation:scroll 180s linear infinite;padding-left:16px;
   font-size:12px;font-weight:600;color:var(--ink-2)
 }
 .ticker .item .name{color:var(--ink)}
@@ -63,7 +63,7 @@ img{display:block;max-width:100%}
 
 /* Header */
 .header{
-  position:relative;z-index:20;
+  position:sticky;top:0;z-index:30;
   background:linear-gradient(180deg,#0c1322 0%,var(--bg) 100%);
   border-bottom:1px solid var(--line);
   padding:14px 20px;
@@ -675,10 +675,7 @@ img{display:block;max-width:100%}
 }
 .featured-asset .nm{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .featured-asset .vl{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:700;font-size:12px;flex:0 0 auto}
-.featured-vs{
-  display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-weight:900;
-  background:var(--panel-2);border:1px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:12px;letter-spacing:.04em;justify-self:center
-}
+
 .featured-cta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;justify-self:end}
 @media (max-width:760px){.featured-cta{align-items:center;justify-self:center}}
 .featured-cta .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
@@ -1061,12 +1058,6 @@ img{display:block;max-width:100%}
   <div class="splash-text">TRADE<span>IQ</span></div>
 </div>
 
-<!-- TICKER -->
-<div class="ticker" id="ticker">
-  <div class="label">LIVE • TOP 25</div>
-  <div class="track" id="ticker-track"></div>
-</div>
-
 <!-- HEADER -->
 <header class="header">
   <div class="header-row">
@@ -1085,6 +1076,12 @@ img{display:block;max-width:100%}
   </div>
   <div class="profile-bar" id="profile-bar"></div>
 </header>
+
+<!-- TICKER -->
+<div class="ticker" id="ticker">
+  <div class="label">LIVE • TOP 25</div>
+  <div class="track" id="ticker-track"></div>
+</div>
 
 <!-- MAIN -->
 <main class="main">
@@ -1566,7 +1563,7 @@ const PLAYERS = [
 {n:"CeeDee Lamb",p:"WR",t:"DAL",a:26,ktc:8824,fc:8872,dp:8726,sleeper:8824},
 {n:"Malik Nabers",p:"WR",t:"NYG",a:24,ktc:9064,fc:9012,dp:9167,sleeper:9064},
 {n:"Puka Nacua",p:"WR",t:"LAR",a:24,ktc:8550,fc:8500,dp:8600,sleeper:8550},
-{n:"Brian Thomas Jr",p:"WR",t:"JAX",a:23,ktc:8400,fc:8350,dp:8500,sleeper:8400},
+{n:"Brian Thomas Jr",p:"WR",t:"JAX",a:23,ktc:6500,fc:6400,dp:6300,sleeper:6400},
 {n:"Marvin Harrison Jr",p:"WR",t:"ARI",a:22,ktc:8000,fc:7900,dp:8200,sleeper:8000},
 {n:"Drake London",p:"WR",t:"ATL",a:26,ktc:7900,fc:7850,dp:7950,sleeper:7900},
 {n:"Amon-Ra St. Brown",p:"WR",t:"DET",a:28,ktc:7898,fc:7995,dp:7800,sleeper:7898},
@@ -2422,7 +2419,7 @@ function renderTiers(){
   //
   // Key anchors (PPR, 12-team defaults):
   //   QB SF  — Dart 9,816 → QB1 | Penix 8,673 → QB2 | Young 8,130 → QB2
-  //   QB 1QB — Daniels 6,542 → QB1 | Dart 4,908 → QB2 | Penix 4,337 → QB2
+  //   QB 1QB — Daniels 6,542 → QB1 | Stroud 6,317 → QB1 | Hurts 6,210 → QB1 | Mahomes 5,638 → QB1 | Dart 4,908 → QB2
   //   RB     — Jeanty 8,350 → RB1 | Love 8,292 → RB1 | Bijan 7,686 → RB1 | Gibbs 7,558 → RB1 | Hall 7,351 → RB1 | Achane 7,261 → RB1 | Cook 5,484 → RB2
   //   WR     — Chase 12,598 → WR1 | Jefferson 9,941 → WR1 | Nabers 9,979 → WR1 | Lamb 9,698 → WR1 | Hunter 9,639 → WR1 | McMillan 9,299 → WR1
   //   TE     — Bowers 9,159 → TE1 | McBride 7,593 → TE1 | LaPorta 7,108 → TE1 | Warren 5,982 → TE2
@@ -2494,7 +2491,6 @@ function renderFeatured(){
       <div class="head">YOU GET</div>
       ${get.map(rowHTML).join("") || '<div class="featured-asset"><span class="nm" style="color:var(--ink-3);font-style:italic">— missing player —</span></div>'}
     </div>
-    <div class="featured-vs">VS</div>
     <div class="featured-side them">
       <div class="head">YOU GIVE</div>
       ${give.map(rowHTML).join("") || '<div class="featured-asset"><span class="nm" style="color:var(--ink-3);font-style:italic">— missing —</span></div>'}
