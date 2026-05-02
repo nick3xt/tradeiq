@@ -394,7 +394,7 @@ img{display:block;max-width:100%}
   background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center
 }
 .v2-grade-card .lbl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
-.v2-grade-card .grade-letter{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:800;line-height:1;margin:6px 0 2px}
+.v2-grade-card .grade-letter{font-family:'Inter',sans-serif;font-size:24px;font-weight:900;line-height:1.05;letter-spacing:.04em;text-transform:uppercase;margin:8px 0 4px;word-break:break-word}
 .v2-grade-card .tier{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
 .v2-grade-card.S .grade-letter,.v2-grade-card.Aplus .grade-letter,.v2-grade-card.S .tier,.v2-grade-card.Aplus .tier{color:var(--green)}
 .v2-grade-card.A .grade-letter,.v2-grade-card.Aminus .grade-letter,.v2-grade-card.A .tier,.v2-grade-card.Aminus .tier{color:#3ee68f}
@@ -792,7 +792,7 @@ img{display:block;max-width:100%}
   .v2-hero { padding: 18px; }
   .v2-hero h1 { font-size: 20px; }
   .v2-hero .delta { font-size: 13px; }
-  .v2-grade-card .grade-letter { font-size: 32px; }
+  .v2-grade-card .grade-letter { font-size: 22px; }
   .v2-grade-card .lbl { font-size: 10px; }
   .v2-grade-card .tier { font-size: 11px; }
   .grade-box .grade { font-size: 44px; }
@@ -1035,9 +1035,9 @@ img{display:block;max-width:100%}
       <div class="field">
         <label>Team Mode</label>
         <div class="opts" data-group="mode">
+          <button class="opt" data-val="rebuilder">Rebuilder</button>
           <button class="opt sel" data-val="contender">Contender</button>
           <button class="opt" data-val="winnow">Win-Now</button>
-          <button class="opt" data-val="rebuilder">Rebuilder</button>
         </div>
       </div>
     </div>
@@ -1074,10 +1074,14 @@ img{display:block;max-width:100%}
       <div class="field">
         <label>Original Team Record (pick origin)</label>
         <div class="opts" data-group="pslot">
-          <button class="opt" data-val="top3">Top 3 (Bottom of standings)</button>
+          <button class="opt" data-val="top3">Early (Top 3 — bottom of standings)</button>
           <button class="opt sel" data-val="mid">Mid (4–9)</button>
-          <button class="opt" data-val="late">Late (Top 3 standings)</button>
+          <button class="opt" data-val="late">Late (Bottom 3 — top of standings)</button>
         </div>
+      </div>
+      <div class="field" id="pick-value-preview-row" style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.25);border-radius:8px;padding:10px 14px;margin-top:6px">
+        <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700">Estimated Value</div>
+        <div id="pick-value-preview" style="font-family:'JetBrains Mono',monospace;font-weight:800;color:var(--gold);font-size:20px">—</div>
       </div>
     </div>
     <div class="footer">
@@ -1641,27 +1645,41 @@ function adjustedConsensus(player){
   return applyFormat(player, rawConsensus(player));
 }
 
-// Picks
-function basePickValue(round, slot){
-  if(round===1){ return slot==="top3"?5800: slot==="late"?2800: 4200; }
-  if(round===2){ return slot==="top3"?2400: slot==="late"?1100: 1800; }
-  if(round===3){ return 800; }
-  if(round===4){ return 350; }
-  if(round===5){ return 150; }
-  return 50;
-}
+// Picks — KTC-calibrated mid-slot base values per round/year, with slot multipliers.
+const PICK_BASE = {
+  1: { 2026:6000, 2027:5000, 2028:4200, 2029:3500 },
+  2: { 2026:2200, 2027:1850, 2028:1550, 2029:1300 },
+  3: { 2026: 950, 2027: 800, 2028: 670, 2029: 560 },
+  4: { 2026: 420, 2027: 350, 2028: 295, 2029: 245 }
+};
+const PICK_SLOT_MULT = { top3: 1.55, mid: 1.00, late: 0.60 };
+
 function pickValue(pick){
-  let v = basePickValue(pick.round, pick.slot);
-  // year decay: assume current dynasty year = 2026
-  const yrs = pick.year - 2026;
-  if(yrs===1) v *= 0.85;
-  else if(yrs===2) v *= 0.72;
-  else if(yrs>=3) v *= 0.62;
-  // format
+  const round = pick.round;
+  const year  = pick.year;
+  let base;
+  if(PICK_BASE[round] && PICK_BASE[round][year] != null){
+    base = PICK_BASE[round][year];
+  } else if(PICK_BASE[round]){
+    // out-of-table year — extrapolate from the nearest endpoint
+    const yrs = Object.keys(PICK_BASE[round]).map(Number).sort((a,b)=>a-b);
+    const lo = yrs[0], hi = yrs[yrs.length-1];
+    if(year < lo){
+      base = PICK_BASE[round][lo] * Math.pow(1.20, lo - year);
+    } else {
+      base = PICK_BASE[round][hi] * Math.pow(0.85, year - hi);
+    }
+  } else {
+    // round 5+ fallback (rough scaling off round 4)
+    base = round === 5 ? 130 : 50;
+  }
+  let v = base * (PICK_SLOT_MULT[pick.slot] != null ? PICK_SLOT_MULT[pick.slot] : 1.0);
+  // Team count
   const tc = parseInt(PROFILE.teams,10);
   if(tc === 14) v *= 1.15;
-  if(tc === 8) v *= 0.90;
-  if(PROFILE.format === "superflex") v *= 1.10;
+  if(tc === 8)  v *= 0.90;
+  // Superflex premium applies only to 1st/2nd round picks
+  if(PROFILE.format === "superflex" && (round === 1 || round === 2)) v *= 1.10;
   return Math.round(v);
 }
 
@@ -2183,14 +2201,23 @@ $("#btn-save-profile").onclick = () => {
 // PICK MODAL
 // =================================================================
 let pickSide = "get";
+function updatePickValuePreview(){
+  const el = document.getElementById("pick-value-preview");
+  if(!el) return;
+  const year  = parseInt(getGroupVal("pick-modal","pyear"),10);
+  const round = parseInt(getGroupVal("pick-modal","pround"),10);
+  const slot  = getGroupVal("pick-modal","pslot");
+  el.textContent = num(pickValue({ type:"pick", year, round, slot }));
+}
 $$(".add-pick-btn").forEach(b => b.onclick = () => {
   pickSide = b.dataset.side;
   setGroupVal("pick-modal","pyear","2026");
   setGroupVal("pick-modal","pround","1");
   setGroupVal("pick-modal","pslot","mid");
+  updatePickValuePreview();
   openModal("#pick-modal");
 });
-["pyear","pround","pslot"].forEach(g => bindOptGroup("pick-modal", g));
+["pyear","pround","pslot"].forEach(g => bindOptGroup("pick-modal", g, updatePickValuePreview));
 $("#btn-add-pick").onclick = () => {
   const pick = {
     type: "pick",
@@ -2412,6 +2439,14 @@ function gradeFor(diffPct){
   return {l:"F", c:"F", tier:"LOPSIDED"};
 }
 
+// Plain-English label shown to the user in place of the raw letter grade.
+const GRADE_LABELS = {
+  "S":"ELITE", "A+":"EXCELLENT", "A":"GREAT", "A-":"SOLID",
+  "B+":"GOOD", "B":"FAIR", "B-":"SLIGHT EDGE",
+  "C+":"CLOSE", "C":"EVEN", "D":"WEAK", "F":"POOR"
+};
+function gradeLabel(g){ return GRADE_LABELS[g.l] || g.l; }
+
 function analyze(){
   const totGet  = state.get.reduce((s,a)=>s+assetValue(a),0);
   const totGive = state.give.reduce((s,a)=>s+assetValue(a),0);
@@ -2540,12 +2575,13 @@ function verdictText(totGet, totGive, you, opp, market){
     lines.push(`You give up <b>${num(-diff)}</b> consensus points (${(((totGive/totGet)-1)*100).toFixed(1)}% premium paid).`);
   }
   lines.push(market.text + ".");
+  const youLbl = gradeLabel(you);
   if(you.l[0] === "A" || you.l === "S"){
-    lines.push(`Your side grades <b>${you.l}</b> — accept it.`);
+    lines.push(`Your side grades <b>${youLbl}</b> — accept it.`);
   } else if(you.l[0] === "B"){
-    lines.push(`Your side grades <b>${you.l}</b> — fair, but consider whether the fit improves on the margin.`);
+    lines.push(`Your side grades <b>${youLbl}</b> — fair, but consider whether the fit improves on the margin.`);
   } else {
-    lines.push(`Your side grades <b>${you.l}</b> — counter or pass unless the roster fit is unusually clean.`);
+    lines.push(`Your side grades <b>${youLbl}</b> — counter or pass unless the roster fit is unusually clean.`);
   }
   return lines.join(" ");
 }
@@ -2583,21 +2619,21 @@ function renderVerdict(v){
       <div class="v2-grade-row">
         <div class="v2-grade-card ${v.yourGrade.c}">
           <div class="lbl">YOUR SIDE</div>
-          <div class="grade-letter">${v.yourGrade.l}</div>
+          <div class="grade-letter">${gradeLabel(v.yourGrade)}</div>
           <div class="tier">${v.yourGrade.tier}</div>
         </div>
         <div class="v2-grade-card ${v.oppGrade.c}">
           <div class="lbl">THEIR SIDE</div>
-          <div class="grade-letter">${v.oppGrade.l}</div>
+          <div class="grade-letter">${gradeLabel(v.oppGrade)}</div>
           <div class="tier">${v.oppGrade.tier}</div>
         </div>
       </div>
       <div class="v2-legend">
-        <b>S</b> = Elite <span class="sep">·</span>
-        <b>A</b> = Strong <span class="sep">·</span>
-        <b>B</b> = Fair <span class="sep">·</span>
-        <b>C</b> = Weak <span class="sep">·</span>
-        <b>D/F</b> = Lopsided
+        <b>ELITE / EXCELLENT</b> = win it <span class="sep">·</span>
+        <b>GREAT / SOLID</b> = strong value <span class="sep">·</span>
+        <b>GOOD / FAIR / SLIGHT EDGE</b> = fair deal <span class="sep">·</span>
+        <b>CLOSE / EVEN</b> = weak return <span class="sep">·</span>
+        <b>WEAK / POOR</b> = lopsided
       </div>
     </div>
   `;
@@ -2996,8 +3032,15 @@ function drawGradeBox(ctx, x, y, w, h, label, grade, total){
 
   const colorMap = {S:"#00d26a",Aplus:"#00d26a",A:"#3ee68f",Aminus:"#3ee68f",Bplus:"#ffd700",B:"#ffd700",Bminus:"#ffd700",Cplus:"#ff9f43",C:"#ff9f43",D:"#ff4757",F:"#ff4757"};
   ctx.fillStyle = colorMap[grade.c] || "#e8eef9";
-  ctx.font = "900 110px JetBrains Mono, monospace";
-  ctx.fillText(grade.l, x+w/2, y+150);
+  const labelText = (typeof gradeLabel === "function") ? gradeLabel(grade) : grade.l;
+  // size label so it fits in the box width regardless of word length
+  let labelSize = 70;
+  ctx.font = `900 ${labelSize}px Inter, sans-serif`;
+  while(ctx.measureText(labelText).width > w - 40 && labelSize > 28){
+    labelSize -= 4;
+    ctx.font = `900 ${labelSize}px Inter, sans-serif`;
+  }
+  ctx.fillText(labelText, x+w/2, y+140);
 
   // tier label
   if(grade.tier){
