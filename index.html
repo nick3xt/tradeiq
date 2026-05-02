@@ -365,6 +365,132 @@ img{display:block;max-width:100%}
   border:1px solid var(--line);border-radius:10px;font-size:14px;line-height:1.6;color:var(--ink)
 }
 
+/* === New Bloomberg-style verdict v2 === */
+.v2-hero{
+  background:linear-gradient(135deg,#0d1322 0%,#161e36 100%);
+  border:1px solid var(--line-2);border-radius:14px;padding:22px;margin-bottom:18px;
+  position:relative;overflow:hidden
+}
+.v2-hero::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:6px
+}
+.v2-hero.you::before{background:var(--green)}
+.v2-hero.them::before{background:var(--red)}
+.v2-hero.even::before{background:var(--blue)}
+.v2-hero h1{
+  margin:0;font-size:24px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;line-height:1.15
+}
+.v2-hero.you h1{color:var(--green)}
+.v2-hero.them h1{color:var(--red)}
+.v2-hero.even h1{color:var(--blue)}
+.v2-hero .delta{margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--ink-2);font-weight:600;letter-spacing:.02em}
+.v2-hero .delta b{color:var(--gold)}
+.v2-grade-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+@media (max-width:560px){.v2-grade-row{grid-template-columns:1fr}}
+.v2-grade-card{
+  background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center
+}
+.v2-grade-card .lbl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.v2-grade-card .grade-letter{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:800;line-height:1;margin:6px 0 2px}
+.v2-grade-card .tier{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
+.v2-grade-card.S .grade-letter,.v2-grade-card.Aplus .grade-letter,.v2-grade-card.S .tier,.v2-grade-card.Aplus .tier{color:var(--green)}
+.v2-grade-card.A .grade-letter,.v2-grade-card.Aminus .grade-letter,.v2-grade-card.A .tier,.v2-grade-card.Aminus .tier{color:#3ee68f}
+.v2-grade-card.Bplus .grade-letter,.v2-grade-card.B .grade-letter,.v2-grade-card.Bminus .grade-letter,.v2-grade-card.Bplus .tier,.v2-grade-card.B .tier,.v2-grade-card.Bminus .tier{color:var(--gold)}
+.v2-grade-card.Cplus .grade-letter,.v2-grade-card.C .grade-letter,.v2-grade-card.Cplus .tier,.v2-grade-card.C .tier{color:#ff9f43}
+.v2-grade-card.D .grade-letter,.v2-grade-card.F .grade-letter,.v2-grade-card.D .tier,.v2-grade-card.F .tier{color:var(--red)}
+
+.v2-legend{
+  margin-top:12px;padding:10px 12px;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:8px;
+  font-size:11px;color:var(--ink-3);letter-spacing:.04em;text-align:center;line-height:1.6
+}
+.v2-legend b{color:var(--ink-2);font-weight:700}
+.v2-legend .sep{color:var(--line-2);margin:0 6px}
+
+.v2-section{
+  margin-bottom:18px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden
+}
+.v2-section-head{
+  padding:11px 16px;background:#0a0f1d;border-bottom:1px solid var(--line);
+  font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px
+}
+.v2-section-head .sub{font-size:10px;color:var(--ink-3);letter-spacing:.06em;text-transform:none;font-weight:500}
+.v2-section-body{padding:14px 16px}
+
+.v2-table{width:100%;border-collapse:collapse;font-size:13px}
+.v2-table th{
+  text-align:left;padding:8px 10px;background:#0a0f1d;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:700;border-bottom:1px solid var(--line)
+}
+.v2-table td{padding:9px 10px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+.v2-table td.nm{color:var(--ink);font-weight:600}
+.v2-table td.val{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:700;text-align:right}
+.v2-table tr.subtotal td{background:#0d1322;font-weight:700;color:var(--ink);border-top:1px solid var(--line-2)}
+.v2-table tr.delta-row td{background:#0d1322;font-weight:800;font-size:14px;letter-spacing:.04em}
+.v2-table tr.delta-row td.pos{color:var(--green)}
+.v2-table tr.delta-row td.neg{color:var(--red)}
+.v2-table tr.delta-row td.even{color:var(--blue)}
+.v2-side-label td{
+  background:#06091a !important;color:var(--ink-3);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:800;padding:7px 10px
+}
+.v2-side-label.you td{color:#3ee68f}
+.v2-side-label.them td{color:#ff7884}
+
+.v2-kv{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.v2-kv{grid-template-columns:1fr}}
+.v2-kv-cell{padding:12px 14px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px}
+.v2-kv-cell .k{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700;margin-bottom:4px}
+.v2-kv-cell .v{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--ink)}
+.v2-kv-cell .sub{font-size:11px;color:var(--ink-3);margin-top:2px}
+
+.v2-flag{
+  margin-top:12px;padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.5;font-weight:600;
+  display:flex;gap:8px;align-items:flex-start
+}
+.v2-flag.win-now{background:rgba(255,159,67,.08);border:1px solid rgba(255,159,67,.3);color:#ffaa57}
+.v2-flag.dynasty{background:rgba(0,210,106,.08);border:1px solid rgba(0,210,106,.3);color:#3ee68f}
+.v2-flag.neutral{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);color:#7ab8ff}
+
+.v2-pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.v2-pos-grid{grid-template-columns:1fr}}
+.v2-pos-col{background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:12px}
+.v2-pos-col .h{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:700;margin-bottom:8px}
+.v2-pos-col.you .h{color:#3ee68f}
+.v2-pos-col.them .h{color:#ff7884}
+.v2-pos-list{display:flex;flex-wrap:wrap;gap:6px}
+.v2-pos-pill{
+  font-size:11px;font-weight:700;padding:4px 9px;border-radius:6px;letter-spacing:.04em;
+  background:#0a0f1d;border:1px solid var(--line)
+}
+.v2-pos-empty{color:var(--ink-3);font-size:12px;font-style:italic}
+
+.v2-spread-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:9px 12px;border-bottom:1px solid var(--line);font-size:12px
+}
+.v2-spread-row:last-child{border-bottom:none}
+.v2-spread-row .nm{color:var(--ink);font-weight:600;flex:0 0 auto;max-width:38%}
+.v2-spread-row .vals{color:var(--ink-3);font-family:'JetBrains Mono',monospace;font-size:11px;flex:1;text-align:left;letter-spacing:.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v2-spread-row .tag{
+  font-size:10px;font-weight:800;padding:3px 8px;border-radius:5px;letter-spacing:.08em;flex:0 0 auto
+}
+.v2-spread-row .tag.tight{background:rgba(74,158,255,.12);color:#7ab8ff}
+.v2-spread-row .tag.wide{background:rgba(0,210,106,.12);color:#3ee68f}
+.v2-spread-row .tag.med{background:rgba(255,159,67,.12);color:#ffaa57}
+
+.v2-context-card{
+  padding:16px 18px;background:linear-gradient(180deg,var(--panel-2),var(--bg-2));
+  border:1px solid var(--line);border-left:3px solid var(--green);border-radius:10px;
+  font-size:14px;line-height:1.6;color:var(--ink)
+}
+.v2-context-card.rebuild{border-left-color:#7ab8ff}
+.v2-context-card .mode-badge{
+  display:inline-block;padding:3px 9px;border-radius:5px;font-size:10px;font-weight:800;
+  letter-spacing:.16em;text-transform:uppercase;background:rgba(0,210,106,.12);color:#3ee68f;margin-right:8px
+}
+.v2-context-card.rebuild .mode-badge{background:rgba(74,158,255,.12);color:#7ab8ff}
+
 /* Toast */
 .toast{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
@@ -421,6 +547,101 @@ img{display:block;max-width:100%}
 .pick-chart-legend .legend-swatch{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid rgba(255,255,255,0.08)}
 .pick-chart-legend .legend-label{margin-right:8px;color:var(--ink-3)}
 .pick-chart-legend .legend-spacer{flex:1}
+
+/* Market Movers */
+.movers-section{margin:32px auto 0;max-width:1200px;padding:0 16px;color:var(--ink)}
+.movers-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.movers-head h3{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-2);margin:0;font-weight:700}
+.movers-head h3 .subtitle{font-size:11px;color:var(--ink-3);margin-left:10px;text-transform:none;letter-spacing:0;font-weight:400}
+.movers-strip{
+  display:flex;gap:10px;overflow-x:auto;padding:6px 2px 14px;
+  scrollbar-width:thin;scrollbar-color:var(--line-2) transparent
+}
+.movers-strip::-webkit-scrollbar{height:8px}
+.movers-strip::-webkit-scrollbar-track{background:transparent}
+.movers-strip::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px}
+.mover-card{
+  flex:0 0 200px;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:12px 14px;display:flex;flex-direction:column;gap:6px;position:relative;
+  transition:transform .15s,border-color .15s
+}
+.mover-card:hover{transform:translateY(-2px);border-color:var(--line-2)}
+.mover-card.up{border-left:3px solid var(--green)}
+.mover-card.down{border-left:3px solid var(--red)}
+.mover-card .nm{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mover-card .meta{font-size:11px;color:var(--ink-3);letter-spacing:.04em}
+.mover-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.mover-card .val{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--gold);font-weight:700}
+.mover-card .trend{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;letter-spacing:.02em}
+.mover-card .trend.up{color:var(--green)}
+.mover-card .trend.down{color:var(--red)}
+.mover-section-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.mover-bucket .bucket-label{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
+  color:var(--ink-3);margin:0 0 8px 2px;display:flex;align-items:center;gap:6px
+}
+.mover-bucket.risers .bucket-label{color:#3ee68f}
+.mover-bucket.fallers .bucket-label{color:#ff7884}
+
+/* Position Tiers */
+.tiers-section{margin:32px auto 0;max-width:1200px;padding:0 16px;color:var(--ink)}
+.tiers-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.tiers-head h3{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-2);margin:0;font-weight:700}
+.tiers-head h3 .subtitle{font-size:11px;color:var(--ink-3);margin-left:10px;text-transform:none;letter-spacing:0;font-weight:400}
+.tiers-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px
+}
+.tier-col{
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden
+}
+.tier-col-head{
+  padding:10px 14px;background:#0a0f1d;border-bottom:1px solid var(--line);
+  font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  display:flex;justify-content:space-between;align-items:center
+}
+.tier-col-head.QB{color:#ff7884}
+.tier-col-head.RB{color:#3ee68f}
+.tier-col-head.WR{color:#7ab8ff}
+.tier-col-head.TE{color:#ffe14f}
+.tier-col-head .ctx{font-size:9px;color:var(--ink-3);font-weight:600;letter-spacing:.06em}
+.tier-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 14px;border-bottom:1px solid var(--line);font-size:12px
+}
+.tier-row:last-child{border-bottom:none}
+.tier-row .lbl{color:var(--ink);font-weight:700;font-size:11px;letter-spacing:.06em}
+.tier-row .rng{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:700;font-size:12px}
+.tier-row .nm-list{font-size:10px;color:var(--ink-3);font-style:italic;display:block;margin-top:2px;letter-spacing:.02em}
+
+/* Featured Trade */
+.featured-section{margin:32px auto 40px;max-width:1200px;padding:0 16px;color:var(--ink)}
+.featured-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.featured-head h3{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-2);margin:0;font-weight:700}
+.featured-head h3 .subtitle{font-size:11px;color:var(--ink-3);margin-left:10px;text-transform:none;letter-spacing:0;font-weight:400}
+.featured-card{
+  background:linear-gradient(135deg,#0d1322 0%,#161e36 100%);
+  border:1px solid var(--line-2);border-radius:14px;padding:18px;
+  display:grid;grid-template-columns:1fr auto 1fr auto;gap:14px;align-items:center
+}
+@media (max-width:760px){.featured-card{grid-template-columns:1fr;text-align:center}}
+.featured-side{display:flex;flex-direction:column;gap:6px}
+.featured-side .head{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:800}
+.featured-side.you .head{color:#3ee68f}
+.featured-side.them .head{color:#ff7884}
+.featured-asset{
+  display:flex;justify-content:space-between;gap:8px;
+  padding:7px 11px;background:rgba(0,0,0,.3);border-radius:7px;font-size:13px
+}
+.featured-asset .nm{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.featured-asset .vl{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:700;font-size:12px;flex:0 0 auto}
+.featured-vs{
+  display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-weight:900;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:12px;letter-spacing:.04em;justify-self:center
+}
+.featured-cta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;justify-self:end}
+@media (max-width:760px){.featured-cta{align-items:center;justify-self:center}}
+.featured-cta .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.featured-cta .btn{font-size:12px;padding:9px 14px}
 
 </style>
 </head>
@@ -525,6 +746,30 @@ img{display:block;max-width:100%}
     </div>
   </section>
 
+  <!-- MARKET MOVERS -->
+  <section class="movers-section" id="movers-section">
+    <header class="movers-head">
+      <h3>Market Movers <span class="subtitle">Post-2026-draft consensus shifts · 30-day window</span></h3>
+    </header>
+    <div class="mover-section-grid" id="movers-grid"></div>
+  </section>
+
+  <!-- POSITION VALUE TIERS -->
+  <section class="tiers-section" id="tiers-section">
+    <header class="tiers-head">
+      <h3>Position Value Tiers <span class="subtitle">Live consensus ranges · adjusts to your league settings</span></h3>
+    </header>
+    <div class="tiers-grid" id="tiers-grid"></div>
+  </section>
+
+  <!-- FEATURED TRADE -->
+  <section class="featured-section" id="featured-section">
+    <header class="featured-head">
+      <h3>Featured Trade of the Day <span class="subtitle">Tap re-analyze to load it into the builder</span></h3>
+    </header>
+    <div class="featured-card" id="featured-card"></div>
+  </section>
+
 </main>
 
 <!-- PROFILE MODAL -->
@@ -567,18 +812,8 @@ img{display:block;max-width:100%}
       <div class="field">
         <label>Team Mode</label>
         <div class="opts" data-group="mode">
-          <button class="opt" data-val="contender">Contender</button>
-          <button class="opt sel" data-val="winnow">Win-Now</button>
+          <button class="opt sel" data-val="contender">Contender</button>
           <button class="opt" data-val="rebuilder">Rebuilder</button>
-        </div>
-      </div>
-      <div class="field">
-        <label>Team Record</label>
-        <div class="opts" data-group="record">
-          <button class="opt" data-val="bottom3">1–3 wins</button>
-          <button class="opt sel" data-val="mid">4–6 wins</button>
-          <button class="opt" data-val="upper">7–9 wins</button>
-          <button class="opt" data-val="top">10+ wins</button>
         </div>
       </div>
     </div>
@@ -610,7 +845,6 @@ img{display:block;max-width:100%}
           <button class="opt" data-val="2">2nd</button>
           <button class="opt" data-val="3">3rd</button>
           <button class="opt" data-val="4">4th</button>
-          <button class="opt" data-val="5">5th</button>
         </div>
       </div>
       <div class="field">
@@ -641,8 +875,8 @@ img{display:block;max-width:100%}
       <div class="field">
         <label>Season</label>
         <div class="opts" data-group="season">
-          <button class="opt" data-val="2026">2026</button>
-          <button class="opt sel" data-val="2025">2025</button>
+          <button class="opt sel" data-val="2026">2026</button>
+          <button class="opt" data-val="2025">2025</button>
         </div>
       </div>
       <div id="sleeper-leagues"></div>
@@ -1126,7 +1360,7 @@ const PLAYERS = [
 const PROFILE_KEY = "tradeiq.profile.v1";
 const ROSTER_KEY = "tradeiq.roster.v1";
 const DEFAULT_PROFILE = {
-  teams:12, scoring:"ppr", tep:"0", format:"standard", mode:"winnow", record:"mid"
+  teams:12, scoring:"ppr", tep:"0", format:"standard", mode:"contender"
 };
 
 function loadProfile(){
@@ -1281,8 +1515,7 @@ function renderTicker(){
 function profileBar(){
   const fmtMap = { standard:"Standard", superflex:"Superflex" };
   const scoreMap = { standard:"Non-PPR", half:"Half PPR", ppr:"Full PPR" };
-  const modeMap = { contender:"Contender", winnow:"Win-Now", rebuilder:"Rebuilder" };
-  const recMap = { bottom3:"1–3 W", mid:"4–6 W", upper:"7–9 W", top:"10+ W" };
+  const modeMap = { contender:"Contender", rebuilder:"Rebuilder" };
   const tepMap = { "0":"No TEP", "0.5":"0.5 TEP", "1":"1.0 TEP" };
   const bar = $("#profile-bar");
   bar.innerHTML = `
@@ -1291,8 +1524,7 @@ function profileBar(){
     <div class="chip">Format: <b>${fmtMap[PROFILE.format]}</b></div>
     <div class="chip">Scoring: <b>${scoreMap[PROFILE.scoring]}</b></div>
     <div class="chip">${tepMap[PROFILE.tep]}</div>
-    <div class="chip">Mode: <b>${modeMap[PROFILE.mode]}</b></div>
-    <div class="chip">Record: <b>${recMap[PROFILE.record]}</b></div>
+    <div class="chip">Mode: <b>${modeMap[PROFILE.mode] || "Contender"}</b></div>
     <button class="edit" id="edit-profile">Edit</button>
   `;
   $("#edit-profile").onclick = openProfile;
@@ -1488,12 +1720,179 @@ function renderPickChart(){
   }
 }
 
+// =================================================================
+// MARKET MOVERS — hardcoded post-2026-draft trends (30d %)
+// =================================================================
+const TRENDS = {
+  // Risers
+  "Ashton Jeanty":         +14.2,
+  "Tetairoa McMillan":     +11.8,
+  "Travis Hunter":         +10.6,
+  "Jaxson Dart":           +9.4,
+  "Colston Loveland":      +8.7,
+  "Omarion Hampton":       +7.9,
+  "Matthew Golden":        +7.2,
+  "Tyler Warren":          +6.8,
+  "TreVeyon Henderson":    +6.1,
+  "Bucky Irving":          +5.4,
+  // Fallers
+  "Travis Kelce":          -18.6,
+  "Stefon Diggs":          -14.2,
+  "Aaron Jones":           -11.7,
+  "Joe Mixon":             -9.8,
+  "Anthony Richardson":    -8.4,
+  "Tyreek Hill":           -7.6,
+  "Davante Adams":         -7.1,
+  "Cooper Kupp":           -6.4,
+  "DJ Moore":              -5.9,
+  "Mike Evans":            -5.3
+};
+function renderMovers(){
+  const grid = document.getElementById("movers-grid");
+  if(!grid) return;
+  const entries = Object.entries(TRENDS).map(([name, t]) => {
+    const p = PLAYERS.find(x => x.n === name);
+    if(!p) return null;
+    return { p, trend: t, val: adjustedConsensus(p) };
+  }).filter(Boolean);
+  const risers = entries.filter(e => e.trend > 0).sort((a,b)=>b.trend-a.trend).slice(0,5);
+  const fallers = entries.filter(e => e.trend < 0).sort((a,b)=>a.trend-b.trend).slice(0,5);
+  function cardHTML(e, dir){
+    const sign = e.trend > 0 ? "▲ +" : "▼ ";
+    return `<div class="mover-card ${dir}">
+      <div class="nm">${e.p.n}</div>
+      <div class="meta">${e.p.p} · ${e.p.t} · Age ${e.p.a}</div>
+      <div class="row">
+        <span class="val">${num(e.val)}</span>
+        <span class="trend ${dir}">${sign}${Math.abs(e.trend).toFixed(1)}%</span>
+      </div>
+    </div>`;
+  }
+  grid.innerHTML = `
+    <div class="mover-bucket risers">
+      <div class="bucket-label">▲ TOP RISERS · 30D</div>
+      <div class="movers-strip">${risers.map(e=>cardHTML(e,"up")).join("") || '<div style="color:var(--ink-3);font-size:12px;padding:8px">No risers tracked.</div>'}</div>
+    </div>
+    <div class="mover-bucket fallers">
+      <div class="bucket-label">▼ TOP FALLERS · 30D</div>
+      <div class="movers-strip">${fallers.map(e=>cardHTML(e,"down")).join("") || '<div style="color:var(--ink-3);font-size:12px;padding:8px">No fallers tracked.</div>'}</div>
+    </div>
+  `;
+}
+
+// =================================================================
+// POSITION VALUE TIERS
+// =================================================================
+function renderTiers(){
+  const grid = document.getElementById("tiers-grid");
+  if(!grid) return;
+  // bucket players by position with current adjusted values
+  const byPos = { QB:[], RB:[], WR:[], TE:[] };
+  for(const p of PLAYERS){
+    if(byPos[p.p]) byPos[p.p].push({ n:p.n, v:adjustedConsensus(p) });
+  }
+  for(const k of Object.keys(byPos)) byPos[k].sort((a,b)=>b.v-a.v);
+
+  // Define tier bands per position (consensus-value cutoffs; reflects current market)
+  const fmtSF = PROFILE.format === "superflex";
+  const tierDefs = {
+    QB: fmtSF
+      ? [["QB1",8500,99999],["QB2",6000,8499],["QB3",3500,5999],["QBSTREAM",0,3499]]
+      : [["QB1",6500,99999],["QB2",4500,6499],["QB3",2500,4499],["QBSTREAM",0,2499]],
+    RB: [["RB1",8000,99999],["RB2",5500,7999],["RB3",3500,5499],["RB4+",0,3499]],
+    WR: [["WR1",8000,99999],["WR2",5500,7999],["WR3",3500,5499],["WR4+",0,3499]],
+    TE: [["TE1",5500,99999],["TE2",3000,5499],["TE3",1500,2999],["TE4+",0,1499]]
+  };
+  function colHTML(pos, defs){
+    const ctx = pos === "QB" ? (fmtSF ? "Superflex" : "1QB") : "all formats";
+    const rows = defs.map(([lbl, lo, hi]) => {
+      const inTier = byPos[pos].filter(x => x.v >= lo && x.v <= hi);
+      const top = inTier.slice(0,3).map(x=>x.n).join(" · ");
+      const range = hi >= 99999 ? `${num(lo)}+` : `${num(lo)}–${num(hi)}`;
+      return `<div class="tier-row">
+        <div>
+          <div class="lbl">${lbl}</div>
+          <div class="nm-list">${top || "— none —"}</div>
+        </div>
+        <div class="rng">${range}</div>
+      </div>`;
+    }).join("");
+    return `<div class="tier-col">
+      <div class="tier-col-head ${pos}"><span>${pos} TIERS</span><span class="ctx">${ctx}</span></div>
+      ${rows}
+    </div>`;
+  }
+  grid.innerHTML = ["QB","RB","WR","TE"].map(p => colHTML(p, tierDefs[p])).join("");
+}
+
+// =================================================================
+// FEATURED TRADE OF THE DAY
+// =================================================================
+const FEATURED_TRADE = {
+  // Jeremiyah Love + 2027 1st  vs  Ja'Marr Chase
+  get:  [
+    { type:"player", lookup:"Ja'Marr Chase" }
+  ],
+  give: [
+    { type:"player", lookup:"Jeremiyah Love" },
+    { type:"pick", year:2027, round:1, slot:"mid" }
+  ],
+  blurb: "Sell-high contender swap: rookie hype + future 1st for the league's WR1."
+};
+function renderFeatured(){
+  const card = document.getElementById("featured-card");
+  if(!card) return;
+  function resolve(asset){
+    if(asset.type === "pick") return { ...asset };
+    const p = PLAYERS.find(x => x.n === asset.lookup);
+    if(!p) return null;
+    return { ...p, type:"player" };
+  }
+  const get  = FEATURED_TRADE.get.map(resolve).filter(Boolean);
+  const give = FEATURED_TRADE.give.map(resolve).filter(Boolean);
+  function rowHTML(a){
+    const v = assetValue(a);
+    const label = a.type === "pick"
+      ? `${a.year} ${a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th"} Round Pick`
+      : `${a.n} (${a.p}, ${a.t})`;
+    return `<div class="featured-asset"><span class="nm">${label}</span><span class="vl">${num(v)}</span></div>`;
+  }
+  card.innerHTML = `
+    <div class="featured-side you">
+      <div class="head">YOU GET</div>
+      ${get.map(rowHTML).join("") || '<div class="featured-asset"><span class="nm" style="color:var(--ink-3);font-style:italic">— missing player —</span></div>'}
+    </div>
+    <div class="featured-vs">VS</div>
+    <div class="featured-side them">
+      <div class="head">YOU GIVE</div>
+      ${give.map(rowHTML).join("") || '<div class="featured-asset"><span class="nm" style="color:var(--ink-3);font-style:italic">— missing —</span></div>'}
+    </div>
+    <div class="featured-cta">
+      <div class="label">${FEATURED_TRADE.blurb}</div>
+      <button class="btn primary" id="featured-load-btn">↻ Load &amp; Analyze</button>
+    </div>
+  `;
+  const btn = document.getElementById("featured-load-btn");
+  if(btn) btn.onclick = () => {
+    state.get = get.map(a => ({...a}));
+    state.give = give.map(a => ({...a}));
+    rerenderAll();
+    refreshAnalyzeBtn();
+    const v = analyze();
+    renderVerdict(v);
+    openModal("#verdict-modal");
+  };
+}
+
 function rerenderAll(){
   renderAssets("get");
   renderAssets("give");
   renderTicker();
   if(state.myRoster) renderRoster();
   renderPickChart();
+  renderMovers();
+  renderTiers();
+  renderFeatured();
 }
 
 // =================================================================
@@ -1536,8 +1935,9 @@ function openProfile(){
   setGroupVal("profile-modal","scoring",PROFILE.scoring);
   setGroupVal("profile-modal","tep",PROFILE.tep);
   setGroupVal("profile-modal","format",PROFILE.format);
-  setGroupVal("profile-modal","mode",PROFILE.mode);
-  setGroupVal("profile-modal","record",PROFILE.record);
+  // mode may have been migrated from old "winnow" -> "contender"
+  const modeVal = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
+  setGroupVal("profile-modal","mode", modeVal);
   openModal("#profile-modal");
 }
 $("#btn-profile").onclick = openProfile;
@@ -1548,7 +1948,6 @@ $("#btn-save-profile").onclick = () => {
     tep: getGroupVal("profile-modal","tep"),
     format: getGroupVal("profile-modal","format"),
     mode: getGroupVal("profile-modal","mode"),
-    record: getGroupVal("profile-modal","record"),
   };
   saveProfile(PROFILE);
   profileBar();
@@ -1556,7 +1955,7 @@ $("#btn-save-profile").onclick = () => {
   closeModal("#profile-modal");
   showToast("League profile saved", "ok");
 };
-["teams","scoring","tep","format","mode","record"].forEach(g => bindOptGroup("profile-modal", g));
+["teams","scoring","tep","format","mode"].forEach(g => bindOptGroup("profile-modal", g));
 
 // =================================================================
 // PICK MODAL
@@ -1587,7 +1986,7 @@ $("#btn-add-pick").onclick = () => {
 $("#btn-import").onclick = () => {
   $("#sleeper-username").value = "";
   $("#sleeper-leagues").innerHTML = "";
-  setGroupVal("sleeper-modal","season","2025");
+  setGroupVal("sleeper-modal","season","2026");
   openModal("#sleeper-modal");
 };
 bindOptGroup("sleeper-modal","season");
@@ -1619,12 +2018,15 @@ $("#btn-fetch-sleeper").onclick = async () => {
     const userR = await fetch(`https://api.sleeper.app/v1/user/${encodeURIComponent(username)}`);
     if(!userR.ok) throw new Error("User not found");
     const user = await userR.json();
-    sleeperUserId = user.user_id;
-    const lgR = await fetch(`https://api.sleeper.app/v1/user/${user.user_id}/leagues/nfl/${season}`);
+    if(!user || !user.user_id){
+      throw new Error(`Sleeper returned no user_id for "${username}"`);
+    }
+    sleeperUserId = String(user.user_id);
+    const lgR = await fetch(`https://api.sleeper.app/v1/user/${sleeperUserId}/leagues/nfl/${season}`);
     if(!lgR.ok) throw new Error("Leagues fetch failed");
     const leagues = await lgR.json();
     if(!leagues.length){
-      $("#sleeper-leagues").innerHTML = `<div class="empty-state" style="margin-top:10px">No ${season} dynasty leagues found for that user</div>`;
+      $("#sleeper-leagues").innerHTML = `<div class="empty-state" style="margin-top:10px">No ${season} dynasty leagues found for that user. Try the other season toggle.</div>`;
     } else {
       $("#sleeper-leagues").innerHTML = `
         <label style="display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:14px 0 8px;font-weight:700">Pick a League</label>
@@ -1659,8 +2061,19 @@ async function loadSleeperRoster(leagueId, leagueName){
       fetch(`https://api.sleeper.app/v1/league/${leagueId}/traded_picks`).then(r=>r.ok?r.json():[]).catch(()=>[]),
       fetchSleeperPlayers()
     ]);
-    const mine = rostersR.find(r => r.owner_id === sleeperUserId);
-    if(!mine){ showToast("Couldn't find your roster in that league","err"); return; }
+    // Robust owner match — coerce both sides to string and also check co_owners
+    const wantId = String(sleeperUserId);
+    const mine = rostersR.find(r => {
+      if(String(r.owner_id) === wantId) return true;
+      if(Array.isArray(r.co_owners) && r.co_owners.map(String).includes(wantId)) return true;
+      return false;
+    });
+    if(!mine){
+      const ownerIds = rostersR.map(r => r.owner_id).join(", ");
+      console.warn("[Sleeper] roster match failed", {wantId, rosters:rostersR.map(r=>({owner:r.owner_id,co:r.co_owners}))});
+      showToast(`Found ${rostersR.length} rosters, none matched user_id ${wantId}. Owners: ${ownerIds.slice(0,80)}${ownerIds.length>80?"…":""}`, "err");
+      return;
+    }
     const ids = mine.players || [];
     const myPlayers = [];
     for(const id of ids){
@@ -1685,9 +2098,9 @@ async function loadSleeperRoster(leagueId, leagueName){
       }
     }
     const myPicks = (Array.isArray(tradedPicksR) ? tradedPicksR : [])
-      .filter(p => p.owner_id === mine.roster_id)
+      .filter(p => String(p.owner_id) === String(mine.roster_id))
       .map(p => {
-        const base = { type:"pick", year: Number(p.season), round: p.round, slot: "mid" };
+        const base = { type:"pick", year: Number(p.season), round: Number(p.round), slot: "mid" };
         return { ...base, value: pickValue(base) };
       });
     state.myRoster = { leagueName, leagueId, players: myPlayers, picks: myPicks };
@@ -1763,17 +2176,18 @@ $("#btn-analyze").onclick = () => {
 
 function gradeFor(diffPct){
   // diffPct = (your_get - your_give)/avg
-  if(diffPct >= 0.18) return {l:"S", c:"S"};
-  if(diffPct >= 0.10) return {l:"A+", c:"Aplus"};
-  if(diffPct >= 0.05) return {l:"A", c:"A"};
-  if(diffPct >= 0.02) return {l:"A-", c:"Aminus"};
-  if(diffPct >= -0.02) return {l:"B+", c:"Bplus"};
-  if(diffPct >= -0.05) return {l:"B", c:"B"};
-  if(diffPct >= -0.10) return {l:"B-", c:"Bminus"};
-  if(diffPct >= -0.18) return {l:"C+", c:"Cplus"};
-  if(diffPct >= -0.28) return {l:"C", c:"C"};
-  if(diffPct >= -0.40) return {l:"D", c:"D"};
-  return {l:"F", c:"F"};
+  // Returns { l: letter, c: cssClass, tier: tier label }
+  if(diffPct >= 0.18) return {l:"S",  c:"S",      tier:"ELITE VALUE WON"};
+  if(diffPct >= 0.10) return {l:"A+", c:"Aplus",  tier:"ELITE VALUE WON"};
+  if(diffPct >= 0.05) return {l:"A",  c:"A",      tier:"STRONG VALUE"};
+  if(diffPct >= 0.02) return {l:"A-", c:"Aminus", tier:"STRONG VALUE"};
+  if(diffPct >= -0.02) return {l:"B+", c:"Bplus",  tier:"FAIR DEAL"};
+  if(diffPct >= -0.05) return {l:"B",  c:"B",      tier:"FAIR DEAL"};
+  if(diffPct >= -0.10) return {l:"B-", c:"Bminus", tier:"FAIR DEAL"};
+  if(diffPct >= -0.18) return {l:"C+", c:"Cplus",  tier:"WEAK RETURN"};
+  if(diffPct >= -0.28) return {l:"C",  c:"C",      tier:"WEAK RETURN"};
+  if(diffPct >= -0.40) return {l:"D",  c:"D",      tier:"LOPSIDED"};
+  return {l:"F", c:"F", tier:"LOPSIDED"};
 }
 
 function analyze(){
@@ -1858,7 +2272,8 @@ function buildObservations(totGet, totGive){
 
 function contextNote(totGet, totGive){
   const diff = totGet - totGive;
-  const mode = PROFILE.mode;
+  // Migrate legacy "winnow" -> "contender"
+  const mode = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
   const player = state.get.find(a => a.type !== "pick" && a.a >= 27);
   const youngPick = state.give.find(a => a.type === "pick" && a.year >= 2027);
   if(mode === "rebuilder" && player){
@@ -1867,14 +2282,14 @@ function contextNote(totGet, totGive){
   if(mode === "rebuilder" && youngPick){
     return `As a <b>Rebuilder</b>, the future ${youngPick.year} ${youngPick.round===1?"1st":youngPick.round+"th"} you're sending is a key building block. Make sure the acquisition justifies it.`;
   }
-  if(mode === "winnow" || mode === "contender"){
+  if(mode === "contender"){
     if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
-      return `As a <b>${mode === "winnow" ? "Win-Now" : "Contender"}</b>, accepting future picks for current production grades softer — distant picks are illiquid.`;
+      return `As a <b>Contender</b>, accepting future picks for current production grades softer — distant picks are illiquid.`;
     }
     if(diff < 0){
-      return `As a <b>${mode === "winnow" ? "Win-Now" : "Contender"}</b>, paying a small premium for the right plug-and-play piece can still be correct. Don't grade purely on raw value.`;
+      return `As a <b>Contender</b>, paying a small premium for the right plug-and-play piece can still be correct. Don't grade purely on raw value.`;
     }
-    return `As a <b>${mode === "winnow" ? "Win-Now" : "Contender"}</b>, you're moving toward proven production. That's the right shape of trade for your window.`;
+    return `As a <b>Contender</b>, you're moving toward proven production. That's the right shape of trade for your window.`;
   }
   return `Profile context: <b>${mode}</b> · ${PROFILE.format} · ${PROFILE.scoring}.`;
 }
@@ -1911,60 +2326,276 @@ function side2html(side){
 }
 
 function renderVerdict(v){
-  // delta percentages for the bar (clamped)
-  const total = v.totGet + v.totGive || 1;
-  const getPct = Math.max(2, Math.min(98, (v.totGet/total)*100));
-  const givePct = 100 - getPct;
   const body = $("#verdict-body");
-  body.innerHTML = `
-    <div class="verdict-head">
-      <div class="grade-box">
-        <div class="lbl">You Get</div>
-        <div class="grade ${v.yourGrade.c}">${v.yourGrade.l}</div>
-        <div class="total">${num(v.totGet)}</div>
+  const diff = v.totGet - v.totGive;
+  let heroClass, heroTitle;
+  if(Math.abs(diff) < 200){
+    heroClass = "even"; heroTitle = "FAIRLY EVEN TRADE";
+  } else if(diff > 0){
+    heroClass = "you"; heroTitle = "YOU WIN THIS TRADE";
+  } else {
+    heroClass = "them"; heroTitle = "THEY WIN THIS TRADE";
+  }
+  const deltaSign = diff > 0 ? "+" : (diff < 0 ? "−" : "±");
+  const deltaAbs = Math.abs(diff);
+  const pctDiff = v.totGive ? Math.abs(((v.totGet/Math.max(1,v.totGive))-1)*100) : 0;
+
+  // === Section A — HERO ===
+  const heroHTML = `
+    <div class="v2-hero ${heroClass}">
+      <h1>${heroTitle}</h1>
+      <div class="delta">Value gap: <b>${deltaSign}${num(deltaAbs)}</b> consensus pts ${deltaAbs>0?`(${pctDiff.toFixed(1)}% ${diff>0?"in your favor":"premium paid"})`:""}</div>
+      <div class="v2-grade-row">
+        <div class="v2-grade-card ${v.yourGrade.c}">
+          <div class="lbl">YOUR SIDE</div>
+          <div class="grade-letter">${v.yourGrade.l}</div>
+          <div class="tier">${v.yourGrade.tier}</div>
+        </div>
+        <div class="v2-grade-card ${v.oppGrade.c}">
+          <div class="lbl">THEIR SIDE</div>
+          <div class="grade-letter">${v.oppGrade.l}</div>
+          <div class="tier">${v.oppGrade.tier}</div>
+        </div>
       </div>
-      <div class="grade-vs">VS</div>
-      <div class="grade-box">
-        <div class="lbl">They Get</div>
-        <div class="grade ${v.oppGrade.c}">${v.oppGrade.l}</div>
-        <div class="total">${num(v.totGive)}</div>
-      </div>
-    </div>
-
-    <div class="delta-bar">
-      <div class="row"><span>Their Side</span><span>Value Split</span><span>Your Side</span></div>
-      <div class="bar">
-        <div class="fill-l" style="width:${givePct}%"></div>
-        <div class="fill-r" style="width:${getPct}%"></div>
-        <div class="center"></div>
-      </div>
-      <div class="pct"><span class="pct l">${givePct.toFixed(1)}%</span><span class="pct r">${getPct.toFixed(1)}%</span></div>
-    </div>
-
-    <div class="ind ${v.market.kind === 'agree' ? 'agree' : v.market.kind === 'buylow' ? 'buylow' : 'contested'}">
-      <span class="ico">SPRD ${num(v.maxSpread)}</span>
-      <span>${v.market.text}</span>
-    </div>
-
-    <div class="note">${v.note}</div>
-
-    <div class="observations">
-      ${v.observations.map(o => `<div class="ob">${o}</div>`).join("")}
-    </div>
-
-    <div class="verdict-text">${v.verdict}</div>
-
-    <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div>
-        <div class="h2" style="margin-bottom:6px">You Get</div>
-        <div style="display:flex;flex-direction:column;gap:6px">${side2html("get")}</div>
-      </div>
-      <div>
-        <div class="h2" style="margin-bottom:6px">You Give</div>
-        <div style="display:flex;flex-direction:column;gap:6px">${side2html("give")}</div>
+      <div class="v2-legend">
+        <b>S</b> = Elite <span class="sep">·</span>
+        <b>A</b> = Strong <span class="sep">·</span>
+        <b>B</b> = Fair <span class="sep">·</span>
+        <b>C</b> = Weak <span class="sep">·</span>
+        <b>D/F</b> = Lopsided
       </div>
     </div>
   `;
+
+  // === Section B — VALUE BREAKDOWN TABLE ===
+  function rowsForSide(side){
+    return state[side].map(a => {
+      const v = assetValue(a);
+      if(a.type === "pick"){
+        const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
+        const slotLabel = a.slot==="top3"?"Top-3 Origin":a.slot==="late"?"Late Origin":"Mid Origin";
+        return `<tr>
+          <td class="nm">${a.year} ${ord} Round Pick</td>
+          <td>PICK</td>
+          <td>—</td>
+          <td>—</td>
+          <td>${slotLabel}</td>
+          <td class="val">${num(v)}</td>
+        </tr>`;
+      }
+      return `<tr>
+        <td class="nm">${a.n}</td>
+        <td>${a.p}</td>
+        <td>${a.t}</td>
+        <td>${a.a}</td>
+        <td>—</td>
+        <td class="val">${num(v)}</td>
+      </tr>`;
+    }).join("");
+  }
+  const dCls = diff > 200 ? "pos" : diff < -200 ? "neg" : "even";
+  const dLabel = diff > 0 ? `+${num(diff)} TO YOU` : diff < 0 ? `${num(diff)} (PREMIUM PAID)` : "EVEN";
+  const breakdownHTML = `
+    <div class="v2-section">
+      <div class="v2-section-head">VALUE BREAKDOWN <span class="sub">consensus across 4 sources</span></div>
+      <div class="v2-section-body" style="padding:0">
+        <table class="v2-table">
+          <thead><tr><th>ASSET</th><th>POS</th><th>TM</th><th>AGE</th><th>NOTE</th><th style="text-align:right">VALUE</th></tr></thead>
+          <tbody>
+            <tr class="v2-side-label you"><td colspan="6">YOU GET</td></tr>
+            ${rowsForSide("get") || `<tr><td colspan="6" style="color:var(--ink-3);font-style:italic">No assets</td></tr>`}
+            <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GET</td><td class="val">${num(v.totGet)}</td></tr>
+            <tr class="v2-side-label them"><td colspan="6">YOU GIVE</td></tr>
+            ${rowsForSide("give") || `<tr><td colspan="6" style="color:var(--ink-3);font-style:italic">No assets</td></tr>`}
+            <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GIVE</td><td class="val">${num(v.totGive)}</td></tr>
+            <tr class="delta-row"><td colspan="5">NET DELTA</td><td class="${dCls}" style="text-align:right;font-family:'JetBrains Mono',monospace">${dLabel}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  // === Section C — AGE & DYNASTY ===
+  const youGetPlayers = state.get.filter(a => a.type !== "pick");
+  const youGivePlayers = state.give.filter(a => a.type !== "pick");
+  const avgAgeGet = youGetPlayers.length ? (youGetPlayers.reduce((s,p)=>s+p.a,0)/youGetPlayers.length) : 0;
+  const avgAgeGive = youGivePlayers.length ? (youGivePlayers.reduce((s,p)=>s+p.a,0)/youGivePlayers.length) : 0;
+  const ageDelta = avgAgeGet - avgAgeGive;
+
+  // Short-term (1-2 yrs) vs Long-term (3+ yrs) heuristics:
+  // short = sum of (current adjusted values) — already what we have
+  // long  = age-decayed estimate: subtract player decline penalty + future picks (gain)
+  function longTermValue(side){
+    let sum = 0;
+    for(const a of state[side]){
+      if(a.type === "pick"){
+        // closer picks are slightly less valuable long-term
+        const yrs = (a.year || 2026) - 2026;
+        sum += assetValue(a) * (1 + yrs*0.05);
+      } else {
+        // age 22-25 holds value; 26-28 mild decline; 29+ steep
+        const age = a.a || 26;
+        let mult = 1.0;
+        if(age <= 23) mult = 1.20;
+        else if(age <= 25) mult = 1.10;
+        else if(age <= 27) mult = 0.95;
+        else if(age <= 29) mult = 0.75;
+        else if(age <= 31) mult = 0.50;
+        else mult = 0.30;
+        sum += assetValue(a) * mult;
+      }
+    }
+    return Math.round(sum);
+  }
+  const ltGet = longTermValue("get");
+  const ltGive = longTermValue("give");
+  const stWinner = v.totGet > v.totGive + 100 ? "YOU" : v.totGive > v.totGet + 100 ? "THEM" : "EVEN";
+  const ltWinner = ltGet > ltGive + 100 ? "YOU" : ltGive > ltGet + 100 ? "THEM" : "EVEN";
+
+  let ageFlag = "";
+  if(ageDelta >= 2){
+    ageFlag = `<div class="v2-flag win-now">⚠ <span><b>WIN-NOW ASSETS</b> — incoming players average ${ageDelta.toFixed(1)} yrs older. Value peaks in 1–2 seasons.</span></div>`;
+  } else if(ageDelta <= -2){
+    ageFlag = `<div class="v2-flag dynasty">📈 <span><b>DYNASTY UPSIDE</b> — incoming players average ${Math.abs(ageDelta).toFixed(1)} yrs younger. Long-term value likely rises.</span></div>`;
+  } else if(youGetPlayers.length || youGivePlayers.length){
+    ageFlag = `<div class="v2-flag neutral">≈ <span><b>AGE NEUTRAL</b> — both sides cluster around the same age band.</span></div>`;
+  }
+
+  const ageHTML = `
+    <div class="v2-section">
+      <div class="v2-section-head">AGE &amp; DYNASTY IMPACT <span class="sub">window analysis</span></div>
+      <div class="v2-section-body">
+        <div class="v2-kv">
+          <div class="v2-kv-cell"><div class="k">YOU GET — AVG AGE</div><div class="v">${avgAgeGet ? avgAgeGet.toFixed(1) : "—"}</div><div class="sub">${youGetPlayers.length} player${youGetPlayers.length===1?"":"s"}</div></div>
+          <div class="v2-kv-cell"><div class="k">YOU GIVE — AVG AGE</div><div class="v">${avgAgeGive ? avgAgeGive.toFixed(1) : "—"}</div><div class="sub">${youGivePlayers.length} player${youGivePlayers.length===1?"":"s"}</div></div>
+          <div class="v2-kv-cell"><div class="k">SHORT-TERM (1–2 YRS)</div><div class="v" style="color:${stWinner==="YOU"?"var(--green)":stWinner==="THEM"?"var(--red)":"var(--blue)"}">${stWinner}</div><div class="sub">${num(v.totGet)} vs ${num(v.totGive)}</div></div>
+          <div class="v2-kv-cell"><div class="k">LONG-TERM (3+ YRS)</div><div class="v" style="color:${ltWinner==="YOU"?"var(--green)":ltWinner==="THEM"?"var(--red)":"var(--blue)"}">${ltWinner}</div><div class="sub">${num(ltGet)} vs ${num(ltGive)} (age-adj)</div></div>
+        </div>
+        ${ageFlag}
+      </div>
+    </div>
+  `;
+
+  // === Section D — POSITION BREAKDOWN ===
+  function posMap(side){
+    const m = {QB:[],RB:[],WR:[],TE:[],PICK:[]};
+    for(const a of state[side]){
+      if(a.type === "pick"){ m.PICK.push(`${a.year} R${a.round}`); }
+      else { (m[a.p] || (m[a.p]=[])).push(a.n); }
+    }
+    return m;
+  }
+  const posGet = posMap("get");
+  const posGive = posMap("give");
+  function pillsHTML(map){
+    const order = ["QB","RB","WR","TE","PICK"];
+    const out = order.flatMap(p => (map[p]||[]).map(n => `<span class="v2-pos-pill pos-${p}">${p === "PICK" ? n : `${p} · ${n}`}</span>`));
+    return out.length ? `<div class="v2-pos-list">${out.join("")}</div>` : `<div class="v2-pos-empty">— nothing —</div>`;
+  }
+  // position needs flag
+  const flags = [];
+  const topGet = state.get.filter(a => a.type !== "pick").sort((a,b)=>assetValue(b)-assetValue(a))[0];
+  if(topGet){
+    const v0 = assetValue(topGet);
+    const tierLabel =
+      topGet.p === "QB" && v0 >= 8500 ? "QB1-caliber" :
+      topGet.p === "RB" && v0 >= 8000 ? "RB1-caliber" :
+      topGet.p === "WR" && v0 >= 8000 ? "WR1-caliber" :
+      topGet.p === "TE" && v0 >= 5500 ? "TE1-caliber" : null;
+    if(tierLabel){
+      flags.push(`<div class="v2-flag dynasty">★ <span>You're adding a <b>${tierLabel}</b> player (${topGet.n}).</span></div>`);
+    }
+  }
+  // thinning out flag
+  const givenStarters = state.give.filter(a => a.type !== "pick" && assetValue(a) >= 7000);
+  if(givenStarters.length){
+    const positions = [...new Set(givenStarters.map(p=>p.p))];
+    flags.push(`<div class="v2-flag win-now">⚠ <span>You're shipping out a starter-tier ${positions.join(" / ")} — make sure you have depth behind it.</span></div>`);
+  }
+
+  const posHTML = `
+    <div class="v2-section">
+      <div class="v2-section-head">POSITION BREAKDOWN <span class="sub">what's moving</span></div>
+      <div class="v2-section-body">
+        <div class="v2-pos-grid">
+          <div class="v2-pos-col you"><div class="h">↑ YOU GET</div>${pillsHTML(posGet)}</div>
+          <div class="v2-pos-col them"><div class="h">↓ YOU GIVE</div>${pillsHTML(posGive)}</div>
+        </div>
+        ${flags.join("")}
+      </div>
+    </div>
+  `;
+
+  // === Section E — MARKET CONSENSUS SPREAD ===
+  const allAssets = [...state.get, ...state.give];
+  const spreadRows = allAssets.filter(a => a.type !== "pick").map(p => {
+    const sp = spread(p);
+    let tag, cls;
+    if(sp <= 400){ tag = "TIGHT"; cls = "tight"; }
+    else if(sp <= 1200){ tag = "MEDIUM"; cls = "med"; }
+    else { tag = "WIDE"; cls = "wide"; }
+    const valStr = `KTC ${num(p.ktc)} · FC ${num(p.fc)} · DP ${num(p.dp)} · SLP ${num(p.sleeper)} → ±${num(sp)}`;
+    return `<div class="v2-spread-row">
+      <span class="nm">${p.n}</span>
+      <span class="vals">${valStr}</span>
+      <span class="tag ${cls}">${tag}</span>
+    </div>`;
+  }).join("");
+  const spreadHTML = `
+    <div class="v2-section">
+      <div class="v2-section-head">MARKET CONSENSUS <span class="sub">cross-source agreement · WIDE = buy-low signal</span></div>
+      <div class="v2-section-body" style="padding:0 6px">
+        ${spreadRows || `<div style="padding:14px;color:var(--ink-3);font-style:italic;font-size:12px">No players in trade — picks-only deals don't have a source spread.</div>`}
+      </div>
+    </div>
+  `;
+
+  // === Section F — CONTEXT VERDICT ===
+  const mode = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
+  const modeLabel = mode === "rebuilder" ? "REBUILDER" : "CONTENDER";
+  let ctxVerdict;
+  if(mode === "contender"){
+    if(diff >= 200){
+      ctxVerdict = `As a Contender, this is a <b>green light</b>. You're getting more current production than you're giving up — exactly the shape you need to push for a title window.`;
+    } else if(diff > -200){
+      ctxVerdict = `As a Contender, the value is roughly even. The deciding question: does the incoming production fit a <b>starting lineup hole</b>? If yes, accept. If just depth, pass.`;
+    } else if(diff > -1500){
+      ctxVerdict = `As a Contender, paying a small premium is sometimes correct for the right plug-and-play piece. <b>Counter</b> if the fit is marginal — accept if it's a clear lineup upgrade.`;
+    } else {
+      ctxVerdict = `As a Contender, you're paying a steep premium. Even win-now teams shouldn't burn this much equity unless this is a needle-moving acquisition. <b>Counter or pass.</b>`;
+    }
+  } else {
+    if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
+      ctxVerdict = `As a Rebuilder, banking <b>future picks</b> is the correct shape of move. Long-term capital is your most valuable asset right now.`;
+    } else if(diff >= 200){
+      ctxVerdict = `As a Rebuilder, you're winning on raw value. Even better if the incoming pieces are young enough to still be on the roster when your window opens.`;
+    } else if(diff > -200){
+      ctxVerdict = `As a Rebuilder, even-value trades only matter if you're getting <b>younger</b>. If the age picture above doesn't favor you, this is a pass.`;
+    } else {
+      ctxVerdict = `As a Rebuilder, paying a premium for <b>now</b> assets is exactly what you shouldn't be doing. <b>Counter</b> by replacing aging pieces with future picks or younger players.`;
+    }
+  }
+  const ctxHTML = `
+    <div class="v2-section">
+      <div class="v2-section-head">CONTEXT VERDICT <span class="sub">graded against your team mode</span></div>
+      <div class="v2-section-body">
+        <div class="v2-context-card ${mode === "rebuilder" ? "rebuild" : ""}">
+          <span class="mode-badge">${modeLabel}</span>${ctxVerdict}
+        </div>
+      </div>
+    </div>
+  `;
+
+  // === Section: market spread band (carried from old) ===
+  const marketBand = `
+    <div class="ind ${v.market.kind === 'agree' ? 'agree' : v.market.kind === 'buylow' ? 'buylow' : 'contested'}" style="margin-bottom:18px">
+      <span class="ico">SPRD ${num(v.maxSpread)}</span>
+      <span>${v.market.text}</span>
+    </div>
+  `;
+
+  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + spreadHTML + marketBand + ctxHTML;
+
   // attach last analysis for share
   window.__lastAnalysis = v;
 }
@@ -2078,19 +2709,26 @@ function drawGradeBox(ctx, x, y, w, h, label, grade, total){
   ctx.fillStyle = "#6b7796";
   ctx.font = "800 14px Inter, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText(label, x+w/2, y+38);
+  ctx.fillText(label, x+w/2, y+34);
 
   const colorMap = {S:"#00d26a",Aplus:"#00d26a",A:"#3ee68f",Aminus:"#3ee68f",Bplus:"#ffd700",B:"#ffd700",Bminus:"#ffd700",Cplus:"#ff9f43",C:"#ff9f43",D:"#ff4757",F:"#ff4757"};
   ctx.fillStyle = colorMap[grade.c] || "#e8eef9";
-  ctx.font = "900 130px JetBrains Mono, monospace";
-  ctx.fillText(grade.l, x+w/2, y+170);
+  ctx.font = "900 110px JetBrains Mono, monospace";
+  ctx.fillText(grade.l, x+w/2, y+150);
+
+  // tier label
+  if(grade.tier){
+    ctx.fillStyle = colorMap[grade.c] || "#e8eef9";
+    ctx.font = "800 13px Inter, sans-serif";
+    ctx.fillText(grade.tier, x+w/2, y+180);
+  }
 
   ctx.fillStyle = "#ffd700";
   ctx.font = "700 26px JetBrains Mono, monospace";
-  ctx.fillText(total.toLocaleString("en-US"), x+w/2, y+230);
+  ctx.fillText(total.toLocaleString("en-US"), x+w/2, y+228);
   ctx.fillStyle = "#6b7796";
   ctx.font = "600 11px Inter, sans-serif";
-  ctx.fillText("CONSENSUS POINTS", x+w/2, y+253);
+  ctx.fillText("CONSENSUS POINTS", x+w/2, y+250);
   ctx.textAlign = "left";
 }
 function drawAssetList(ctx, list, x, y, w, accent){
