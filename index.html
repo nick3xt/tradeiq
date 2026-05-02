@@ -602,16 +602,17 @@ img{display:block;max-width:100%}
 .movers-head h3{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-2);margin:0;font-weight:700}
 .movers-head h3 .subtitle{font-size:11px;color:var(--ink-3);margin-left:10px;text-transform:none;letter-spacing:0;font-weight:400}
 .movers-strip{
-  display:flex;gap:10px;overflow-x:auto;padding:6px 2px 14px;
-  scrollbar-width:thin;scrollbar-color:var(--line-2) transparent
+  display:flex;flex-wrap:nowrap;gap:10px;overflow-x:auto;padding:6px 2px 14px;
+  scrollbar-width:thin;scrollbar-color:var(--line-2) transparent;
+  -webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;touch-action:pan-x
 }
 .movers-strip::-webkit-scrollbar{height:8px}
 .movers-strip::-webkit-scrollbar-track{background:transparent}
 .movers-strip::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px}
 .mover-card{
-  flex:0 0 200px;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  flex:0 0 200px;flex-shrink:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;
   padding:12px 14px;display:flex;flex-direction:column;gap:6px;position:relative;
-  transition:transform .15s,border-color .15s
+  transition:transform .15s,border-color .15s;scroll-snap-align:start
 }
 .mover-card:hover{transform:translateY(-2px);border-color:var(--line-2)}
 .mover-card.up{border-left:3px solid var(--green)}
