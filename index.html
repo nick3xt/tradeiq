@@ -2415,15 +2415,25 @@ function renderTiers(){
   }
   for(const k of Object.keys(byPos)) byPos[k].sort((a,b)=>b.v-a.v);
 
-  // Define tier bands per position (consensus-value cutoffs; reflects current market)
+  // Tier bands in adjusted-value space (post-format/scoring/team multipliers applied by adjustedConsensus).
+  // Thresholds calibrated against natural value clusters in the actual data — no round numbers.
+  // QB thresholds split by format: SF inflates QB values ×1.40; 1QB deflates ×0.70.
+  // RB/WR/TE thresholds are format-neutral (format only shifts QB values).
+  //
+  // Key anchors (PPR, 12-team defaults):
+  //   QB SF  — Dart 9,816 → QB1 | Penix 8,673 → QB2 | Young 8,130 → QB2
+  //   QB 1QB — Daniels 6,542 → QB1 | Dart 4,908 → QB2 | Penix 4,337 → QB2
+  //   RB     — Jeanty 8,350 → RB1 | Love 8,292 → RB2 | Bijan 7,686 → RB2
+  //   WR     — Chase 10,194 → WR1 | Hunter 9,639 → WR1 | McMillan 9,299 → WR1 | MH Jr 8,817 → WR2
+  //   TE     — Bowers 9,159 → TE1 | McBride 7,593 → TE1 | LaPorta 7,108 → TE1 | Warren 5,982 → TE2
   const fmtSF = PROFILE.format === "superflex";
   const tierDefs = {
     QB: fmtSF
-      ? [["QB1",8500,99999],["QB2",6000,8499],["QB3",3500,5999],["QBSTREAM",0,3499]]
-      : [["QB1",6500,99999],["QB2",4500,6499],["QB3",2500,4499],["QBSTREAM",0,2499]],
-    RB: [["RB1",8000,99999],["RB2",5500,7999],["RB3",3500,5499],["RB4+",0,3499]],
-    WR: [["WR1",8000,99999],["WR2",5500,7999],["WR3",3500,5499],["WR4+",0,3499]],
-    TE: [["TE1",5500,99999],["TE2",3000,5499],["TE3",1500,2999],["TE4+",0,1499]]
+      ? [["QB1",8800,99999],["QB2",6600,8799],["QB3",4200,6599],["Streamers",0,4199]]
+      : [["QB1",5200,99999],["QB2",4300,5199],["QB3",2600,4299],["Streamers",0,2599]],
+    RB: [["RB1",8300,99999],["RB2",6500,8299],["RB3",3800,6499],["Depth",0,3799]],
+    WR: [["WR1",9100,99999],["WR2",7200,9099],["WR3",4500,7199],["Depth",0,4499]],
+    TE: [["TE1",7000,99999],["TE2",5200,6999],["TE3",2300,5199],["Streamers",0,2299]]
   };
   function colHTML(pos, defs){
     const ctx = pos === "QB" ? (fmtSF ? "Superflex" : "1QB") : "all formats";
