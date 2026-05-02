@@ -1255,7 +1255,7 @@ body{padding-bottom:56px}
     </header>
     <div class="pick-chart-grid" id="pick-chart-grid"></div>
     <div class="pick-chart-legend">
-      <span class="legend-label">MID shown · TOP / LATE in subscript ·</span>
+      <span class="legend-label">MID shown · BOTTOM / LATE in subscript ·</span>
       <span class="legend-swatch" style="background:#0a4d28"></span><span>Premium</span>
       <span class="legend-swatch" style="background:#1f6b32"></span><span>High</span>
       <span class="legend-swatch" style="background:#3a8a47"></span><span>Mid</span>
@@ -1375,8 +1375,8 @@ body{padding-bottom:56px}
 </div>
 
 <!-- DRAFT PICK MODAL -->
-<div class="modal-bg" id="pick-modal">
-  <div class="modal" role="dialog">
+<div class="modal-bg" id="pick-modal" style="z-index:250">
+  <div class="modal" role="dialog" style="max-height:calc(100vh - 56px);overflow-y:auto">
     <header><h2>Add Draft Pick</h2><button class="close" data-close>×</button></header>
     <div class="body">
       <div class="field">
@@ -1400,9 +1400,9 @@ body{padding-bottom:56px}
       <div class="field">
         <label>Original Team Record (pick origin)</label>
         <div class="opts" data-group="pslot">
-          <button class="opt" data-val="top3">Early (Top 3 — bottom of standings)</button>
-          <button class="opt sel" data-val="mid">Mid (4–9)</button>
-          <button class="opt" data-val="late">Late (Bottom 3 — top of standings)</button>
+          <button class="opt" data-val="top3">Bottom (Picks 1–3)</button>
+          <button class="opt sel" data-val="mid">Mid (Picks 4–8)</button>
+          <button class="opt" data-val="late">Late (Picks 9–10)</button>
         </div>
       </div>
       <div class="field" id="pick-value-preview-row" style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.25);border-radius:8px;padding:10px 14px;margin-top:6px">
@@ -1486,13 +1486,13 @@ body{padding-bottom:56px}
           <h3>Draft Pick Values</h3>
           <p class="hiw-lead">Based on round, year, and slot. KTC-calibrated.</p>
           <table class="hiw-table">
-            <tr><th>Pick</th><th>Early</th><th>Mid</th><th>Late</th></tr>
-            <tr><td>2026 1st</td><td>9,300</td><td>6,000</td><td>3,600</td></tr>
-            <tr><td>2026 2nd</td><td>3,410</td><td>2,200</td><td>1,320</td></tr>
-            <tr><td>2027 1st</td><td>7,750</td><td>5,000</td><td>3,000</td></tr>
-            <tr><td>2028 1st</td><td>6,510</td><td>4,200</td><td>2,520</td></tr>
+            <tr><th>Pick</th><th>Bottom (1–3)</th><th>Mid (4–8)</th><th>Late (9–10)</th></tr>
+            <tr><td>2026 1st</td><td>8,500</td><td>6,000</td><td>4,200</td></tr>
+            <tr><td>2026 2nd</td><td>3,000</td><td>2,000</td><td>1,500</td></tr>
+            <tr><td>2027 1st</td><td>7,000</td><td>5,000</td><td>3,500</td></tr>
+            <tr><td>2028 1st</td><td>5,500</td><td>4,000</td><td>2,800</td></tr>
           </table>
-          <p class="hiw-note">Values decay ~15% per year further out. Superflex adds +10% to 1st &amp; 2nd round picks.</p>
+          <p class="hiw-note">Consensus-calibrated (KTC/FantasyCalc, 10-team SF PPR). Superflex adds +10% to 1st &amp; 2nd round picks.</p>
         </div>
       </div>
 
@@ -2100,35 +2100,55 @@ function adjustedConsensus(player){
   return applyFormat(player, rawConsensus(player));
 }
 
-// Picks — KTC-calibrated mid-slot base values per round/year, with slot multipliers.
-const PICK_BASE = {
-  1: { 2026:6000, 2027:5000, 2028:4200, 2029:3500 },
-  2: { 2026:2200, 2027:1850, 2028:1550, 2029:1300 },
-  3: { 2026: 950, 2027: 800, 2028: 670, 2029: 560 },
-  4: { 2026: 420, 2027: 350, 2028: 295, 2029: 245 }
+// Picks — consensus-calibrated values (KTC/FantasyCalc, 10-team SF PPR baseline).
+// Internal slot keys: top3 = Bottom of standings (Picks 1-3), mid = Picks 4-8, late = Picks 9-10.
+const PICK_VALUES = {
+  1: {
+    2026: { top3: 8500, mid: 6000, late: 4200 },
+    2027: { top3: 7000, mid: 5000, late: 3500 },
+    2028: { top3: 5500, mid: 4000, late: 2800 },
+    2029: { top3: 4500, mid: 3200, late: 2200 }
+  },
+  2: {
+    2026: { top3: 3000, mid: 2000, late: 1500 },
+    2027: { top3: 2500, mid: 1700, late: 1200 },
+    2028: { top3: 2000, mid: 1400, late:  900 },
+    2029: { top3: 1600, mid: 1100, late:  750 }
+  },
+  3: {
+    2026: { top3: 1200, mid:  900, late:  700 },
+    2027: { top3:  900, mid:  650, late:  500 },
+    2028: { top3:  700, mid:  500, late:  400 },
+    2029: { top3:  550, mid:  400, late:  300 }
+  },
+  4: {
+    2026: { top3: 400, mid: 400, late: 400 },
+    2027: { top3: 300, mid: 300, late: 300 },
+    2028: { top3: 250, mid: 250, late: 250 },
+    2029: { top3: 200, mid: 200, late: 200 }
+  }
 };
-const PICK_SLOT_MULT = { top3: 1.55, mid: 1.00, late: 0.60 };
 
 function pickValue(pick){
   const round = pick.round;
   const year  = pick.year;
-  let base;
-  if(PICK_BASE[round] && PICK_BASE[round][year] != null){
-    base = PICK_BASE[round][year];
-  } else if(PICK_BASE[round]){
+  const slot  = pick.slot in {top3:1, mid:1, late:1} ? pick.slot : "mid";
+  let v;
+  if(PICK_VALUES[round] && PICK_VALUES[round][year]){
+    v = PICK_VALUES[round][year][slot];
+  } else if(PICK_VALUES[round]){
     // out-of-table year — extrapolate from the nearest endpoint
-    const yrs = Object.keys(PICK_BASE[round]).map(Number).sort((a,b)=>a-b);
+    const yrs = Object.keys(PICK_VALUES[round]).map(Number).sort((a,b)=>a-b);
     const lo = yrs[0], hi = yrs[yrs.length-1];
     if(year < lo){
-      base = PICK_BASE[round][lo] * Math.pow(1.20, lo - year);
+      v = PICK_VALUES[round][lo][slot] * Math.pow(1.20, lo - year);
     } else {
-      base = PICK_BASE[round][hi] * Math.pow(0.85, year - hi);
+      v = PICK_VALUES[round][hi][slot] * Math.pow(0.85, year - hi);
     }
   } else {
-    // round 5+ fallback (rough scaling off round 4)
-    base = round === 5 ? 130 : 50;
+    // round 5+ fallback
+    v = round === 5 ? 130 : 50;
   }
-  let v = base * (PICK_SLOT_MULT[pick.slot] != null ? PICK_SLOT_MULT[pick.slot] : 1.0);
   // Team count
   const tc = parseInt(PROFILE.teams,10);
   if(tc === 14) v *= 1.15;
@@ -2361,7 +2381,7 @@ function renderAssets(side){
     el.innerHTML = list.map((a, i) => {
       const v = assetValue(a);
       if(a.type === "pick"){
-        const slotMap = { top3:"Top-3 Origin", mid:"Mid Pick", late:"Late Origin" };
+        const slotMap = { top3:"Bottom (1–3)", mid:"Mid (4–8)", late:"Late (9–10)" };
         const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
         return `
           <div class="asset pick">
@@ -2673,7 +2693,7 @@ function rerenderAll(){
     if(!round) return null;
 
     let slot = "mid";
-    if(/\b(early|top|top3|top-3)\b/.test(t)) slot = "top3";
+    if(/\b(bottom|early|top|top3|top-3)\b/.test(t)) slot = "top3";
     else if(/\b(late|back|end)\b/.test(t)) slot = "late";
     return { type:"pick", year, round, slot };
   }
@@ -2711,7 +2731,7 @@ function rerenderAll(){
       const pick = parsePick(part);
       if(pick){
         const ord = pick.round===1?"1st":pick.round===2?"2nd":pick.round===3?"3rd":pick.round+"th";
-        const slotLabel = pick.slot==="top3"?"(early)":pick.slot==="late"?"(late)":"";
+        const slotLabel = pick.slot==="top3"?"(bottom)":pick.slot==="late"?"(late)":"";
         parsed.push({ asset: pick, label: `${pick.year} ${ord} ${slotLabel}`.trim() });
       } else {
         const player = fuzzyMatchPlayer(part);
@@ -2807,24 +2827,31 @@ function renderMarketAlerts(){
     arr.sort((a,b) => b.v - a.v);
     const n = arr.length;
     const [peakStart, peakEnd] = PEAK[pos];
-    const top40cutoff  = arr[Math.floor(n * 0.40)]?.v ?? 0;  // top 40% threshold
-    const bot50cutoff  = arr[Math.floor(n * 0.50)]?.v ?? 0;  // bottom 50% threshold
+    const top40cutoff = arr[Math.floor(n * 0.40)]?.v ?? 0;  // top 40% threshold
+    const top25cutoff = arr[Math.floor(n * 0.25)]?.v ?? 0;  // elite tier ceiling
+    const top70cutoff = arr[Math.floor(n * 0.70)]?.v ?? 0;  // floor for "still a real asset"
 
     for(const { p, v } of arr){
       const age = p.a;
+      // Rookies/prospects already have upside priced in — exclude from buy window.
+      const isRookie = !!p.draft;
+
       // Sell High: value in top 40%, age is post-peak (>= peakEnd+1)
       if(v >= top40cutoff && age >= peakEnd + 1){
         const reason = age >= peakEnd + 3 ? "AGE CLIFF" : "POST-PEAK";
         sellCandidates.push({ p, v, reason });
       }
-      // Buy Low: value in bottom 50% of position, age < peak start (undervalued youth)
-      if(v <= bot50cutoff && age < peakStart){
-        const reason = age <= 22 ? "PRIME SOON" : "YOUNG VALUE";
-        buyCandidates.push({ p, v, reason });
-      }
-      // Rising Star: age ≤ 23, KTC value > FC (trending up signal)
-      if(age <= 23 && p.ktc > p.fc && v > bot50cutoff){
-        buyCandidates.push({ p, v, reason: "RISING STAR" });
+
+      // Buy Window: real young veterans (age 23–27, not rookies) whose current
+      // value sits below where their position/age combo "should" land — i.e. they
+      // ranked as starters once but the market has them in the middle band now.
+      if(!isRookie && age >= 23 && age <= 27 && v < top25cutoff && v >= top70cutoff){
+        const trend = TRENDS[p.n] || 0;
+        let reason;
+        if(trend <= -4 && trend >= -12)        reason = "RECENT DIP";
+        else if(age >= 25 && age <= 27)        reason = "PROVEN VET";
+        else                                    reason = "PRIME WINDOW";
+        buyCandidates.push({ p, v, reason, trend });
       }
     }
   }
@@ -2837,9 +2864,15 @@ function renderMarketAlerts(){
     return true;
   });
 
-  // Sort: sell by value desc (highest value = most to lose), buy by age asc (youngest first)
+  // Sort: sell by value desc (highest = most to lose).
+  // Buy: prioritize RECENT DIP (real signal), then by value desc (better assets first).
   sellCandidates.sort((a,b) => b.v - a.v);
-  uniqueBuy.sort((a,b) => a.p.a - b.p.a);
+  uniqueBuy.sort((a,b) => {
+    const aDip = a.reason === "RECENT DIP" ? 1 : 0;
+    const bDip = b.reason === "RECENT DIP" ? 1 : 0;
+    if(aDip !== bDip) return bDip - aDip;
+    return b.v - a.v;
+  });
 
   const topSell = sellCandidates.slice(0, 6);
   const topBuy  = uniqueBuy.slice(0, 6);
@@ -2869,7 +2902,7 @@ function renderMarketAlerts(){
       <div class="alerts-strip">${sellHTML}</div>
     </div>
     <div>
-      <div class="alert-bucket-label buy">🟢 BUY WINDOW · Young talent at a discount</div>
+      <div class="alert-bucket-label buy">🟢 BUY WINDOW · Prime-age vets the market is sleeping on</div>
       <div class="alerts-strip">${buyHTML}</div>
     </div>
   `;
@@ -3588,7 +3621,7 @@ function side2html(side){
   return state[side].map(a => {
     if(a.type === "pick"){
       const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
-      return `<div class="asset pick">${avatarHTML(a)}<div class="info"><div class="nm">${a.year} ${ord}</div><div class="sub">${posTag("PICK")}${a.slot==="top3"?"Top-3":a.slot==="late"?"Late":"Mid"}</div></div><div class="vl"><span class="num">${num(assetValue(a))}</span></div></div>`;
+      return `<div class="asset pick">${avatarHTML(a)}<div class="info"><div class="nm">${a.year} ${ord}</div><div class="sub">${posTag("PICK")}${a.slot==="top3"?"Bottom":a.slot==="late"?"Late":"Mid"}</div></div><div class="vl"><span class="num">${num(assetValue(a))}</span></div></div>`;
     }
     return `<div class="asset">${avatarHTML(a)}<div class="info"><div class="nm">${a.n}</div><div class="sub">${posTag(a.p)}${a.t} • Age ${a.a}</div></div><div class="vl"><span class="num">${num(assetValue(a))}</span></div></div>`;
   }).join("");
@@ -3642,7 +3675,7 @@ function renderVerdict(v){
       const v = assetValue(a);
       if(a.type === "pick"){
         const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
-        const slotLabel = a.slot==="top3"?"Top-3 Origin":a.slot==="late"?"Late Origin":"Mid Origin";
+        const slotLabel = a.slot==="top3"?"Bottom (1–3)":a.slot==="late"?"Late (9–10)":"Mid (4–8)";
         return `<tr>
           <td class="nm">${a.year} ${ord} Round Pick</td>
           <td>PICK</td>
@@ -4119,7 +4152,7 @@ function drawAssetList(ctx, list, x, y, w, accent){
     if(a.type === "pick"){
       const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
       nm = `${a.year} ${ord} Pick`;
-      sub = a.slot==="top3"?"Top-3 Origin":a.slot==="late"?"Late Origin":"Mid Origin";
+      sub = a.slot==="top3"?"Bottom (1–3)":a.slot==="late"?"Late (9–10)":"Mid (4–8)";
     } else {
       nm = a.n;
       sub = `${a.p} • ${a.t} • Age ${a.a}`;
