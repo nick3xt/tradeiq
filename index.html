@@ -39,11 +39,12 @@ img{display:block;max-width:100%}
 
 /* Ticker */
 .ticker{
-  position:sticky;top:0;z-index:30;
+  position:sticky;top:0;z-index:100;
   background:linear-gradient(180deg,#0d1322 0%,#080c18 100%);
   border-bottom:1px solid var(--line);
   overflow:hidden;
   height:32px;display:flex;align-items:center;
+  isolation:isolate;
 }
 .ticker .label{
   background:var(--green);color:#04140a;font-weight:800;font-size:11px;letter-spacing:.12em;
@@ -62,6 +63,7 @@ img{display:block;max-width:100%}
 
 /* Header */
 .header{
+  position:relative;z-index:1;
   background:linear-gradient(180deg,#0c1322 0%,var(--bg) 100%);
   border-bottom:1px solid var(--line);
   padding:14px 20px;
@@ -70,7 +72,7 @@ img{display:block;max-width:100%}
   max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap
 }
 .brand{display:flex;align-items:center;gap:12px;cursor:default}
-.brand img{width:42px;height:42px;border-radius:50%;box-shadow:0 0 0 2px rgba(0,210,106,.25),0 4px 12px rgba(0,210,106,.18)}
+.brand img{width:46px;height:46px;border-radius:50%;box-shadow:0 0 0 2px rgba(0,210,106,.45),0 4px 14px rgba(0,210,106,.28);background:#04140a}
 .brand .text{display:flex;flex-direction:column;line-height:1}
 .brand .name{font-size:18px;font-weight:900;letter-spacing:.04em}
 .brand .name span{color:var(--green)}
@@ -486,11 +488,13 @@ img{display:block;max-width:100%}
   font-size:14px;line-height:1.6;color:var(--ink)
 }
 .v2-context-card.rebuild{border-left-color:#7ab8ff}
+.v2-context-card.winnow{border-left-color:#ffb547}
 .v2-context-card .mode-badge{
   display:inline-block;padding:3px 9px;border-radius:5px;font-size:10px;font-weight:800;
   letter-spacing:.16em;text-transform:uppercase;background:rgba(0,210,106,.12);color:#3ee68f;margin-right:8px
 }
 .v2-context-card.rebuild .mode-badge{background:rgba(74,158,255,.12);color:#7ab8ff}
+.v2-context-card.winnow .mode-badge{background:rgba(255,181,71,.14);color:#ffb547}
 
 /* Toast */
 .toast{
@@ -654,6 +658,31 @@ img{display:block;max-width:100%}
   -webkit-overflow-scrolling: touch;
 }
 
+/* Splash screen (first paint) */
+.splash{
+  position:fixed;inset:0;z-index:9999;
+  background:radial-gradient(ellipse at center, #0c1322 0%, #04060d 70%, #02030a 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+  opacity:1;transition:opacity .45s ease;
+  pointer-events:auto;
+}
+.splash.fade-out{opacity:0;pointer-events:none}
+.splash img{
+  width:128px;height:128px;border-radius:50%;
+  box-shadow:0 0 0 3px rgba(0,210,106,.35),0 0 60px rgba(0,210,106,.35),0 12px 40px rgba(0,210,106,.25);
+  background:#04140a;
+  animation:splashIn .9s cubic-bezier(.2,.8,.2,1) both;
+}
+.splash .splash-text{
+  font-size:13px;font-weight:800;letter-spacing:.32em;color:var(--ink-3);text-transform:uppercase;
+  animation:splashIn .9s .1s cubic-bezier(.2,.8,.2,1) both;
+}
+.splash .splash-text span{color:var(--green)}
+@keyframes splashIn{
+  from{opacity:0;transform:scale(.92)}
+  to{opacity:1;transform:scale(1)}
+}
+
 @media (max-width: 768px) {
 
   /* --- Global font size bump --- */
@@ -666,6 +695,7 @@ img{display:block;max-width:100%}
   /* --- Header --- */
   .header { padding: 10px 14px; }
   .header-row { gap: 8px; }
+  .brand img { width: 44px; height: 44px; box-shadow: 0 0 0 2px rgba(0,210,106,.55), 0 4px 14px rgba(0,210,106,.35); }
   .brand .name { font-size: 16px; }
   .brand .tag { font-size: 9px; letter-spacing: .12em; }
   .btn { padding: 10px 12px; font-size: 14px; min-height: 44px; }
@@ -812,6 +842,12 @@ img{display:block;max-width:100%}
 </style>
 </head>
 <body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash" aria-hidden="true">
+  <img id="splash-logo" alt="TradeIQ">
+  <div class="splash-text">TRADE<span>IQ</span></div>
+</div>
 
 <!-- TICKER -->
 <div class="ticker" id="ticker">
@@ -1000,6 +1036,7 @@ img{display:block;max-width:100%}
         <label>Team Mode</label>
         <div class="opts" data-group="mode">
           <button class="opt sel" data-val="contender">Contender</button>
+          <button class="opt" data-val="winnow">Win-Now</button>
           <button class="opt" data-val="rebuilder">Rebuilder</button>
         </div>
       </div>
@@ -1702,7 +1739,7 @@ function renderTicker(){
 function profileBar(){
   const fmtMap = { standard:"Standard", superflex:"Superflex" };
   const scoreMap = { standard:"Non-PPR", half:"Half PPR", ppr:"Full PPR" };
-  const modeMap = { contender:"Contender", rebuilder:"Rebuilder" };
+  const modeMap = { contender:"Contender", winnow:"Win-Now", rebuilder:"Rebuilder" };
   const tepMap = { "0":"No TEP", "0.5":"0.5 TEP", "1":"1.0 TEP" };
   const bar = $("#profile-bar");
   bar.innerHTML = `
@@ -2122,9 +2159,7 @@ function openProfile(){
   setGroupVal("profile-modal","scoring",PROFILE.scoring);
   setGroupVal("profile-modal","tep",PROFILE.tep);
   setGroupVal("profile-modal","format",PROFILE.format);
-  // mode may have been migrated from old "winnow" -> "contender"
-  const modeVal = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
-  setGroupVal("profile-modal","mode", modeVal);
+  setGroupVal("profile-modal","mode", PROFILE.mode);
   openModal("#profile-modal");
 }
 $("#btn-profile").onclick = openProfile;
@@ -2459,8 +2494,7 @@ function buildObservations(totGet, totGive){
 
 function contextNote(totGet, totGive){
   const diff = totGet - totGive;
-  // Migrate legacy "winnow" -> "contender"
-  const mode = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
+  const mode = PROFILE.mode;
   const player = state.get.find(a => a.type !== "pick" && a.a >= 27);
   const youngPick = state.give.find(a => a.type === "pick" && a.year >= 2027);
   if(mode === "rebuilder" && player){
@@ -2468,6 +2502,20 @@ function contextNote(totGet, totGive){
   }
   if(mode === "rebuilder" && youngPick){
     return `As a <b>Rebuilder</b>, the future ${youngPick.year} ${youngPick.round===1?"1st":youngPick.round+"th"} you're sending is a key building block. Make sure the acquisition justifies it.`;
+  }
+  if(mode === "winnow"){
+    const incomingFuturePick = state.get.some(a=>a.type==="pick" && a.year >= 2027);
+    const incomingRookiePick = state.get.some(a=>a.type==="pick" && a.round === 1 && a.year <= 2026);
+    if(incomingFuturePick){
+      return `As a <b>Win-Now</b> team, future picks are dead weight — they don't help you THIS year. Only acceptable if you're flipping them again before the deadline.`;
+    }
+    if(incomingRookiePick){
+      return `As a <b>Win-Now</b> team, even current rookie picks are a gamble — you need plug-and-play production now, not a developmental swing.`;
+    }
+    if(diff < 0){
+      return `As a <b>Win-Now</b> team, paying a premium for proven, immediate-impact starters is correct. Your window is now — equity is meaningless if you don't cash it in.`;
+    }
+    return `As a <b>Win-Now</b> team, you're acquiring immediate production at fair-or-better value. Exactly the move.`;
   }
   if(mode === "contender"){
     if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
@@ -2738,10 +2786,23 @@ function renderVerdict(v){
   `;
 
   // === Section F — CONTEXT VERDICT ===
-  const mode = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
-  const modeLabel = mode === "rebuilder" ? "REBUILDER" : "CONTENDER";
+  const mode = PROFILE.mode;
+  const modeLabel = mode === "rebuilder" ? "REBUILDER" : mode === "winnow" ? "WIN-NOW" : "CONTENDER";
   let ctxVerdict;
-  if(mode === "contender"){
+  if(mode === "winnow"){
+    const incomingFuturePick = state.get.some(a=>a.type==="pick" && a.year >= 2027);
+    if(incomingFuturePick){
+      ctxVerdict = `As Win-Now, accepting <b>future picks</b> is the wrong direction — they don't score points THIS year. Only run this back if you're flipping them again before the deadline.`;
+    } else if(diff >= 200){
+      ctxVerdict = `As Win-Now, this is a <b>full green light</b>. You're getting more immediate production than you're giving up — cash in your equity, that's what it's for.`;
+    } else if(diff > -200){
+      ctxVerdict = `As Win-Now, the value is roughly even — but the only question that matters is <b>does this win you games NOW?</b> If yes, accept. Equity left on the table at season's end is wasted equity.`;
+    } else if(diff > -2500){
+      ctxVerdict = `As Win-Now, paying a real premium for proven, immediate-impact production is <b>exactly the move</b>. Your window is open. Don't grade this purely on raw value.`;
+    } else {
+      ctxVerdict = `As Win-Now, even in win-now mode there's a price ceiling. This much overpay only works if the incoming piece is genuinely needle-moving. <b>Counter</b> first.`;
+    }
+  } else if(mode === "contender"){
     if(diff >= 200){
       ctxVerdict = `As a Contender, this is a <b>green light</b>. You're getting more current production than you're giving up — exactly the shape you need to push for a title window.`;
     } else if(diff > -200){
@@ -2762,11 +2823,12 @@ function renderVerdict(v){
       ctxVerdict = `As a Rebuilder, paying a premium for <b>now</b> assets is exactly what you shouldn't be doing. <b>Counter</b> by replacing aging pieces with future picks or younger players.`;
     }
   }
+  const ctxClass = mode === "rebuilder" ? "rebuild" : mode === "winnow" ? "winnow" : "";
   const ctxHTML = `
     <div class="v2-section">
       <div class="v2-section-head">CONTEXT VERDICT <span class="sub">graded against your team mode</span></div>
       <div class="v2-section-body">
-        <div class="v2-context-card ${mode === "rebuilder" ? "rebuild" : ""}">
+        <div class="v2-context-card ${ctxClass}">
           <span class="mode-badge">${modeLabel}</span>${ctxVerdict}
         </div>
       </div>
@@ -2790,9 +2852,10 @@ function renderVerdict(v){
 // =================================================================
 // SHARE CARD (canvas)
 // =================================================================
-$("#btn-share").onclick = () => {
-  drawShareCard();
+$("#btn-share").onclick = async () => {
   openModal("#share-modal");
+  await LOGO_READY;
+  drawShareCard();
 };
 
 function drawShareCard(){
@@ -2884,6 +2947,39 @@ function drawShareCard(){
   ctx.textAlign = "center";
   ctx.fillText("POWERED BY TRADEIQ • dynasty fantasy football trade analyzer", W/2, H-30);
   ctx.textAlign = "left";
+
+  // logo watermark — guaranteed on every share card
+  if(LOGO_IMG && LOGO_IMG.complete && LOGO_IMG.naturalWidth){
+    const wmSize = 110;
+    const wmX = W - wmSize - 60;
+    const wmY = H - wmSize - 80;
+    ctx.save();
+    ctx.globalAlpha = 0.8;
+    ctx.beginPath();
+    ctx.arc(wmX + wmSize/2, wmY + wmSize/2, wmSize/2, 0, Math.PI*2);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(LOGO_IMG, wmX, wmY, wmSize, wmSize);
+    ctx.restore();
+    ctx.save();
+    ctx.globalAlpha = 0.85;
+    ctx.strokeStyle = "#00d26a";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(wmX + wmSize/2, wmY + wmSize/2, wmSize/2, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.restore();
+  } else {
+    // text fallback if image somehow not ready
+    ctx.save();
+    ctx.globalAlpha = 0.8;
+    ctx.fillStyle = "#00d26a";
+    ctx.font = "900 36px Inter, sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText("TradeIQ", W - 60, H - 90);
+    ctx.restore();
+    ctx.textAlign = "left";
+  }
 }
 
 function drawGradeBox(ctx, x, y, w, h, label, grade, total){
@@ -2983,7 +3079,31 @@ function stripTags(s){ return s.replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim
 // preload logo for canvas
 const LOGO_IMG = new Image();
 LOGO_IMG.crossOrigin = "anonymous";
+const LOGO_READY = new Promise((res) => {
+  LOGO_IMG.onload = () => res(true);
+  LOGO_IMG.onerror = () => res(false);
+});
 LOGO_IMG.src = LOGO_URL;
+
+// splash boot screen
+(function initSplash(){
+  const splash = document.getElementById("splash");
+  const splashLogo = document.getElementById("splash-logo");
+  if(!splash || !splashLogo) return;
+  splashLogo.src = LOGO_URL;
+  const minDuration = 1500;
+  const start = performance.now();
+  const finish = () => {
+    const elapsed = performance.now() - start;
+    const wait = Math.max(0, minDuration - elapsed);
+    setTimeout(() => {
+      splash.classList.add("fade-out");
+      setTimeout(() => splash.remove(), 500);
+    }, wait);
+  };
+  if(document.readyState === "complete") finish();
+  else window.addEventListener("load", finish, { once: true });
+})();
 
 $("#btn-download-share").onclick = () => {
   const c = $("#share-canvas");
