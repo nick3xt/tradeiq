@@ -39,7 +39,7 @@ img{display:block;max-width:100%}
 
 /* Ticker */
 .ticker{
-  position:sticky;top:0;z-index:100;
+  position:sticky;top:0;z-index:20;
   background:linear-gradient(180deg,#0d1322 0%,#080c18 100%);
   border-bottom:1px solid var(--line);
   overflow:hidden;
@@ -51,7 +51,7 @@ img{display:block;max-width:100%}
   padding:0 12px;height:100%;display:flex;align-items:center;flex:0 0 auto;text-transform:uppercase;
 }
 .ticker .track{
-  display:flex;gap:32px;white-space:nowrap;animation:scroll 60s linear infinite;padding-left:16px;
+  display:flex;gap:32px;white-space:nowrap;animation:scroll 180s linear infinite;padding-left:16px;
   font-size:12px;font-weight:600;color:var(--ink-2)
 }
 .ticker .item .name{color:var(--ink)}
@@ -63,7 +63,7 @@ img{display:block;max-width:100%}
 
 /* Header */
 .header{
-  position:relative;z-index:1;
+  position:sticky;top:0;z-index:30;
   background:linear-gradient(180deg,#0c1322 0%,var(--bg) 100%);
   border-bottom:1px solid var(--line);
   padding:14px 20px;
@@ -125,7 +125,6 @@ img{display:block;max-width:100%}
 }
 @media (max-width:880px){
   .trade-grid{grid-template-columns:1fr;gap:12px}
-  .trade-grid .vs{order:2;margin:0 auto}
 }
 .side{
   background:var(--panel);border:1px solid var(--line);border-radius:14px;
@@ -224,13 +223,6 @@ img{display:block;max-width:100%}
 .pos-WR{background:rgba(74,158,255,.15);color:#7ab8ff}
 .pos-TE{background:rgba(255,215,0,.15);color:#ffe14f}
 .pos-PICK{background:rgba(167,139,250,.18);color:#c5b3ff}
-
-.vs{
-  display:flex;align-items:center;justify-content:center;
-  background:var(--panel);border:1px solid var(--line);border-radius:50%;
-  width:56px;height:56px;font-weight:900;font-size:14px;letter-spacing:.04em;color:var(--ink-3);
-  margin-top:120px
-}
 
 /* Toolbar */
 .tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;justify-content:center}
@@ -602,16 +594,17 @@ img{display:block;max-width:100%}
 .movers-head h3{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-2);margin:0;font-weight:700}
 .movers-head h3 .subtitle{font-size:11px;color:var(--ink-3);margin-left:10px;text-transform:none;letter-spacing:0;font-weight:400}
 .movers-strip{
-  display:flex;gap:10px;overflow-x:auto;padding:6px 2px 14px;
-  scrollbar-width:thin;scrollbar-color:var(--line-2) transparent
+  display:flex;flex-wrap:nowrap;gap:10px;overflow-x:auto;padding:6px 2px 14px;
+  scrollbar-width:thin;scrollbar-color:var(--line-2) transparent;
+  -webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;touch-action:pan-x
 }
 .movers-strip::-webkit-scrollbar{height:8px}
 .movers-strip::-webkit-scrollbar-track{background:transparent}
 .movers-strip::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px}
 .mover-card{
-  flex:0 0 200px;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  flex:0 0 200px;flex-shrink:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;
   padding:12px 14px;display:flex;flex-direction:column;gap:6px;position:relative;
-  transition:transform .15s,border-color .15s
+  transition:transform .15s,border-color .15s;scroll-snap-align:start
 }
 .mover-card:hover{transform:translateY(-2px);border-color:var(--line-2)}
 .mover-card.up{border-left:3px solid var(--green)}
@@ -682,10 +675,7 @@ img{display:block;max-width:100%}
 }
 .featured-asset .nm{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .featured-asset .vl{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:700;font-size:12px;flex:0 0 auto}
-.featured-vs{
-  display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-weight:900;
-  background:var(--panel-2);border:1px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:12px;letter-spacing:.04em;justify-self:center
-}
+
 .featured-cta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;justify-self:end}
 @media (max-width:760px){.featured-cta{align-items:center;justify-self:center}}
 .featured-cta .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
@@ -882,6 +872,182 @@ img{display:block;max-width:100%}
   #btn-import { display: none; }   /* hide on very narrow, still accessible via ⚙ League */
 }
 
+
+/* =====================================================
+   FEATURE 6 — QUICK PARSE (Natural Language Input)
+   ===================================================== */
+.quick-parse-card{
+  background:#0d1322;
+  border:1px solid #1e2d45;
+  border-radius:8px;
+  padding:14px 16px 12px;
+  margin-bottom:16px;
+}
+.qp-header{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:10px;
+}
+.qp-icon{ font-size:16px; }
+.qp-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.16em;
+  color:#00ff88;
+}
+#nl-trade-input{
+  width:100%;
+  background:#060c18;
+  border:1px solid #1e2d45;
+  border-radius:5px;
+  color:#e8eef9;
+  font-size:13px;
+  font-family:inherit;
+  padding:9px 12px;
+  outline:none;
+  box-sizing:border-box;
+  transition:border-color .15s;
+}
+#nl-trade-input:focus{ border-color:#00ff88; }
+#nl-trade-input::placeholder{ color:#3a4d6a; }
+.qp-status{
+  font-size:11px;
+  margin-top:7px;
+  min-height:16px;
+  line-height:1.4;
+}
+.qp-status.ok{ color:#00ff88; }
+.qp-status.warn{ color:#ffa500; }
+.qp-status.err{ color:#ff4444; }
+
+/* =====================================================
+   FEATURE 7 — TEAM NEEDS PILLS
+   ===================================================== */
+.team-needs-bar{
+  display:none;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+  padding:10px 14px;
+  background:#0d1322;
+  border:1px solid #1e2d45;
+  border-radius:8px;
+}
+.team-needs-bar.show{ display:flex; }
+.tn-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.14em;
+  color:#4a9eff;
+  white-space:nowrap;
+}
+.tn-pill{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.1em;
+  padding:4px 10px;
+  border-radius:4px;
+  border:1px solid #1e2d45;
+  background:#060c18;
+  color:#e8eef9;
+  cursor:pointer;
+  transition:background .12s, border-color .12s;
+}
+.tn-pill:hover{ background:#1a2540; border-color:#4a9eff; color:#4a9eff; }
+.tn-pill.active{ background:#0d2444; border-color:#4a9eff; color:#4a9eff; }
+.tn-pill.pos-QB{ border-color:#ffa500; color:#ffa500; }
+.tn-pill.pos-QB:hover,.tn-pill.pos-QB.active{ background:#2a1a00; border-color:#ffa500; }
+.tn-pill.pos-RB{ border-color:#00ff88; color:#00ff88; }
+.tn-pill.pos-RB:hover,.tn-pill.pos-RB.active{ background:#002a1a; border-color:#00ff88; }
+.tn-pill.pos-WR{ border-color:#4a9eff; color:#4a9eff; }
+.tn-pill.pos-WR:hover,.tn-pill.pos-WR.active{ background:#0a1e3a; border-color:#4a9eff; }
+.tn-pill.pos-TE{ border-color:#cc88ff; color:#cc88ff; }
+.tn-pill.pos-TE:hover,.tn-pill.pos-TE.active{ background:#1a0a2a; border-color:#cc88ff; }
+
+/* Verdict ROSTER FIT section */
+.v2-roster-fit-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:5px 0;
+  border-bottom:1px solid #1e2d45;
+  font-size:12px;
+}
+.v2-roster-fit-row:last-child{ border-bottom:none; }
+.v2-rf-name{ flex:1; color:#e8eef9; font-weight:600; }
+.v2-rf-tag-fills{ color:#00ff88; font-size:11px; font-weight:700; letter-spacing:.08em; }
+.v2-rf-tag-loses{ color:#ffa500; font-size:11px; font-weight:700; letter-spacing:.08em; }
+.v2-rf-neutral{ color:#5a7a9a; font-size:11px; }
+.v2-connect-prompt{ color:#4a9eff; font-size:12px; font-style:italic; }
+
+/* =====================================================
+   FEATURE 10 — MARKET ALERTS (Sell High / Buy Low)
+   ===================================================== */
+.alerts-section{
+  background:#0a0e1a;
+  border:1px solid #1a2540;
+  border-radius:10px;
+  margin:0 0 18px;
+  overflow:hidden;
+}
+.alerts-head{
+  padding:14px 18px 10px;
+  border-bottom:1px solid #1a2540;
+}
+.alerts-head h3{
+  margin:0;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#e8eef9;
+}
+.alerts-buckets{
+  padding:14px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.alert-bucket-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.16em;
+  margin-bottom:8px;
+}
+.alert-bucket-label.sell{ color:#ff4444; }
+.alert-bucket-label.buy{ color:#00ff88; }
+.alerts-strip{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:6px;
+  scrollbar-width:thin;
+  scrollbar-color:#1e2d45 transparent;
+}
+.alerts-strip::-webkit-scrollbar{ height:4px; }
+.alerts-strip::-webkit-scrollbar-track{ background:transparent; }
+.alerts-strip::-webkit-scrollbar-thumb{ background:#1e2d45; border-radius:2px; }
+.alert-card{
+  flex:0 0 auto;
+  background:#0d1322;
+  border:1px solid #1e2d45;
+  border-radius:7px;
+  padding:11px 13px;
+  min-width:140px;
+  max-width:160px;
+}
+.alert-card.sell{ border-top:2px solid #ff4444; }
+.alert-card.buy{ border-top:2px solid #00ff88; }
+.alert-card .nm{ font-size:12px; font-weight:700; color:#e8eef9; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.alert-card .meta{ font-size:10px; color:#5a7a9a; margin-bottom:6px; }
+.alert-card .row{ display:flex; align-items:center; justify-content:space-between; gap:4px; }
+.alert-card .val{ font-size:13px; font-weight:700; font-family:'JetBrains Mono',monospace; color:#e8eef9; }
+.alert-card .reason{ font-size:9px; font-weight:700; letter-spacing:.1em; padding:2px 5px; border-radius:3px; }
+.alert-card.sell .reason{ background:rgba(255,68,68,.15); color:#ff4444; }
+.alert-card.buy .reason{ background:rgba(0,255,136,.12); color:#00ff88; }
+
 </style>
 </head>
 <body>
@@ -890,12 +1056,6 @@ img{display:block;max-width:100%}
 <div class="splash" id="splash" aria-hidden="true">
   <img id="splash-logo" alt="TradeIQ">
   <div class="splash-text">TRADE<span>IQ</span></div>
-</div>
-
-<!-- TICKER -->
-<div class="ticker" id="ticker">
-  <div class="label">LIVE • TOP 25</div>
-  <div class="track" id="ticker-track"></div>
 </div>
 
 <!-- HEADER -->
@@ -917,27 +1077,29 @@ img{display:block;max-width:100%}
   <div class="profile-bar" id="profile-bar"></div>
 </header>
 
+<!-- TICKER -->
+<div class="ticker" id="ticker">
+  <div class="label">LIVE • TOP 25</div>
+  <div class="track" id="ticker-track"></div>
+</div>
+
 <!-- MAIN -->
 <main class="main">
 
-  <!-- FIRST-VISIT LEAGUE SETUP BANNER -->
-  <div id="setup-banner" style="display:none;
-    background:linear-gradient(135deg,#0d1f12 0%,#0a1a1a 100%);
-    border:1.5px solid rgba(0,210,106,.45);
-    border-radius:12px;
-    padding:14px 18px;
-    margin-bottom:18px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    flex-wrap:wrap;">
-    <span style="font-size:22px">⚙️</span>
-    <div style="flex:1;min-width:180px">
-      <div style="font-size:14px;font-weight:700;color:var(--ink)">Configure your league first</div>
-      <div style="font-size:12px;color:var(--ink-2);margin-top:3px">Values auto-adjust for your scoring, format &amp; team count.</div>
+  <!-- TEAM NEEDS BAR (shown after Sleeper import) -->
+  <div class="team-needs-bar" id="team-needs-bar">
+    <span class="tn-label">📊 ROSTER NEEDS</span>
+    <div id="tn-pills"></div>
+  </div>
+
+  <!-- QUICK PARSE — Feature 6 -->
+  <div class="quick-parse-card" id="quick-parse-card">
+    <div class="qp-header">
+      <span class="qp-icon">⚡</span>
+      <span class="qp-label">QUICK PARSE</span>
     </div>
-    <button class="btn primary" onclick="openProfile();document.getElementById('setup-banner').style.display='none'" style="white-space:nowrap;flex:0 0 auto">⚙ Set League Format</button>
-    <button onclick="document.getElementById('setup-banner').style.display='none';localStorage.setItem('tradeiq.banner.v1','1')" style="background:none;border:none;color:var(--ink-3);font-size:18px;cursor:pointer;padding:4px 6px;line-height:1" title="Dismiss">×</button>
+    <input id="nl-trade-input" type="text" placeholder='e.g. "I&apos;m giving Puka + 2027 first for Davante"' autocomplete="off">
+    <div class="qp-status" id="qp-status"></div>
   </div>
 
   <div class="trade-grid">
@@ -958,8 +1120,6 @@ img{display:block;max-width:100%}
         <div class="empty-state">No assets added.<br>Search above to add players or picks.</div>
       </div>
     </section>
-
-    <div class="vs">VS</div>
 
     <!-- YOU GET -->
     <section class="side you-get">
@@ -1019,6 +1179,14 @@ img{display:block;max-width:100%}
       <h3>Market Movers <span class="subtitle">Post-2026-draft consensus shifts · 30-day window</span></h3>
     </header>
     <div class="mover-section-grid" id="movers-grid"></div>
+  </section>
+
+  <!-- MARKET ALERTS — Feature 10 -->
+  <section class="alerts-section" id="alerts-section">
+    <header class="alerts-head">
+      <h3>Market Alerts <span class="subtitle">Sell-high &amp; buy-low signals based on age vs. current value</span></h3>
+    </header>
+    <div class="alerts-buckets" id="alerts-grid"></div>
   </section>
 
   <!-- POSITION VALUE TIERS -->
@@ -1330,7 +1498,7 @@ const LOGO_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAFACAYAAADN
 const PLAYERS = [
 // QBs
 {n:"Lamar Jackson",p:"QB",t:"BAL",a:29,ktc:8730,fc:8685,dp:8595,sleeper:8730},
-{n:"Josh Allen",p:"QB",t:"BUF",a:29,ktc:8505,fc:8550,dp:8370,sleeper:8550},
+{n:"Josh Allen",p:"QB",t:"BUF",a:29,ktc:8200,fc:8250,dp:8100,sleeper:8200},
 {n:"Jalen Hurts",p:"QB",t:"PHI",a:27,ktc:8872,fc:8824,dp:8678,sleeper:8775},
 {n:"Patrick Mahomes",p:"QB",t:"KC",a:30,ktc:8055,fc:8100,dp:7965,sleeper:8055},
 {n:"Joe Burrow",p:"QB",t:"CIN",a:30,ktc:7560,fc:7650,dp:7470,sleeper:7605},
@@ -1390,12 +1558,12 @@ const PLAYERS = [
 {n:"Najee Harris",p:"RB",t:"LAC",a:29,ktc:2660,fc:2755,dp:2565,sleeper:2660},
 
 // WRs
-{n:"Ja'Marr Chase",p:"WR",t:"CIN",a:26,ktc:9300,fc:9250,dp:9200,sleeper:9300},
-{n:"Justin Jefferson",p:"WR",t:"MIN",a:26,ktc:8482,fc:8580,dp:8385,sleeper:8482},
+{n:"Ja'Marr Chase",p:"WR",t:"CIN",a:26,ktc:11500,fc:11450,dp:11350,sleeper:11500},
+{n:"Justin Jefferson",p:"WR",t:"MIN",a:26,ktc:9050,fc:9100,dp:8950,sleeper:9050},
 {n:"CeeDee Lamb",p:"WR",t:"DAL",a:26,ktc:8824,fc:8872,dp:8726,sleeper:8824},
 {n:"Malik Nabers",p:"WR",t:"NYG",a:24,ktc:9064,fc:9012,dp:9167,sleeper:9064},
-{n:"Puka Nacua",p:"WR",t:"LAR",a:24,ktc:8550,fc:8500,dp:8600,sleeper:8550},
-{n:"Brian Thomas Jr",p:"WR",t:"JAX",a:23,ktc:8400,fc:8350,dp:8500,sleeper:8400},
+{n:"Puka Nacua",p:"WR",t:"LAR",a:24,ktc:7200,fc:7100,dp:7000,sleeper:7100},
+{n:"Brian Thomas Jr",p:"WR",t:"JAX",a:23,ktc:6500,fc:6400,dp:6300,sleeper:6400},
 {n:"Marvin Harrison Jr",p:"WR",t:"ARI",a:22,ktc:8000,fc:7900,dp:8200,sleeper:8000},
 {n:"Drake London",p:"WR",t:"ATL",a:26,ktc:7900,fc:7850,dp:7950,sleeper:7900},
 {n:"Amon-Ra St. Brown",p:"WR",t:"DET",a:28,ktc:7898,fc:7995,dp:7800,sleeper:7898},
@@ -1415,14 +1583,14 @@ const PLAYERS = [
 {n:"Mike Evans",p:"WR",t:"TB",a:33,ktc:3060,fc:3150,dp:2970,sleeper:3060},
 {n:"Chris Godwin",p:"WR",t:"TB",a:31,ktc:3240,fc:3330,dp:3150,sleeper:3240},
 {n:"Tee Higgins",p:"WR",t:"CIN",a:28,ktc:6728,fc:6825,dp:6630,sleeper:6728},
-{n:"DeVonta Smith",p:"WR",t:"PHI",a:28,ktc:6532,fc:6630,dp:6435,sleeper:6532},
-{n:"AJ Brown",p:"WR",t:"PHI",a:29,ktc:6840,fc:6935,dp:6745,sleeper:6840},
-{n:"Keenan Allen",p:"WR",t:"FA",a:35,ktc:810,fc:900,dp:720,sleeper:810},
+{n:"DeVonta Smith",p:"WR",t:"PHI",a:27,ktc:6532,fc:6630,dp:6435,sleeper:6532},
+{n:"AJ Brown",p:"WR",t:"PHI",a:28,ktc:6840,fc:6935,dp:6745,sleeper:6840},
+{n:"Keenan Allen",p:"WR",t:"FA",a:34,ktc:810,fc:900,dp:720,sleeper:810},
 {n:"Calvin Ridley",p:"WR",t:"TEN",a:32,ktc:2790,fc:2880,dp:2700,sleeper:2790},
 {n:"Tank Dell",p:"WR",t:"HOU",a:27,ktc:3400,fc:3300,dp:3500,sleeper:3400},
 {n:"Christian Kirk",p:"WR",t:"HOU",a:30,ktc:2160,fc:2250,dp:2070,sleeper:2160},
 {n:"Rashee Rice",p:"WR",t:"KC",a:26,ktc:7500,fc:7600,dp:7400,sleeper:7500},
-{n:"Jaxon Smith-Njigba",p:"WR",t:"SEA",a:23,ktc:7800,fc:7900,dp:7700,sleeper:7800},
+{n:"Jaxon Smith-Njigba",p:"WR",t:"SEA",a:24,ktc:7800,fc:7900,dp:7700,sleeper:7800},
 {n:"Xavier Legette",p:"WR",t:"CAR",a:26,ktc:4200,fc:4150,dp:4300,sleeper:4200},
 {n:"Ladd McConkey",p:"WR",t:"LAC",a:23,ktc:7700,fc:7800,dp:7600,sleeper:7700},
 {n:"Quentin Johnston",p:"WR",t:"LAC",a:25,ktc:3900,fc:3850,dp:3950,sleeper:3900},
@@ -1574,7 +1742,7 @@ const PLAYERS = [
 {n:"Odell Beckham Jr",p:"WR",t:"FA",a:34,ktc:270,fc:360,dp:180,sleeper:270},
 {n:"JuJu Smith-Schuster",p:"WR",t:"KC",a:30,ktc:540,fc:630,dp:450,sleeper:540},
 {n:"Emmanuel Sanders",p:"WR",t:"FA",a:40,ktc:45,fc:90,dp:45,sleeper:45},
-{n:"Amari Cooper",p:"WR",t:"FA",a:33,ktc:990,fc:1080,dp:900,sleeper:990},
+{n:"Amari Cooper",p:"WR",t:"FA",a:31,ktc:990,fc:1080,dp:900,sleeper:990},
 {n:"Michael Gallup",p:"WR",t:"FA",a:31,ktc:270,fc:360,dp:180,sleeper:270},
 {n:"Donovan Peoples-Jones",p:"WR",t:"FA",a:28,ktc:390,fc:488,dp:292,sleeper:390},
 {n:"Tutu Atwell",p:"WR",t:"LAR",a:27,ktc:1900,fc:1850,dp:2000,sleeper:1900},
@@ -1696,14 +1864,14 @@ const PLAYERS = [
 {n:"Elijah Arroyo",p:"TE",t:"SEA",a:25,ktc:2800,fc:2750,dp:2900,sleeper:2800},
 {n:"Terrance Ferguson",p:"TE",t:"LAR",a:25,ktc:2700,fc:2650,dp:2800,sleeper:2700},
 // --- 2026 Rookie Class (FantasyPros Dynasty rookie rankings) ---
-{n:"Jeremiyah Love",p:"RB",t:"ARI",a:21,ktc:9270,fc:9064,dp:9373,sleeper:9167,draft:2026},
-{n:"Carnell Tate",p:"WR",t:"TEN",a:22,ktc:8755,fc:8549,dp:8858,sleeper:8652,draft:2026},
-{n:"Jordyn Tyson",p:"WR",t:"NO",a:22,ktc:8034,fc:7828,dp:8137,sleeper:7931,draft:2026},
-{n:"Makai Lemon",p:"WR",t:"PHI",a:22,ktc:7622,fc:7416,dp:7725,sleeper:7519,draft:2026},
-{n:"Jadarian Price",p:"RB",t:"SEA",a:23,ktc:7210,fc:7004,dp:7313,sleeper:7107,draft:2026},
-{n:"KC Concepcion",p:"WR",t:"CLE",a:22,ktc:6695,fc:6489,dp:6798,sleeper:6592,draft:2026},
-{n:"Omar Cooper Jr.",p:"WR",t:"NYJ",a:23,ktc:6386,fc:6180,dp:6489,sleeper:6283,draft:2026},
-{n:"Kenyon Sadiq",p:"TE",t:"NYJ",a:22,ktc:6180,fc:5974,dp:6283,sleeper:6077,draft:2026},
+{n:"Jeremiyah Love",p:"RB",t:"ARI",a:21,ktc:7500,fc:7400,dp:7600,sleeper:7500,draft:2026},
+{n:"Carnell Tate",p:"WR",t:"TEN",a:22,ktc:5800,fc:5700,dp:5600,sleeper:5700,draft:2026},
+{n:"Jordyn Tyson",p:"WR",t:"NO",a:22,ktc:6300,fc:6200,dp:6400,sleeper:6300,draft:2026},
+{n:"Makai Lemon",p:"WR",t:"PHI",a:22,ktc:5400,fc:5300,dp:5500,sleeper:5400,draft:2026},
+{n:"Jadarian Price",p:"RB",t:"SEA",a:23,ktc:5800,fc:5700,dp:5900,sleeper:5800,draft:2026},
+{n:"KC Concepcion",p:"WR",t:"CLE",a:22,ktc:5000,fc:4900,dp:5100,sleeper:5000,draft:2026},
+{n:"Omar Cooper Jr.",p:"WR",t:"NYJ",a:23,ktc:4700,fc:4600,dp:4800,sleeper:4700,draft:2026},
+{n:"Kenyon Sadiq",p:"TE",t:"NYJ",a:22,ktc:4500,fc:4400,dp:4600,sleeper:4500,draft:2026},
 {n:"Eli Stowers",p:"TE",t:"PHI",a:24,ktc:5665,fc:5459,dp:5768,sleeper:5562,draft:2026},
 {n:"Fernando Mendoza",p:"QB",t:"LV",a:23,ktc:5356,fc:5150,dp:5459,sleeper:5253,draft:2026},
 {n:"Denzel Boston",p:"WR",t:"CLE",a:23,ktc:4944,fc:4738,dp:5047,sleeper:4841,draft:2026},
@@ -2244,15 +2412,25 @@ function renderTiers(){
   }
   for(const k of Object.keys(byPos)) byPos[k].sort((a,b)=>b.v-a.v);
 
-  // Define tier bands per position (consensus-value cutoffs; reflects current market)
+  // Tier bands in adjusted-value space (post-format/scoring/team multipliers applied by adjustedConsensus).
+  // Thresholds calibrated against natural value clusters in the actual data — no round numbers.
+  // QB thresholds split by format: SF inflates QB values ×1.40; 1QB deflates ×0.70.
+  // RB/WR/TE thresholds are format-neutral (format only shifts QB values).
+  //
+  // Key anchors (PPR, 12-team defaults):
+  //   QB SF  — Dart 9,816 → QB1 | Penix 8,673 → QB2 | Young 8,130 → QB2
+  //   QB 1QB — Daniels 6,542 → QB1 | Stroud 6,317 → QB1 | Hurts 6,210 → QB1 | Mahomes 5,638 → QB1 | Dart 4,908 → QB2
+  //   RB     — Jeanty 8,350 → RB1 | Love 8,292 → RB1 | Bijan 7,686 → RB1 | Gibbs 7,558 → RB1 | Hall 7,351 → RB1 | Achane 7,261 → RB1 | Cook 5,484 → RB2
+  //   WR     — Chase 12,598 → WR1 | Jefferson 9,941 → WR1 | Nabers 9,979 → WR1 | Lamb 9,698 → WR1 | Hunter 9,639 → WR1 | McMillan 9,299 → WR1
+  //   TE     — Bowers 9,159 → TE1 | McBride 7,593 → TE1 | LaPorta 7,108 → TE1 | Warren 5,982 → TE2
   const fmtSF = PROFILE.format === "superflex";
   const tierDefs = {
     QB: fmtSF
-      ? [["QB1",8500,99999],["QB2",6000,8499],["QB3",3500,5999],["QBSTREAM",0,3499]]
-      : [["QB1",6500,99999],["QB2",4500,6499],["QB3",2500,4499],["QBSTREAM",0,2499]],
-    RB: [["RB1",8000,99999],["RB2",5500,7999],["RB3",3500,5499],["RB4+",0,3499]],
-    WR: [["WR1",8000,99999],["WR2",5500,7999],["WR3",3500,5499],["WR4+",0,3499]],
-    TE: [["TE1",5500,99999],["TE2",3000,5499],["TE3",1500,2999],["TE4+",0,1499]]
+      ? [["QB1",8800,99999],["QB2",6600,8799],["QB3",4200,6599],["Streamers",0,4199]]
+      : [["QB1",5200,99999],["QB2",4300,5199],["QB3",2600,4299],["Streamers",0,2599]],
+    RB: [["RB1",7200,99999],["RB2",5000,7199],["RB3",3200,4999],["Depth",0,3199]],
+    WR: [["WR1",9100,99999],["WR2",7200,9099],["WR3",4500,7199],["Depth",0,4499]],
+    TE: [["TE1",7000,99999],["TE2",5200,6999],["TE3",2300,5199],["Streamers",0,2299]]
   };
   function colHTML(pos, defs){
     const ctx = pos === "QB" ? (fmtSF ? "Superflex" : "1QB") : "all formats";
@@ -2313,7 +2491,6 @@ function renderFeatured(){
       <div class="head">YOU GET</div>
       ${get.map(rowHTML).join("") || '<div class="featured-asset"><span class="nm" style="color:var(--ink-3);font-style:italic">— missing player —</span></div>'}
     </div>
-    <div class="featured-vs">VS</div>
     <div class="featured-side them">
       <div class="head">YOU GIVE</div>
       ${give.map(rowHTML).join("") || '<div class="featured-asset"><span class="nm" style="color:var(--ink-3);font-style:italic">— missing —</span></div>'}
@@ -2342,8 +2519,239 @@ function rerenderAll(){
   if(state.myRoster) renderRoster();
   renderPickChart();
   renderMovers();
+  renderMarketAlerts();
   renderTiers();
   renderFeatured();
+}
+
+// =================================================================
+// FEATURE 6 — NATURAL LANGUAGE TRADE PARSER
+// =================================================================
+(function setupNLParser(){
+  const input  = document.getElementById("nl-trade-input");
+  const status = document.getElementById("qp-status");
+  if(!input) return;
+
+  // Ordinal word → round number
+  const ORD_MAP = {
+    "first":1, "1st":1, "second":2, "2nd":2,
+    "third":3, "3rd":3, "fourth":4, "4th":4
+  };
+
+  function parsePick(token){
+    // Patterns: "2027 first", "early 2026 1st", "late 2027 2nd", "2028 2nd round"
+    const t = token.toLowerCase().trim();
+    const yearM = t.match(/20(2[5-9]|3\d)/);
+    if(!yearM) return null;
+    const year = parseInt(yearM[0], 10);
+
+    let round = null;
+    for(const [word, r] of Object.entries(ORD_MAP)){
+      if(t.includes(word)){ round = r; break; }
+    }
+    if(!round) return null;
+
+    let slot = "mid";
+    if(/\b(early|top|top3|top-3)\b/.test(t)) slot = "top3";
+    else if(/\b(late|back|end)\b/.test(t)) slot = "late";
+    return { type:"pick", year, round, slot };
+  }
+
+  function fuzzyMatchPlayer(token){
+    const t = token.toLowerCase().trim();
+    if(t.length < 2) return null;
+    // 1. exact substring on full name
+    let m = PLAYERS.find(p => p.n.toLowerCase().includes(t));
+    if(m) return m;
+    // 2. last name only
+    const tokens = t.split(/\s+/);
+    const lastName = tokens[tokens.length - 1];
+    if(lastName.length >= 3){
+      m = PLAYERS.find(p => {
+        const parts = p.n.toLowerCase().split(/\s+/);
+        return parts[parts.length-1] === lastName;
+      });
+      if(m) return m;
+    }
+    // 3. first name only
+    const firstName = tokens[0];
+    if(firstName.length >= 3){
+      m = PLAYERS.find(p => p.n.toLowerCase().split(/\s+/)[0] === firstName);
+      if(m) return m;
+    }
+    return null;
+  }
+
+  function parseTokens(str){
+    const parts = str.split(/[,+]|\band\b/i).map(s => s.trim()).filter(Boolean);
+    const parsed = [];
+    const unknown = [];
+    for(const part of parts){
+      const pick = parsePick(part);
+      if(pick){
+        const ord = pick.round===1?"1st":pick.round===2?"2nd":pick.round===3?"3rd":pick.round+"th";
+        const slotLabel = pick.slot==="top3"?"(early)":pick.slot==="late"?"(late)":"";
+        parsed.push({ asset: pick, label: `${pick.year} ${ord} ${slotLabel}`.trim() });
+      } else {
+        const player = fuzzyMatchPlayer(part);
+        if(player){
+          parsed.push({ asset: {...player, type:"player"}, label: player.n });
+        } else {
+          if(part.length >= 2) unknown.push(part);
+        }
+      }
+    }
+    return { parsed, unknown };
+  }
+
+  function setStatus(msg, cls){
+    status.textContent = msg;
+    status.className = "qp-status " + cls;
+  }
+
+  function runParse(raw){
+    const text = raw.trim();
+    if(!text){ status.textContent = ""; status.className = "qp-status"; return; }
+
+    // Split on " for " (case-insensitive)
+    const forMatch = text.match(/^(.+?)\s+for\s+(.+)$/i);
+    if(!forMatch){
+      setStatus("⚠ Couldn't find "for" separator. Try: [give assets] for [get assets]", "warn");
+      return;
+    }
+    const giveSide = forMatch[1];
+    const getSide  = forMatch[2];
+
+    const { parsed: parsedGive, unknown: unknownGive } = parseTokens(giveSide);
+    const { parsed: parsedGet,  unknown: unknownGet  } = parseTokens(getSide);
+
+    const allUnknown = [...unknownGive, ...unknownGet];
+
+    if(!parsedGive.length && !parsedGet.length){
+      setStatus("✗ Could not recognize any players or picks. Check spelling.", "err");
+      return;
+    }
+
+    // Populate state
+    state.give = parsedGive.map(x => x.asset);
+    state.get  = parsedGet.map(x => x.asset);
+    rerenderAll();
+    refreshAnalyzeBtn();
+
+    const giveStr = parsedGive.map(x => x.label).join(" + ") || "—";
+    const getStr  = parsedGet.map(x => x.label).join(" + ") || "—";
+    let msg = `✓ Parsed: ${giveStr} → ${getStr}`;
+    if(allUnknown.length){
+      msg += `  ·  ⚠ Could not parse: ${allUnknown.join(", ")}`;
+      setStatus(msg, "warn");
+    } else {
+      setStatus(msg, "ok");
+    }
+  }
+
+  let debounce;
+  input.addEventListener("input", () => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => runParse(input.value), 420);
+  });
+  input.addEventListener("keydown", e => {
+    if(e.key === "Enter"){ clearTimeout(debounce); runParse(input.value); }
+  });
+})();
+
+// =================================================================
+// FEATURE 10 — MARKET ALERTS: SELL HIGH / BUY LOW
+// =================================================================
+function renderMarketAlerts(){
+  const grid = document.getElementById("alerts-grid");
+  if(!grid) return;
+
+  // Position peak age ranges: [peakStart, peakEnd]
+  const PEAK = { QB:[26,32], RB:[23,26], WR:[24,28], TE:[25,29] };
+
+  // Bucket players by position with adjusted values
+  const byPos = {};
+  for(const p of PLAYERS){
+    if(!PEAK[p.p]) continue;
+    const v = adjustedConsensus(p);
+    if(!byPos[p.p]) byPos[p.p] = [];
+    byPos[p.p].push({ p, v });
+  }
+
+  const sellCandidates = [];
+  const buyCandidates  = [];
+
+  for(const [pos, arr] of Object.entries(byPos)){
+    if(!arr.length) continue;
+    arr.sort((a,b) => b.v - a.v);
+    const n = arr.length;
+    const [peakStart, peakEnd] = PEAK[pos];
+    const top40cutoff  = arr[Math.floor(n * 0.40)]?.v ?? 0;  // top 40% threshold
+    const bot50cutoff  = arr[Math.floor(n * 0.50)]?.v ?? 0;  // bottom 50% threshold
+
+    for(const { p, v } of arr){
+      const age = p.a;
+      // Sell High: value in top 40%, age is post-peak (>= peakEnd+1)
+      if(v >= top40cutoff && age >= peakEnd + 1){
+        const reason = age >= peakEnd + 3 ? "AGE CLIFF" : "POST-PEAK";
+        sellCandidates.push({ p, v, reason });
+      }
+      // Buy Low: value in bottom 50% of position, age < peak start (undervalued youth)
+      if(v <= bot50cutoff && age < peakStart){
+        const reason = age <= 22 ? "PRIME SOON" : "YOUNG VALUE";
+        buyCandidates.push({ p, v, reason });
+      }
+      // Rising Star: age ≤ 23, KTC value > FC (trending up signal)
+      if(age <= 23 && p.ktc > p.fc && v > bot50cutoff){
+        buyCandidates.push({ p, v, reason: "RISING STAR" });
+      }
+    }
+  }
+
+  // Dedupe buy candidates by player name
+  const seenBuy = new Set();
+  const uniqueBuy = buyCandidates.filter(x => {
+    if(seenBuy.has(x.p.n)) return false;
+    seenBuy.add(x.p.n);
+    return true;
+  });
+
+  // Sort: sell by value desc (highest value = most to lose), buy by age asc (youngest first)
+  sellCandidates.sort((a,b) => b.v - a.v);
+  uniqueBuy.sort((a,b) => a.p.a - b.p.a);
+
+  const topSell = sellCandidates.slice(0, 6);
+  const topBuy  = uniqueBuy.slice(0, 6);
+
+  function alertCard(entry, cls){
+    const { p, v, reason } = entry;
+    return `<div class="alert-card ${cls}">
+      <div class="nm">${p.n}</div>
+      <div class="meta">${p.p} · ${p.t} · Age ${p.a}</div>
+      <div class="row">
+        <span class="val">${num(v)}</span>
+        <span class="reason">${reason}</span>
+      </div>
+    </div>`;
+  }
+
+  const sellHTML = topSell.length
+    ? topSell.map(e => alertCard(e, "sell")).join("")
+    : `<div style="color:var(--ink-3);font-size:12px;padding:4px">No strong sell-high candidates at current values.</div>`;
+  const buyHTML = topBuy.length
+    ? topBuy.map(e => alertCard(e, "buy")).join("")
+    : `<div style="color:var(--ink-3);font-size:12px;padding:4px">No strong buy-low candidates at current values.</div>`;
+
+  grid.innerHTML = `
+    <div>
+      <div class="alert-bucket-label sell">🔴 SELL HIGH · Market hasn't caught up to age yet</div>
+      <div class="alerts-strip">${sellHTML}</div>
+    </div>
+    <div>
+      <div class="alert-bucket-label buy">🟢 BUY WINDOW · Young talent at a discount</div>
+      <div class="alerts-strip">${buyHTML}</div>
+    </div>
+  `;
 }
 
 // =================================================================
@@ -2564,6 +2972,7 @@ async function loadSleeperRoster(leagueId, leagueName){
       });
     state.myRoster = { leagueName, leagueId, players: myPlayers, picks: myPicks };
     localStorage.setItem(ROSTER_KEY, JSON.stringify(state.myRoster));
+    analyzeTeamNeeds();
     renderRoster();
     closeModal("#sleeper-modal");
     const pickMsg = myPicks.length ? ` + ${myPicks.length} picks` : "";
@@ -2613,8 +3022,10 @@ function renderRoster(){
 
 $("#btn-roster-clear").onclick = () => {
   state.myRoster = null;
+  window.teamNeeds = [];
   localStorage.removeItem(ROSTER_KEY);
   renderRoster();
+  renderTeamNeedsBar();
 };
 
 // restore roster
@@ -2622,6 +3033,111 @@ try{
   const saved = JSON.parse(localStorage.getItem(ROSTER_KEY) || "null");
   if(saved){ state.myRoster = saved; }
 }catch(e){}
+window.teamNeeds = [];
+
+// =================================================================
+// FEATURE 7 — TEAM NEEDS ANALYSIS
+// =================================================================
+function analyzeTeamNeeds(){
+  const roster = state.myRoster;
+  if(!roster || !roster.players || !roster.players.length){
+    window.teamNeeds = [];
+    renderTeamNeedsBar();
+    return;
+  }
+
+  const positions = ["QB","RB","WR","TE"];
+  const posData = {};
+  for(const pos of positions){
+    const players = roster.players.filter(p => p.p === pos);
+    if(!players.length){
+      posData[pos] = { count: 0, avgValue: 0, total: 0 };
+      continue;
+    }
+    const vals = players.map(p => adjustedConsensus(p));
+    const total = vals.reduce((s,v)=>s+v, 0);
+    posData[pos] = {
+      count: players.length,
+      avgValue: total / players.length,
+      total,
+      players
+    };
+  }
+
+  // Normalize avg values within positions to find relative weaknesses
+  // Weak = low avg value relative to own position's typical range
+  // Score each position by: 0 (no players) is weakest; else avgValue
+  const scores = positions.map(pos => ({ pos, score: posData[pos].avgValue, count: posData[pos].count }));
+  // Positions with 0 players get score 0 (most needed), then sort ascending
+  scores.sort((a,b) => a.score - b.score);
+
+  // Two weakest by avg value
+  const weakest = scores.slice(0, 2).map(x => x.pos);
+  window.teamNeeds = weakest;
+
+  // Build descriptive labels
+  function needLabel(pos, pd){
+    if(pd.count === 0) return `${pos} STARTER`;
+    if(pd.count === 1) return `${pos} DEPTH`;
+    if(pd.avgValue < 3000) return `${pos} UPGRADE`;
+    return `${pos}2`;
+  }
+  window.teamNeedsLabels = {};
+  for(const pos of weakest){
+    window.teamNeedsLabels[pos] = needLabel(pos, posData[pos]);
+  }
+  // Also store all 4 for pill filtering
+  window.teamNeedsAll = scores.map(s => ({
+    pos: s.pos,
+    label: needLabel(s.pos, posData[s.pos]),
+    score: s.score
+  }));
+
+  renderTeamNeedsBar();
+}
+
+function renderTeamNeedsBar(){
+  const bar  = document.getElementById("team-needs-bar");
+  const pills = document.getElementById("tn-pills");
+  if(!bar || !pills) return;
+
+  if(!window.teamNeeds || !window.teamNeeds.length){
+    bar.classList.remove("show");
+    pills.innerHTML = "";
+    return;
+  }
+
+  bar.classList.add("show");
+  // Show top 3 needs as pills
+  const topNeeds = (window.teamNeedsAll || []).slice(0, 3);
+  pills.innerHTML = topNeeds.map(({ pos, label }) => {
+    return `<button class="tn-pill pos-${pos}" data-pos="${pos}" title="Filter search to ${pos}">${label}</button>`;
+  }).join("");
+
+  // Pill click: filter player search to that position
+  pills.querySelectorAll(".tn-pill").forEach(pill => {
+    pill.onclick = () => {
+      const pos = pill.dataset.pos;
+      const isActive = pill.classList.contains("active");
+      // toggle off if already active
+      pills.querySelectorAll(".tn-pill").forEach(p => p.classList.remove("active"));
+      if(!isActive){
+        pill.classList.add("active");
+        // Pre-fill search inputs with position filter
+        const giveInput = document.getElementById("search-give");
+        const getInput  = document.getElementById("search-get");
+        if(giveInput){ giveInput.value = pos; giveInput.dispatchEvent(new Event("input")); }
+        if(getInput){  getInput.value  = pos; getInput.dispatchEvent(new Event("input")); }
+      } else {
+        // Clear search filter
+        const giveInput = document.getElementById("search-give");
+        const getInput  = document.getElementById("search-get");
+        if(giveInput){ giveInput.value = ""; giveInput.dispatchEvent(new Event("input")); }
+        if(getInput){  getInput.value  = ""; getInput.dispatchEvent(new Event("input")); }
+      }
+    };
+  });
+}
 
 // =================================================================
 // ANALYZE
@@ -3089,7 +3605,57 @@ function renderVerdict(v){
     </div>
   `;
 
-  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + spreadHTML + marketBand + ctxHTML;
+  // === Section G — ROSTER FIT (Feature 7) ===
+  let rosterFitHTML = "";
+  {
+    const needs = window.teamNeeds || [];
+    const hasRoster = !!(state.myRoster && state.myRoster.players && state.myRoster.players.length);
+    if(!hasRoster){
+      rosterFitHTML = `
+        <div class="v2-section">
+          <div class="v2-section-head">ROSTER FIT <span class="sub">requires Sleeper connection</span></div>
+          <div class="v2-section-body">
+            <div class="v2-connect-prompt">📡 Connect Sleeper to see how this trade fits your roster needs.</div>
+          </div>
+        </div>
+      `;
+    } else {
+      const allTradeAssets = [
+        ...state.get.map(a => ({ ...a, side: "get" })),
+        ...state.give.map(a => ({ ...a, side: "give" }))
+      ].filter(a => a.type !== "pick");
+
+      const fitRows = allTradeAssets.map(a => {
+        const inNeed = needs.includes(a.p);
+        const isGetting = a.side === "get";
+        let tagHTML = `<span class="v2-rf-neutral">—</span>`;
+        if(inNeed && isGetting)  tagHTML = `<span class="v2-rf-tag-fills">✓ FILLS NEED</span>`;
+        if(inNeed && !isGetting) tagHTML = `<span class="v2-rf-tag-loses">⚠ LOSING A NEED</span>`;
+        const sideLabel = isGetting ? "GET" : "GIVE";
+        return `<div class="v2-roster-fit-row">
+          <span class="v2-rf-name">${a.n} <span style="color:var(--ink-3);font-size:10px;font-weight:500">(${sideLabel})</span></span>
+          <span style="color:var(--ink-3);font-size:11px;margin-right:6px">${a.p}</span>
+          ${tagHTML}
+        </div>`;
+      }).join("");
+
+      const needsStr = needs.length
+        ? needs.map(p => `<span style="font-weight:700;color:var(--blue)">${p}</span>`).join(", ")
+        : `<span style="color:var(--ink-3)">All positions covered</span>`;
+
+      rosterFitHTML = `
+        <div class="v2-section">
+          <div class="v2-section-head">ROSTER FIT <span class="sub">based on your Sleeper roster</span></div>
+          <div class="v2-section-body">
+            <div style="font-size:11px;color:var(--ink-3);margin-bottom:10px">Your biggest needs: ${needsStr}</div>
+            ${fitRows || `<div style="color:var(--ink-3);font-size:12px;font-style:italic">No players in this trade to evaluate.</div>`}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + rosterFitHTML + spreadHTML + marketBand + ctxHTML;
 
   // attach last analysis for share
   window.__lastAnalysis = v;
@@ -3383,15 +3949,11 @@ function boot(){
   setupSearch("give");
   profileBar();
   rerenderAll();
+  // Re-run team needs analysis if roster was restored from localStorage
+  if(state.myRoster) analyzeTeamNeeds();
   // first-run profile prompt
   if(!localStorage.getItem(PROFILE_KEY)){
     setTimeout(openProfile, 350);
-  }
-  // Also show setup banner for first-time visitors (or if banner wasn't dismissed)
-  const bannerDismissed = localStorage.getItem('tradeiq.banner.v1');
-  if(!bannerDismissed){
-    const banner = document.getElementById('setup-banner');
-    if(banner){ banner.style.display='flex'; }
   }
 }
 boot();
