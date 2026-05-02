@@ -2616,7 +2616,7 @@ function rerenderAll(){
     // Split on " for " (case-insensitive)
     const forMatch = text.match(/^(.+?)\s+for\s+(.+)$/i);
     if(!forMatch){
-      setStatus("⚠ Couldn't find "for" separator. Try: [give assets] for [get assets]", "warn");
+      setStatus('⚠ Couldn\'t find "for" separator. Try: [give assets] for [get assets]', "warn");
       return;
     }
     const giveSide = forMatch[1];
