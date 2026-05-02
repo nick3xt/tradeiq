@@ -118,7 +118,31 @@ img{display:block;max-width:100%}
 .profile-bar .edit:hover{text-decoration:underline}
 
 /* Main */
-.main{max-width:1280px;margin:0 auto;padding:18px 20px 80px}
+.main{max-width:1280px;margin:0 auto;padding:18px 20px 96px}
+body{padding-bottom:56px}
+
+/* Bottom Tab Navigation */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  display:flex;height:56px;
+  background:var(--panel);border-top:1px solid var(--line);
+  box-shadow:0 -4px 16px rgba(0,0,0,.35);
+}
+.bottom-nav .nav-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;padding:6px 4px;color:var(--ink-3);
+  font-family:inherit;cursor:pointer;
+  transition:color .12s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.bottom-nav .nav-tab:hover{color:var(--ink-2)}
+.bottom-nav .nav-tab .nav-icon{font-size:20px;line-height:1}
+.bottom-nav .nav-tab .nav-label{
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+}
+.bottom-nav .nav-tab.active{color:var(--green)}
+.bottom-nav .nav-tab.active .nav-icon{filter:drop-shadow(0 0 6px rgba(0,210,106,.4))}
+.tab-section[hidden]{display:none !important}
 .h2{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
 
 /* Trade builder grid */
@@ -1115,6 +1139,9 @@ img{display:block;max-width:100%}
 <!-- MAIN -->
 <main class="main">
 
+  <!-- TAB: TRADE -->
+  <div id="tab-trade" class="tab-section">
+
   <!-- TEAM NEEDS BAR (shown after Sleeper import) -->
   <div class="team-needs-bar" id="team-needs-bar">
     <span class="tn-label">📊 ROSTER NEEDS</span>
@@ -1186,6 +1213,40 @@ img{display:block;max-width:100%}
     <div class="grid" id="roster-grid"></div>
   </div>
 
+  <!-- FEATURED TRADE -->
+  <section class="featured-section" id="featured-section">
+    <header class="featured-head">
+      <h3>Featured Trade of the Day <span class="subtitle">Tap re-analyze to load it into the builder</span></h3>
+    </header>
+    <div class="featured-card" id="featured-card"></div>
+  </section>
+
+  </div><!-- /tab-trade -->
+
+  <!-- TAB: MARKET -->
+  <div id="tab-market" class="tab-section" hidden>
+
+  <!-- MARKET MOVERS -->
+  <section class="movers-section" id="movers-section">
+    <header class="movers-head">
+      <h3>Market Movers <span class="subtitle">Post-2026-draft consensus shifts · 30-day window</span></h3>
+    </header>
+    <div class="mover-section-grid" id="movers-grid"></div>
+  </section>
+
+  <!-- MARKET ALERTS — Feature 10 -->
+  <section class="alerts-section" id="alerts-section">
+    <header class="alerts-head">
+      <h3>Market Alerts <span class="subtitle">Sell-high &amp; buy-low signals based on age vs. current value</span></h3>
+    </header>
+    <div class="alerts-buckets" id="alerts-grid"></div>
+  </section>
+
+  </div><!-- /tab-market -->
+
+  <!-- TAB: TIERS -->
+  <div id="tab-tiers" class="tab-section" hidden>
+
   <!-- PICK VALUE CHART -->
   <section class="pick-chart-section" id="pick-chart-section">
     <header class="pick-chart-header">
@@ -1206,22 +1267,6 @@ img{display:block;max-width:100%}
     </div>
   </section>
 
-  <!-- MARKET MOVERS -->
-  <section class="movers-section" id="movers-section">
-    <header class="movers-head">
-      <h3>Market Movers <span class="subtitle">Post-2026-draft consensus shifts · 30-day window</span></h3>
-    </header>
-    <div class="mover-section-grid" id="movers-grid"></div>
-  </section>
-
-  <!-- MARKET ALERTS — Feature 10 -->
-  <section class="alerts-section" id="alerts-section">
-    <header class="alerts-head">
-      <h3>Market Alerts <span class="subtitle">Sell-high &amp; buy-low signals based on age vs. current value</span></h3>
-    </header>
-    <div class="alerts-buckets" id="alerts-grid"></div>
-  </section>
-
   <!-- POSITION VALUE TIERS -->
   <section class="tiers-section" id="tiers-section">
     <header class="tiers-head">
@@ -1230,15 +1275,51 @@ img{display:block;max-width:100%}
     <div class="tiers-grid" id="tiers-grid"></div>
   </section>
 
-  <!-- FEATURED TRADE -->
-  <section class="featured-section" id="featured-section">
-    <header class="featured-head">
-      <h3>Featured Trade of the Day <span class="subtitle">Tap re-analyze to load it into the builder</span></h3>
-    </header>
-    <div class="featured-card" id="featured-card"></div>
-  </section>
+  </div><!-- /tab-tiers -->
 
 </main>
+
+<!-- BOTTOM TAB NAV -->
+<nav class="bottom-nav" role="tablist" aria-label="Primary">
+  <button type="button" class="nav-tab active" data-tab="trade" role="tab" aria-selected="true">
+    <span class="nav-icon" aria-hidden="true">📊</span>
+    <span class="nav-label">Trade</span>
+  </button>
+  <button type="button" class="nav-tab" data-tab="market" role="tab" aria-selected="false">
+    <span class="nav-icon" aria-hidden="true">📈</span>
+    <span class="nav-label">Market</span>
+  </button>
+  <button type="button" class="nav-tab" data-tab="tiers" role="tab" aria-selected="false">
+    <span class="nav-icon" aria-hidden="true">🏆</span>
+    <span class="nav-label">Tiers</span>
+  </button>
+</nav>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.bottom-nav .nav-tab');
+  var sections = {
+    trade:  document.getElementById('tab-trade'),
+    market: document.getElementById('tab-market'),
+    tiers:  document.getElementById('tab-tiers')
+  };
+  function activate(name){
+    Object.keys(sections).forEach(function(k){
+      var el = sections[k]; if (!el) return;
+      if (k === name) el.removeAttribute('hidden'); else el.setAttribute('hidden','');
+    });
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === name;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch(e) { window.scrollTo(0,0); }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){ activate(btn.getAttribute('data-tab')); });
+  });
+})();
+</script>
 
 <!-- PROFILE MODAL -->
 <div class="modal-bg" id="profile-modal">
