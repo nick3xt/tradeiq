@@ -29,6 +29,7 @@
   --shadow:0 8px 24px rgba(0,0,0,.45);
 }
 *{box-sizing:border-box}
+html{overflow-x:hidden}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;font-feature-settings:'cv02','cv03','cv04','cv11';-webkit-font-smoothing:antialiased}
 body{min-height:100vh;overflow-x:hidden}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
@@ -448,7 +449,7 @@ img{display:block;max-width:100%}
   margin-top:12px;padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.5;font-weight:600;
   display:flex;gap:8px;align-items:flex-start
 }
-.v2-flag.win-now{background:rgba(255,159,67,.08);border:1px solid rgba(255,159,67,.3);color:#ffaa57}
+.v2-flag.age-alert{background:rgba(255,159,67,.08);border:1px solid rgba(255,159,67,.3);color:#ffaa57}
 .v2-flag.dynasty{background:rgba(0,210,106,.08);border:1px solid rgba(0,210,106,.3);color:#3ee68f}
 .v2-flag.neutral{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.2);color:#7ab8ff}
 
@@ -643,6 +644,171 @@ img{display:block;max-width:100%}
 .featured-cta .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
 .featured-cta .btn{font-size:12px;padding:9px 14px}
 
+/* =================================================================
+   MOBILE RESPONSIVENESS — TradeIQ  (max-width: 768px)
+   ================================================================= */
+
+/* Ensure the pick-chart section can scroll horizontally */
+.pick-chart-section {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+
+  /* --- Global font size bump --- */
+  body { font-size: 15px; }
+
+  /* --- Ticker --- */
+  .ticker .label { font-size: 11px; padding: 0 10px; }
+  .ticker .track { font-size: 13px; gap: 20px; }
+
+  /* --- Header --- */
+  .header { padding: 10px 14px; }
+  .header-row { gap: 8px; }
+  .brand .name { font-size: 16px; }
+  .brand .tag { font-size: 9px; letter-spacing: .12em; }
+  .btn { padding: 10px 12px; font-size: 14px; min-height: 44px; }
+  #btn-import { font-size: 12px; padding: 9px 10px; }
+
+  /* --- Profile bar --- */
+  .profile-bar { gap: 7px; padding: 0 14px; }
+  .chip { font-size: 12px; padding: 7px 10px; }
+
+  /* --- Main container: tighter horizontal padding --- */
+  .main { padding: 12px 12px 60px; }
+
+  /* --- Section headings --- */
+  .h2 { font-size: 14px; letter-spacing: .1em; }
+
+  /* --- Trade builder sides --- */
+  .side { padding: 14px; gap: 12px; }
+  .side h3 { font-size: 13px; letter-spacing: .1em; }
+  .side-total .lbl { font-size: 10px; }
+  .side-total .val { font-size: 18px; }
+  .searchwrap input { font-size: 15px; padding: 13px 14px 13px 40px; }
+  .add-pick-btn, .rookies-btn { font-size: 14px; padding: 12px; min-height: 44px; }
+
+  /* --- Asset cards --- */
+  .asset .nm { font-size: 16px; }
+  .asset .sub { font-size: 12px; }
+  .asset .num { font-size: 16px; }
+  .asset .src { font-size: 10px; }
+
+  /* --- Analyze button --- */
+  .analyze { font-size: 16px; padding: 17px 32px; width: 100%; max-width: 340px; }
+
+  /* --- Inner sections: remove double horizontal padding on mobile --- */
+  .pick-chart-section,
+  .movers-section,
+  .tiers-section,
+  .featured-section { padding: 0; }
+
+  /* --- Pick value chart: horizontal scroll --- */
+  .pick-chart-grid { min-width: 380px; }
+  .pick-chart-cell { padding: 10px 6px; min-height: 52px; }
+  .pick-chart-cell.value-cell .cell-value { font-size: 15px; }
+  .pick-chart-cell.value-cell .cell-sub { font-size: 9px; }
+  .pick-chart-header h3 { font-size: 16px; letter-spacing: .8px; }
+  .pick-chart-meta { font-size: 11px; }
+  .pick-chart-legend { font-size: 10px; }
+
+  /* --- Market movers --- */
+  .movers-head h3 { font-size: 16px; letter-spacing: .8px; }
+  .mover-card { flex: 0 0 175px; }
+  .mover-card .nm { font-size: 14px; }
+  .mover-card .meta { font-size: 11px; }
+  .mover-card .val { font-size: 15px; }
+  .mover-card .trend { font-size: 14px; }
+
+  /* --- Position tiers --- */
+  .tiers-head h3 { font-size: 16px; letter-spacing: .8px; }
+  .tiers-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .tier-col-head { font-size: 12px; padding: 9px 12px; }
+  .tier-row { padding: 7px 12px; }
+  .tier-row .lbl { font-size: 12px; }
+  .tier-row .rng { font-size: 13px; }
+  .tier-row .nm-list { font-size: 10px; }
+
+  /* --- Featured trade --- */
+  .featured-head h3 { font-size: 16px; letter-spacing: .8px; }
+  .featured-asset .nm { font-size: 14px; }
+  .featured-asset .vl { font-size: 13px; }
+
+  /* --- Modals: slide-up sheet from bottom --- */
+  .modal-bg { padding: 0; align-items: flex-end; }
+  .modal {
+    max-width: 100%;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    max-height: 92vh;
+  }
+  .modal.lg { max-width: 100%; }
+  .modal header { padding: 16px 18px; }
+  .modal header h2 { font-size: 17px; }
+  .modal .body { padding: 16px 18px; }
+  .modal .footer { padding: 12px 18px; gap: 8px; }
+
+  /* --- Modal form elements --- */
+  .field { margin-bottom: 18px; }
+  .field label { font-size: 12px; letter-spacing: .1em; margin-bottom: 10px; }
+  .opts { gap: 7px; }
+  .opt { font-size: 14px; padding: 11px 14px; min-height: 44px; }
+  .field input.txt, .field select { font-size: 15px; padding: 13px 12px; }
+  .league-row .lg-name { font-size: 15px; }
+  .league-row .lg-meta { font-size: 12px; }
+
+  /* --- Verdict modal (v2 Bloomberg layout) --- */
+  .v2-hero { padding: 18px; }
+  .v2-hero h1 { font-size: 20px; }
+  .v2-hero .delta { font-size: 13px; }
+  .v2-grade-card .grade-letter { font-size: 32px; }
+  .v2-grade-card .lbl { font-size: 10px; }
+  .v2-grade-card .tier { font-size: 11px; }
+  .grade-box .grade { font-size: 44px; }
+  .v2-kv-cell .v { font-size: 16px; }
+  .v2-kv-cell .k { font-size: 10px; }
+  .v2-table { font-size: 13px; }
+  .v2-table th { font-size: 10px; padding: 8px; }
+  .v2-table td { padding: 10px 8px; }
+  .v2-section-head { font-size: 12px; padding: 10px 14px; }
+  .v2-section-body { padding: 12px 14px; }
+  .v2-flag { font-size: 13px; }
+  .v2-spread-row .nm { font-size: 13px; }
+  .v2-spread-row .vals { font-size: 11px; }
+  .v2-context-card { font-size: 14px; padding: 14px 16px; }
+  .delta-bar .pct { font-size: 14px; }
+  .observations .ob { font-size: 13px; }
+  .note { font-size: 13px; }
+  .verdict-text { font-size: 14px; }
+
+  /* --- My Roster panel --- */
+  .my-roster .grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 6px; }
+  .r-card .nm { font-size: 13px; }
+  .r-card .sub { font-size: 10px; }
+  .r-card .vl { font-size: 12px; }
+
+  /* --- Footer --- */
+  .foot { font-size: 12px; padding: 20px 16px; }
+
+  /* --- Toast --- */
+  .toast { font-size: 14px; padding: 12px 18px; left: 12px; right: 12px; transform: none; }
+  .toast.show { animation: slideup-mobile .25s ease; }
+  @keyframes slideup-mobile {
+    from { transform: translateY(12px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+}
+
+@media (max-width: 430px) {
+  /* Extra-small phones: push font sizes slightly larger */
+  .asset .nm { font-size: 17px; }
+  .asset .num { font-size: 17px; }
+  .side-total .val { font-size: 19px; }
+  .tiers-grid { grid-template-columns: 1fr; }
+  #btn-import { display: none; }   /* hide on very narrow, still accessible via ⚙ League */
+}
+
 </style>
 </head>
 <body>
@@ -665,7 +831,7 @@ img{display:block;max-width:100%}
     </div>
     <div class="spacer"></div>
     <button class="btn ghost" id="btn-import"><span>⬇</span> Import from Sleeper</button>
-    <button class="btn" id="btn-profile">⚙ League</button>
+    <button class="btn primary" id="btn-profile">⚙ Set League Format</button>
     <button class="btn ghost" id="btn-clear">Reset</button>
   </div>
   <div class="profile-bar" id="profile-bar"></div>
@@ -673,6 +839,27 @@ img{display:block;max-width:100%}
 
 <!-- MAIN -->
 <main class="main">
+
+  <!-- FIRST-VISIT LEAGUE SETUP BANNER -->
+  <div id="setup-banner" style="display:none;
+    background:linear-gradient(135deg,#0d1f12 0%,#0a1a1a 100%);
+    border:1.5px solid rgba(0,210,106,.45);
+    border-radius:12px;
+    padding:14px 18px;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;">
+    <span style="font-size:22px">⚙️</span>
+    <div style="flex:1;min-width:180px">
+      <div style="font-size:14px;font-weight:700;color:var(--ink)">Configure your league first</div>
+      <div style="font-size:12px;color:var(--ink-2);margin-top:3px">Values auto-adjust for your scoring, format &amp; team count.</div>
+    </div>
+    <button class="btn primary" onclick="openProfile();document.getElementById('setup-banner').style.display='none'" style="white-space:nowrap;flex:0 0 auto">⚙ Set League Format</button>
+    <button onclick="document.getElementById('setup-banner').style.display='none';localStorage.setItem('tradeiq.banner.v1','1')" style="background:none;border:none;color:var(--ink-3);font-size:18px;cursor:pointer;padding:4px 6px;line-height:1" title="Dismiss">×</button>
+  </div>
+
   <div class="trade-grid">
     <!-- YOU GET -->
     <section class="side you-get">
@@ -2244,7 +2431,7 @@ function buildObservations(totGet, totGive){
   const avgAgeGive = youGivePlayers.length ? youGivePlayers.reduce((s,p)=>s+p.a,0)/youGivePlayers.length : 0;
   if(avgAgeGet && avgAgeGive){
     const dAge = avgAgeGet - avgAgeGive;
-    if(dAge >= 2) obs.push(`<b>Getting older:</b> Your incoming players average ${avgAgeGet.toFixed(1)}, you're sending out ${avgAgeGive.toFixed(1)}. Win-now lean.`);
+    if(dAge >= 2) obs.push(`<b>Getting older:</b> Your incoming players average ${avgAgeGet.toFixed(1)}, you're sending out ${avgAgeGive.toFixed(1)}. Veteran-heavy return.`);
     else if(dAge <= -2) obs.push(`<b>Getting younger:</b> Incoming avg age ${avgAgeGet.toFixed(1)} vs outgoing ${avgAgeGive.toFixed(1)}. Future-equity move.`);
     else obs.push(`<b>Age neutral:</b> Both sides cluster around the same age band (${avgAgeGet.toFixed(1)} vs ${avgAgeGive.toFixed(1)}).`);
   }
@@ -2277,7 +2464,7 @@ function contextNote(totGet, totGive){
   const player = state.get.find(a => a.type !== "pick" && a.a >= 27);
   const youngPick = state.give.find(a => a.type === "pick" && a.year >= 2027);
   if(mode === "rebuilder" && player){
-    return `As a <b>Rebuilder</b>, taking <b>${player.n}</b> at age ${player.a} grades lower — you're paying win-now prices for a window you're not in.`;
+    return `As a <b>Rebuilder</b>, taking <b>${player.n}</b> at age ${player.a} grades lower — you're paying veteran prices for a window you're not in.`;
   }
   if(mode === "rebuilder" && youngPick){
     return `As a <b>Rebuilder</b>, the future ${youngPick.year} ${youngPick.round===1?"1st":youngPick.round+"th"} you're sending is a key building block. Make sure the acquisition justifies it.`;
@@ -2454,7 +2641,7 @@ function renderVerdict(v){
 
   let ageFlag = "";
   if(ageDelta >= 2){
-    ageFlag = `<div class="v2-flag win-now">⚠ <span><b>WIN-NOW ASSETS</b> — incoming players average ${ageDelta.toFixed(1)} yrs older. Value peaks in 1–2 seasons.</span></div>`;
+    ageFlag = `<div class="v2-flag age-alert">⚠ <span><b>VETERAN ASSETS</b> — incoming players average ${ageDelta.toFixed(1)} yrs older. Value peaks in 1–2 seasons.</span></div>`;
   } else if(ageDelta <= -2){
     ageFlag = `<div class="v2-flag dynasty">📈 <span><b>DYNASTY UPSIDE</b> — incoming players average ${Math.abs(ageDelta).toFixed(1)} yrs younger. Long-term value likely rises.</span></div>`;
   } else if(youGetPlayers.length || youGivePlayers.length){
@@ -2510,7 +2697,7 @@ function renderVerdict(v){
   const givenStarters = state.give.filter(a => a.type !== "pick" && assetValue(a) >= 7000);
   if(givenStarters.length){
     const positions = [...new Set(givenStarters.map(p=>p.p))];
-    flags.push(`<div class="v2-flag win-now">⚠ <span>You're shipping out a starter-tier ${positions.join(" / ")} — make sure you have depth behind it.</span></div>`);
+    flags.push(`<div class="v2-flag age-alert">⚠ <span>You're shipping out a starter-tier ${positions.join(" / ")} — make sure you have depth behind it.</span></div>`);
   }
 
   const posHTML = `
@@ -2562,7 +2749,7 @@ function renderVerdict(v){
     } else if(diff > -1500){
       ctxVerdict = `As a Contender, paying a small premium is sometimes correct for the right plug-and-play piece. <b>Counter</b> if the fit is marginal — accept if it's a clear lineup upgrade.`;
     } else {
-      ctxVerdict = `As a Contender, you're paying a steep premium. Even win-now teams shouldn't burn this much equity unless this is a needle-moving acquisition. <b>Counter or pass.</b>`;
+      ctxVerdict = `As a Contender, you're paying a steep premium. Even contending teams shouldn't burn this much equity unless this is a needle-moving acquisition. <b>Counter or pass.</b>`;
     }
   } else {
     if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
@@ -2826,6 +3013,12 @@ function boot(){
   // first-run profile prompt
   if(!localStorage.getItem(PROFILE_KEY)){
     setTimeout(openProfile, 350);
+  }
+  // Also show setup banner for first-time visitors (or if banner wasn't dismissed)
+  const bannerDismissed = localStorage.getItem('tradeiq.banner.v1');
+  if(!bannerDismissed){
+    const banner = document.getElementById('setup-banner');
+    if(banner){ banner.style.display='flex'; }
   }
 }
 boot();
