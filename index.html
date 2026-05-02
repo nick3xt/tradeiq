@@ -250,6 +250,12 @@ img{display:block;max-width:100%}
 .my-roster header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap}
 .my-roster h3{margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
 .my-roster .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.roster-side-toggle{flex:1;justify-content:center;min-width:0}
+.roster-side-toggle .opt{padding:7px 12px;font-size:12px;letter-spacing:.04em}
+@media (max-width:560px){
+  .roster-side-toggle{order:3;flex-basis:100%;justify-content:stretch}
+  .roster-side-toggle .opt{flex:1;text-align:center}
+}
 .r-card{
   display:flex;align-items:center;gap:10px;background:var(--panel-2);border:1px solid var(--line);
   border-radius:8px;padding:8px 10px;cursor:pointer;transition:all .15s
@@ -1171,6 +1177,10 @@ img{display:block;max-width:100%}
   <div class="my-roster" id="my-roster">
     <header>
       <h3 id="my-roster-title">My Roster</h3>
+      <div class="opts roster-side-toggle" id="roster-side-toggle" aria-label="Choose which side a tapped player gets added to">
+        <button class="opt sel" data-side="give" type="button">Add to YOU GIVE</button>
+        <button class="opt" data-side="get" type="button">Add to YOU GET</button>
+      </div>
       <button class="btn ghost" id="btn-roster-clear">Clear</button>
     </header>
     <div class="grid" id="roster-grid"></div>
@@ -3143,12 +3153,18 @@ async function loadSleeperRoster(leagueId){
   btn.disabled = false;
 }
 
+// Which trade side a tapped roster card is added to. Defaults to "give"
+// — the user toggles this via the YOU GIVE / YOU GET buttons in the
+// roster header. Generic for any user; not tied to a specific account.
+let rosterAddSide = "give";
+
 function renderRoster(){
   const r = state.myRoster;
   const wrap = $("#my-roster");
   if(!r){ wrap.classList.remove("show"); return; }
   wrap.classList.add("show");
-  $("#my-roster-title").innerHTML = `My Roster <span style="color:var(--ink-3);font-weight:500;letter-spacing:0;text-transform:none;margin-left:6px;font-size:11px">${r.leagueName} · click an asset to add to "You Give"</span>`;
+  const sideLabel = rosterAddSide === "give" ? "You Give" : "You Get";
+  $("#my-roster-title").innerHTML = `My Roster <span style="color:var(--ink-3);font-weight:500;letter-spacing:0;text-transform:none;margin-left:6px;font-size:11px">${r.leagueName} · tap an asset to add to "${sideLabel}"</span>`;
   const all = [...(r.players||[]), ...(r.picks||[])];
   const sorted = all.sort((a,b)=>assetValue(b)-assetValue(a));
   const grid = $("#roster-grid");
@@ -3174,11 +3190,26 @@ function renderRoster(){
     const i = parseInt(card.dataset.i,10);
     const a = sorted[i];
     if(!a) return;
-    addAsset("give", {...a});
+    addAsset(rosterAddSide, {...a});
     const label = a.type === "pick" ? `${a.year} R${a.round}` : a.n;
-    showToast(`Added ${label} to "You Give"`, "ok");
+    const sideLabel = rosterAddSide === "give" ? "You Give" : "You Get";
+    showToast(`Added ${label} to "${sideLabel}"`, "ok");
   };
 }
+
+// Side toggle inside the roster header — lets any user pick whether a
+// tapped roster card populates YOU GIVE or YOU GET.
+(function bindRosterSideToggle(){
+  const tog = $("#roster-side-toggle");
+  if(!tog) return;
+  tog.addEventListener("click", (ev) => {
+    const btn = ev.target.closest("[data-side]");
+    if(!btn || !tog.contains(btn)) return;
+    rosterAddSide = btn.dataset.side === "get" ? "get" : "give";
+    $$(".opt", tog).forEach(b => b.classList.toggle("sel", b === btn));
+    if(state.myRoster) renderRoster(); // refresh hint text
+  });
+})();
 
 $("#btn-roster-clear").onclick = () => {
   state.myRoster = null;
