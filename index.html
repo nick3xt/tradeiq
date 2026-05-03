@@ -3613,7 +3613,7 @@ function verdictText(totGet, totGive, you, opp, market){
   } else if(you.l[0] === "B"){
     lines.push(`Your side grades <b>${youLbl}</b> — fair, but consider whether the fit improves on the margin.`);
   } else {
-    lines.push(`Your side grades <b>${youLbl}</b> — counter or pass unless the roster fit is unusually clean.`);
+    lines.push(`Your side grades <b>${youLbl}</b> — pass unless the roster fit is unusually clean.`);
   }
   return lines.join(" ");
 }
@@ -3700,7 +3700,7 @@ function renderVerdict(v){
   const dLabel = diff > 0 ? `+${num(diff)} TO YOU` : diff < 0 ? `${num(diff)} (PREMIUM PAID)` : "EVEN";
   const breakdownHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">VALUE BREAKDOWN <span class="sub">consensus across 4 sources</span></div>
+      <div class="v2-section-head">📊 VALUE BREAKDOWN <span class="sub">points each side is worth · averaged across 4 consensus sources</span></div>
       <div class="v2-section-body" style="padding:0">
         <table class="v2-table">
           <thead><tr><th>ASSET</th><th>POS</th><th>TM</th><th>AGE</th><th>NOTE</th><th style="text-align:right">VALUE</th></tr></thead>
@@ -3766,7 +3766,7 @@ function renderVerdict(v){
 
   const ageHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">AGE &amp; DYNASTY IMPACT <span class="sub">window analysis</span></div>
+      <div class="v2-section-head">🗓 AGE &amp; DYNASTY IMPACT <span class="sub">how each side ages · what it does to your contention window</span></div>
       <div class="v2-section-body">
         <div class="v2-kv">
           <div class="v2-kv-cell"><div class="k">YOU GET — AVG AGE</div><div class="v">${avgAgeGet ? avgAgeGet.toFixed(1) : "—"}</div><div class="sub">${youGetPlayers.length} player${youGetPlayers.length===1?"":"s"}</div></div>
@@ -3818,7 +3818,7 @@ function renderVerdict(v){
 
   const posHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">POSITION BREAKDOWN <span class="sub">what's moving</span></div>
+      <div class="v2-section-head">🏈 POSITION BREAKDOWN <span class="sub">which positions you gain · which you give up</span></div>
       <div class="v2-section-body">
         <div class="v2-pos-grid">
           <div class="v2-pos-col you"><div class="h">↑ YOU GET</div>${pillsHTML(posGet)}</div>
@@ -3846,7 +3846,7 @@ function renderVerdict(v){
   }).join("");
   const spreadHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">MARKET CONSENSUS <span class="sub">cross-source agreement · WIDE = buy-low signal</span></div>
+      <div class="v2-section-head">📈 MARKET CONSENSUS <span class="sub">how tightly the 4 sources agree · WIDE = buy-low signal</span></div>
       <div class="v2-section-body" style="padding:0 6px">
         ${spreadRows || `<div style="padding:14px;color:var(--ink-3);font-style:italic;font-size:12px">No players in trade — picks-only deals don't have a source spread.</div>`}
       </div>
@@ -3868,7 +3868,7 @@ function renderVerdict(v){
     } else if(diff > -2500){
       ctxVerdict = `As Win-Now, paying a real premium for proven, immediate-impact production is <b>exactly the move</b>. Your window is open. Don't grade this purely on raw value.`;
     } else {
-      ctxVerdict = `As Win-Now, even in win-now mode there's a price ceiling. This much overpay only works if the incoming piece is genuinely needle-moving. <b>Counter</b> first.`;
+      ctxVerdict = `As Win-Now, even in win-now mode there's a price ceiling. This much overpay only works if the incoming piece is genuinely needle-moving. <b>Pass</b> unless that's clearly the case.`;
     }
   } else if(mode === "contender"){
     if(diff >= 200){
@@ -3876,9 +3876,9 @@ function renderVerdict(v){
     } else if(diff > -200){
       ctxVerdict = `As a Contender, the value is roughly even. The deciding question: does the incoming production fit a <b>starting lineup hole</b>? If yes, accept. If just depth, pass.`;
     } else if(diff > -1500){
-      ctxVerdict = `As a Contender, paying a small premium is sometimes correct for the right plug-and-play piece. <b>Counter</b> if the fit is marginal — accept if it's a clear lineup upgrade.`;
+      ctxVerdict = `As a Contender, paying a small premium is sometimes correct for the right plug-and-play piece. Accept only if it's a clear lineup upgrade — <b>otherwise pass</b>.`;
     } else {
-      ctxVerdict = `As a Contender, you're paying a steep premium. Even contending teams shouldn't burn this much equity unless this is a needle-moving acquisition. <b>Counter or pass.</b>`;
+      ctxVerdict = `As a Contender, you're paying a steep premium. Even contending teams shouldn't burn this much equity unless this is a needle-moving acquisition. <b>Pass.</b>`;
     }
   } else {
     if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
@@ -3888,13 +3888,13 @@ function renderVerdict(v){
     } else if(diff > -200){
       ctxVerdict = `As a Rebuilder, even-value trades only matter if you're getting <b>younger</b>. If the age picture above doesn't favor you, this is a pass.`;
     } else {
-      ctxVerdict = `As a Rebuilder, paying a premium for <b>now</b> assets is exactly what you shouldn't be doing. <b>Counter</b> by replacing aging pieces with future picks or younger players.`;
+      ctxVerdict = `As a Rebuilder, paying a premium for <b>now</b> assets is exactly what you shouldn't be doing. <b>Pass</b> — your shape needs future picks and younger players, not the other way around.`;
     }
   }
   const ctxClass = mode === "rebuilder" ? "rebuild" : mode === "winnow" ? "winnow" : "";
   const ctxHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">CONTEXT VERDICT <span class="sub">graded against your team mode</span></div>
+      <div class="v2-section-head">🎯 CONTEXT VERDICT <span class="sub">your trade graded against your team mode</span></div>
       <div class="v2-section-body">
         <div class="v2-context-card ${ctxClass}">
           <span class="mode-badge">${modeLabel}</span>${ctxVerdict}
@@ -3919,7 +3919,7 @@ function renderVerdict(v){
     if(!hasRoster){
       rosterFitHTML = `
         <div class="v2-section">
-          <div class="v2-section-head">ROSTER FIT <span class="sub">requires Sleeper connection</span></div>
+          <div class="v2-section-head">🧩 ROSTER FIT <span class="sub">does this trade fill or vacate a need on your team</span></div>
           <div class="v2-section-body">
             <div class="v2-connect-prompt">📡 Connect Sleeper to see how this trade fits your roster needs.</div>
           </div>
@@ -3951,7 +3951,7 @@ function renderVerdict(v){
 
       rosterFitHTML = `
         <div class="v2-section">
-          <div class="v2-section-head">ROSTER FIT <span class="sub">based on your Sleeper roster</span></div>
+          <div class="v2-section-head">🧩 ROSTER FIT <span class="sub">does this trade fill or vacate a need on your team</span></div>
           <div class="v2-section-body">
             <div style="font-size:11px;color:var(--ink-3);margin-bottom:10px">Your biggest needs: ${needsStr}</div>
             ${fitRows || `<div style="color:var(--ink-3);font-size:12px;font-style:italic">No players in this trade to evaluate.</div>`}
