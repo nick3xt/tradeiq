@@ -3490,7 +3490,24 @@ function analyze(){
   const youDiff = (totGet - totGive) / avg;          // your side
   const oppDiff = (totGive - totGet) / avg;          // their side
 
-  const yourGrade = gradeFor(youDiff);
+  // Roster-need grade modifier — only activates when Sleeper team is loaded (window.teamNeeds populated)
+  let needAdjustment = 0;
+  let needWeighted = false;
+  const _needs = window.teamNeeds;
+  if (_needs && _needs.length) {
+    const top2 = _needs.slice(0, 2);
+    for (const a of state.get) {
+      if (a.type !== "pick" && top2.includes(a.p)) needAdjustment += 0.04;
+    }
+    for (const a of state.give) {
+      if (a.type !== "pick" && top2.includes(a.p)) needAdjustment -= 0.04;
+    }
+    // Cap total swing at ±0.08 (max 2 players × 0.04)
+    needAdjustment = Math.max(-0.08, Math.min(0.08, needAdjustment));
+    needWeighted = needAdjustment !== 0;
+  }
+
+  const yourGrade = gradeFor(youDiff + needAdjustment);
   const oppGrade  = gradeFor(oppDiff);
 
   // spreads (contested?)
@@ -3524,7 +3541,8 @@ function analyze(){
 
   return {
     totGet, totGive, avg, youDiff, oppDiff,
-    yourGrade, oppGrade, market, observations, note, verdict, maxSpread, avgSpread
+    yourGrade, oppGrade, market, observations, note, verdict, maxSpread, avgSpread,
+    needWeighted
   };
 }
 
@@ -3664,6 +3682,7 @@ function renderVerdict(v){
           <div class="tier">${v.oppGrade.tier}</div>
         </div>
       </div>
+      ${v.needWeighted ? `<div style="text-align:center;margin-top:8px;font-size:12px;color:var(--ink-3);letter-spacing:0.03em">⚡ Roster fit included</div>` : ""}
       <div class="v2-legend">
         <b>ELITE / EXCELLENT</b> = win it <span class="sep">·</span>
         <b>GREAT / SOLID</b> = strong value <span class="sep">·</span>
