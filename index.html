@@ -2310,7 +2310,7 @@ function setupSearch(side){
       <div class="row" data-name="${p.n}">
         <div class="av" style="background:${avatarColor(p.n)}">${p.n.split(/\s+/).map(s=>s[0]).slice(0,2).join("")}</div>
         <div class="meta">
-          <div class="nm">${p.n}</div>
+          <div class="nm">${p.n}${fcArrow(p.n, p.ktc)}</div>
           <div class="sub">${posTag(p.p)} ${p.t} • Age ${p.a}${p.draft===2026?' • <span style="color:var(--gold)">ROOKIE</span>':''}</div>
         </div>
         <div class="vl">${num(v)}</div>
@@ -2402,7 +2402,7 @@ function renderAssets(side){
         <div class="asset">
           ${avatarHTML(a)}
           <div class="info">
-            <div class="nm">${a.n}</div>
+            <div class="nm">${a.n}${fcArrow(a.n, a.ktc)}</div>
             <div class="sub">${posTag(a.p)}${a.t} • Age ${a.a}</div>
           </div>
           <div class="vl"><span class="num">${num(v)}</span><span class="src">CONSENSUS</span></div>
@@ -4269,6 +4269,33 @@ $("#btn-clear").onclick = () => {
   state.get = []; state.give = [];
   rerenderAll();
 };
+
+
+// =================================================================
+// FANTASYCALC LIVE VALUE TRENDING ARROWS
+// =================================================================
+window.fcLiveValues = {};
+(async function fetchFCValues(){
+  try {
+    const res = await fetch('https://api.fantasycalc.com/values/current?isDynasty=true&numQbs=2&ppr=1&includePicksEtc=true');
+    if(!res.ok) return;
+    const data = await res.json();
+    data.forEach(item => {
+      if(item.player && item.player.name){
+        window.fcLiveValues[item.player.name.trim().toLowerCase()] = item.value;
+      }
+    });
+  } catch(e) { /* gracefully degrade — no arrows shown if fetch fails */ }
+})();
+
+function fcArrow(name, ktcVal){
+  if(!ktcVal || !name) return '';
+  const live = window.fcLiveValues[name.trim().toLowerCase()];
+  if(live == null) return '';
+  if(live > ktcVal * 1.03) return '<span style="font-size:11px;color:#22c55e;margin-left:3px;vertical-align:middle">&#9650;</span>';
+  if(live < ktcVal * 0.97) return '<span style="font-size:11px;color:#ef4444;margin-left:3px;vertical-align:middle">&#9660;</span>';
+  return '';
+}
 
 // =================================================================
 // BOOT
