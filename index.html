@@ -2100,32 +2100,36 @@ function adjustedConsensus(player){
   return applyFormat(player, rawConsensus(player));
 }
 
-// Picks — consensus-calibrated values (KTC/FantasyCalc, 10-team SF PPR baseline).
-// Internal slot keys: top3 = Bottom of standings (Picks 1-3), mid = Picks 4-8, late = Picks 9-10.
+// Picks — KTC-aligned consensus values (10-team SF PPR baseline, post-2026 NFL Draft May 2026).
+// Anchored to KeepTradeCut + DynastyCalc + Justin Boone post-draft charts. SF inflates 1st/2nd
+// rounds vs 1QB; 10-team baseline (vs 12-team) compresses "late" slot to picks 9-10.
+// 2027 1sts price slightly above 2026 1sts in early/mid — post-draft, the unknown class earns
+// a premium; the validated 2026 class is now players, not picks. Late slot is roughly even.
+// Internal slot keys: top3 = Picks 1-3 (bottom of standings), mid = Picks 4-8, late = Picks 9-10.
 const PICK_VALUES = {
   1: {
-    2026: { top3: 8500, mid: 6000, late: 4200 },
-    2027: { top3: 7000, mid: 5000, late: 3500 },
-    2028: { top3: 5500, mid: 4000, late: 2800 },
-    2029: { top3: 4500, mid: 3200, late: 2200 }
+    2026: { top3: 8800, mid: 6200, late: 4400 },
+    2027: { top3: 7800, mid: 5500, late: 3900 },
+    2028: { top3: 6000, mid: 4200, late: 3000 },
+    2029: { top3: 4500, mid: 3200, late: 2300 }
   },
   2: {
-    2026: { top3: 3200, mid: 2400, late: 1800 },
-    2027: { top3: 2800, mid: 2000, late: 1500 },
-    2028: { top3: 2200, mid: 1600, late: 1100 },
-    2029: { top3: 1800, mid: 1300, late:  900 }
+    2026: { top3: 3000, mid: 2600, late: 2200 },
+    2027: { top3: 2800, mid: 2200, late: 1850 },
+    2028: { top3: 2200, mid: 1700, late: 1400 },
+    2029: { top3: 1700, mid: 1300, late: 1050 }
   },
   3: {
-    2026: { top3: 1400, mid: 1050, late:  800 },
-    2027: { top3: 1100, mid:  800, late:  600 },
-    2028: { top3:  850, mid:  600, late:  450 },
-    2029: { top3:  650, mid:  480, late:  350 }
+    2026: { top3: 1900, mid: 1600, late: 1400 },
+    2027: { top3: 1500, mid: 1250, late: 1050 },
+    2028: { top3: 1100, mid:  900, late:  750 },
+    2029: { top3:  800, mid:  650, late:  550 }
   },
   4: {
-    2026: { top3: 500, mid: 500, late: 500 },
-    2027: { top3: 400, mid: 400, late: 400 },
-    2028: { top3: 300, mid: 300, late: 300 },
-    2029: { top3: 250, mid: 250, late: 250 }
+    2026: { top3: 1200, mid: 1000, late:  850 },
+    2027: { top3:  900, mid:  750, late:  650 },
+    2028: { top3:  600, mid:  500, late:  420 },
+    2029: { top3:  450, mid:  380, late:  320 }
   }
 };
 
