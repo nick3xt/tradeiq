@@ -29,9 +29,9 @@
   --shadow:0 8px 24px rgba(0,0,0,.45);
 }
 *{box-sizing:border-box}
-html{overflow-x:hidden}
+html{overflow-x:clip}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;font-feature-settings:'cv02','cv03','cv04','cv11';-webkit-font-smoothing:antialiased}
-body{min-height:100vh;overflow-x:hidden}
+body{min-height:100vh;overflow-x:clip}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 input,select{font-family:inherit;color:inherit;background:transparent;border:none;outline:none}
 img{display:block;max-width:100%}
@@ -40,9 +40,9 @@ img{display:block;max-width:100%}
 /* Ticker */
 .ticker{
   position:sticky;top:0;z-index:30;
-  background:#0d1117;
+  background-color:#0d1117;background:#0d1117;
   border-bottom:1px solid var(--line);
-  overflow:hidden;
+  overflow:clip;
   height:32px;display:flex;align-items:center;
 }
 .ticker .label{
@@ -109,6 +109,18 @@ img{display:block;max-width:100%}
   box-shadow:0 0 0 0 rgba(0,210,106,.8);animation:pulse 1.6s infinite
 }
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,210,106,.6)}70%{box-shadow:0 0 0 8px rgba(0,210,106,0)}100%{box-shadow:0 0 0 0 rgba(0,210,106,0)}}
+/* Setup banner */
+#setup-banner{
+  display:none;
+  background:linear-gradient(135deg,#0d1f12 0%,#0a1a1a 100%);
+  border:1.5px solid rgba(0,210,106,.45);
+  border-radius:12px;
+  padding:14px 18px;
+  margin-bottom:18px;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+}
 .profile-bar .edit{font-size:12px;color:var(--blue);background:none;border:none;padding:4px 8px;cursor:pointer}
 .profile-bar .edit:hover{text-decoration:underline}
 
@@ -842,23 +854,13 @@ img{display:block;max-width:100%}
 <main class="main">
 
   <!-- FIRST-VISIT LEAGUE SETUP BANNER -->
-  <div id="setup-banner" style="display:none;
-    background:linear-gradient(135deg,#0d1f12 0%,#0a1a1a 100%);
-    border:1.5px solid rgba(0,210,106,.45);
-    border-radius:12px;
-    padding:14px 18px;
-    margin-bottom:18px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    flex-wrap:wrap;">
+  <div id="setup-banner">
     <span style="font-size:22px">⚙️</span>
     <div style="flex:1;min-width:180px">
       <div style="font-size:14px;font-weight:700;color:var(--ink)">Configure your league first</div>
       <div style="font-size:12px;color:var(--ink-2);margin-top:3px">Values auto-adjust for your scoring, format &amp; team count.</div>
     </div>
-    <button class="btn primary" onclick="openProfile();document.getElementById('setup-banner').style.display='none'" style="white-space:nowrap;flex:0 0 auto">⚙ Set League Format</button>
-    <button onclick="document.getElementById('setup-banner').style.display='none';localStorage.setItem('tradeiq.banner.v1','1')" style="background:none;border:none;color:var(--ink-3);font-size:18px;cursor:pointer;padding:4px 6px;line-height:1" title="Dismiss">×</button>
+    <button onclick="document.getElementById('setup-banner').style.display='none';localStorage.setItem('tradeiq.banner.v1','1')" style="background:none;border:none;color:var(--ink-3);font-size:18px;cursor:pointer;padding:4px 6px;line-height:1;margin-left:auto" title="Dismiss">×</button>
   </div>
 
   <div class="trade-grid">
@@ -1707,21 +1709,37 @@ function renderTicker(){
 // PROFILE BAR
 // =================================================================
 function profileBar(){
-  const fmtMap = { standard:"Standard", superflex:"Superflex" };
+  const fmtMap  = { standard:"Standard", superflex:"Superflex" };
   const scoreMap = { standard:"Non-PPR", half:"Half PPR", ppr:"Full PPR" };
-  const modeMap = { contender:"Contender", rebuilder:"Rebuilder" };
-  const tepMap = { "0":"No TEP", "0.5":"0.5 TEP", "1":"1.0 TEP" };
+  const modeMap  = { contender:"Contender", rebuilder:"Rebuilder" };
+  const tepMap   = { "0":"", "0.5":"0.5 TEP · ", "1":"1.0 TEP · " };
   const bar = $("#profile-bar");
-  bar.innerHTML = `
-    <div class="chip live">League Active</div>
-    <div class="chip">Teams: <b>${PROFILE.teams}</b></div>
-    <div class="chip">Format: <b>${fmtMap[PROFILE.format]}</b></div>
-    <div class="chip">Scoring: <b>${scoreMap[PROFILE.scoring]}</b></div>
-    <div class="chip">${tepMap[PROFILE.tep]}</div>
-    <div class="chip">Mode: <b>${modeMap[PROFILE.mode] || "Contender"}</b></div>
-    <button class="edit" id="edit-profile">Edit</button>
-  `;
-  $("#edit-profile").onclick = openProfile;
+  const btnProfile = document.getElementById("btn-profile");
+  const btnClear   = document.getElementById("btn-clear");
+  if(localStorage.getItem(PROFILE_KEY)){
+    // League configured — compact single row, hide header setup buttons
+    if(btnProfile) btnProfile.style.display = "none";
+    if(btnClear)   btnClear.style.display   = "none";
+    const score  = scoreMap[PROFILE.scoring] || "Full PPR";
+    const tep    = tepMap[PROFILE.tep] || "";
+    const teams  = PROFILE.teams;
+    const mode   = modeMap[PROFILE.mode] || "Contender";
+    const fmt    = fmtMap[PROFILE.format] || "Standard";
+    bar.innerHTML = `
+      <div class="chip live" style="gap:8px">
+        <span style="font-size:11px;font-weight:700;color:var(--ink)">League Active</span>
+        <span style="color:var(--line-2)">—</span>
+        <span style="color:var(--ink-2);font-size:12px">${score} · ${tep}${teams} Teams · ${fmt} · ${mode}</span>
+        <button class="edit" id="edit-profile" style="margin-left:6px">Edit</button>
+      </div>
+    `;
+    $("#edit-profile").onclick = openProfile;
+  } else {
+    // Not configured — show header button, clear the bar
+    if(btnProfile) btnProfile.style.display = "";
+    if(btnClear)   btnClear.style.display   = "none";
+    bar.innerHTML = "";
+  }
 }
 
 // =================================================================
@@ -3052,10 +3070,8 @@ function boot(){
     setTimeout(openProfile, 350);
   }
   // Configure banner: show only when league is not yet configured (tied to PROFILE_KEY)
-  if(!localStorage.getItem(PROFILE_KEY)){
-    const _banner = document.getElementById("setup-banner");
-    if(_banner) _banner.style.display = "flex";
-  }
+  const _banner = document.getElementById("setup-banner");
+  if(_banner) _banner.style.display = localStorage.getItem(PROFILE_KEY) ? "none" : "flex";
 }
 boot();
 </script>
