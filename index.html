@@ -39,20 +39,18 @@ img{display:block;max-width:100%}
 
 /* Ticker */
 .ticker{
-  position:sticky;top:0;z-index:20;
+  position:sticky;top:0;z-index:30;
   background:linear-gradient(180deg,#0d1322 0%,#080c18 100%);
   border-bottom:1px solid var(--line);
   overflow:hidden;
   height:32px;display:flex;align-items:center;
-  isolation:isolate;
 }
 .ticker .label{
-  position:relative;z-index:2;
   background:var(--green);color:#04140a;font-weight:800;font-size:11px;letter-spacing:.12em;
   padding:0 12px;height:100%;display:flex;align-items:center;flex:0 0 auto;text-transform:uppercase;
 }
 .ticker .track{
-  display:flex;gap:32px;white-space:nowrap;animation:scroll 90s linear infinite;padding-left:16px;
+  display:flex;gap:32px;white-space:nowrap;animation:scroll 60s linear infinite;padding-left:16px;
   font-size:12px;font-weight:600;color:var(--ink-2)
 }
 .ticker .item .name{color:var(--ink)}
@@ -64,7 +62,6 @@ img{display:block;max-width:100%}
 
 /* Header */
 .header{
-  position:sticky;top:0;z-index:30;
   background:linear-gradient(180deg,#0c1322 0%,var(--bg) 100%);
   border-bottom:1px solid var(--line);
   padding:14px 20px;
@@ -73,7 +70,7 @@ img{display:block;max-width:100%}
   max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap
 }
 .brand{display:flex;align-items:center;gap:12px;cursor:default}
-.brand img{width:46px;height:46px;border-radius:50%;box-shadow:0 0 0 2px rgba(0,210,106,.45),0 4px 14px rgba(0,210,106,.28);background:#04140a}
+.brand img{width:42px;height:42px;border-radius:50%;box-shadow:0 0 0 2px rgba(0,210,106,.25),0 4px 12px rgba(0,210,106,.18)}
 .brand .text{display:flex;flex-direction:column;line-height:1}
 .brand .name{font-size:18px;font-weight:900;letter-spacing:.04em}
 .brand .name span{color:var(--green)}
@@ -88,8 +85,6 @@ img{display:block;max-width:100%}
 .btn:hover{background:var(--panel-2);border-color:#3a4d7c}
 .btn.primary{background:var(--green);color:#04140a;border-color:var(--green)}
 .btn.primary:hover{background:#00e878;border-color:#00e878}
-.btn.settings{background:var(--panel);color:#fff;border:1px solid rgba(255,255,255,.55);font-weight:700}
-.btn.settings:hover{background:var(--panel-2);border-color:#fff}
 .btn.danger{background:transparent;color:var(--red);border-color:rgba(255,71,87,.4)}
 .btn.danger:hover{background:rgba(255,71,87,.1)}
 .btn.ghost{background:transparent}
@@ -118,31 +113,7 @@ img{display:block;max-width:100%}
 .profile-bar .edit:hover{text-decoration:underline}
 
 /* Main */
-.main{max-width:1280px;margin:0 auto;padding:18px 20px 96px}
-body{padding-bottom:56px}
-
-/* Bottom Tab Navigation */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:100;
-  display:flex;height:56px;
-  background:var(--panel);border-top:1px solid var(--line);
-  box-shadow:0 -4px 16px rgba(0,0,0,.35);
-}
-.bottom-nav .nav-tab{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:2px;padding:6px 4px;color:var(--ink-3);
-  font-family:inherit;cursor:pointer;
-  transition:color .12s ease;
-  -webkit-tap-highlight-color:transparent;
-}
-.bottom-nav .nav-tab:hover{color:var(--ink-2)}
-.bottom-nav .nav-tab .nav-icon{font-size:20px;line-height:1}
-.bottom-nav .nav-tab .nav-label{
-  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-}
-.bottom-nav .nav-tab.active{color:var(--green)}
-.bottom-nav .nav-tab.active .nav-icon{filter:drop-shadow(0 0 6px rgba(0,210,106,.4))}
-.tab-section[hidden]{display:none !important}
+.main{max-width:1280px;margin:0 auto;padding:18px 20px 80px}
 .h2{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
 
 /* Trade builder grid */
@@ -152,6 +123,7 @@ body{padding-bottom:56px}
 }
 @media (max-width:880px){
   .trade-grid{grid-template-columns:1fr;gap:12px}
+  .trade-grid .vs{order:2;margin:0 auto}
 }
 .side{
   background:var(--panel);border:1px solid var(--line);border-radius:14px;
@@ -251,6 +223,13 @@ body{padding-bottom:56px}
 .pos-TE{background:rgba(255,215,0,.15);color:#ffe14f}
 .pos-PICK{background:rgba(167,139,250,.18);color:#c5b3ff}
 
+.vs{
+  display:flex;align-items:center;justify-content:center;
+  background:var(--panel);border:1px solid var(--line);border-radius:50%;
+  width:56px;height:56px;font-weight:900;font-size:14px;letter-spacing:.04em;color:var(--ink-3);
+  margin-top:120px
+}
+
 /* Toolbar */
 .tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;justify-content:center}
 .cta{
@@ -273,22 +252,16 @@ body{padding-bottom:56px}
 .my-roster.show{display:block}
 .my-roster header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap}
 .my-roster h3{margin:0;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
-.my-roster .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
-.roster-side-toggle{flex:1;justify-content:center;min-width:0}
-.roster-side-toggle .opt{padding:7px 12px;font-size:12px;letter-spacing:.04em}
-@media (max-width:560px){
-  .roster-side-toggle{order:3;flex-basis:100%;justify-content:stretch}
-  .roster-side-toggle .opt{flex:1;text-align:center}
-}
+.my-roster .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
 .r-card{
   display:flex;align-items:center;gap:10px;background:var(--panel-2);border:1px solid var(--line);
   border-radius:8px;padding:8px 10px;cursor:pointer;transition:all .15s
 }
 .r-card:hover{border-color:var(--green);transform:translateY(-1px)}
-.r-card .av{width:30px;height:30px;border-radius:50%;background:#2a3960;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.r-card .av{width:30px;height:30px;border-radius:50%;background:#2a3960;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
 .r-card .info{flex:1;min-width:0}
-.r-card .nm{font-size:12px;font-weight:600;white-space:normal;line-height:1.25;word-break:break-word}
-.r-card .sub{font-size:10px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r-card .nm{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r-card .sub{font-size:10px;color:var(--ink-3)}
 .r-card .vl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);font-weight:700}
 
 /* Modal */
@@ -419,7 +392,7 @@ body{padding-bottom:56px}
   background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center
 }
 .v2-grade-card .lbl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
-.v2-grade-card .grade-letter{font-family:'Inter',sans-serif;font-size:24px;font-weight:900;line-height:1.05;letter-spacing:.04em;text-transform:uppercase;margin:8px 0 4px;word-break:break-word}
+.v2-grade-card .grade-letter{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:800;line-height:1;margin:6px 0 2px}
 .v2-grade-card .tier{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-top:4px}
 .v2-grade-card.S .grade-letter,.v2-grade-card.Aplus .grade-letter,.v2-grade-card.S .tier,.v2-grade-card.Aplus .tier{color:var(--green)}
 .v2-grade-card.A .grade-letter,.v2-grade-card.Aminus .grade-letter,.v2-grade-card.A .tier,.v2-grade-card.Aminus .tier{color:#3ee68f}
@@ -458,6 +431,8 @@ body{padding-bottom:56px}
 .v2-table tr.delta-row td.pos{color:var(--green)}
 .v2-table tr.delta-row td.neg{color:var(--red)}
 .v2-table tr.delta-row td.even{color:var(--blue)}
+.v2-table tr.adj-row td{background:#0a1a2e;border-top:1px dashed var(--line-2);font-size:12px;color:var(--ink-2)}
+.v2-table tr.adj-row td.val.pos{color:#4fc3f7;font-family:'JetBrains Mono',monospace;font-weight:700;text-align:right}
 .v2-side-label td{
   background:#06091a !important;color:var(--ink-3);font-size:10px;letter-spacing:.16em;
   text-transform:uppercase;font-weight:800;padding:7px 10px
@@ -513,13 +488,11 @@ body{padding-bottom:56px}
   font-size:14px;line-height:1.6;color:var(--ink)
 }
 .v2-context-card.rebuild{border-left-color:#7ab8ff}
-.v2-context-card.winnow{border-left-color:#ffb547}
 .v2-context-card .mode-badge{
   display:inline-block;padding:3px 9px;border-radius:5px;font-size:10px;font-weight:800;
   letter-spacing:.16em;text-transform:uppercase;background:rgba(0,210,106,.12);color:#3ee68f;margin-right:8px
 }
 .v2-context-card.rebuild .mode-badge{background:rgba(74,158,255,.12);color:#7ab8ff}
-.v2-context-card.winnow .mode-badge{background:rgba(255,181,71,.14);color:#ffb547}
 
 /* Toast */
 .toast{
@@ -561,49 +534,6 @@ body{padding-bottom:56px}
 }
 .share-preview canvas{max-width:100%;border-radius:8px;border:1px solid var(--line-2)}
 
-/* How We Grade modal */
-.hiw-modal{max-width:760px;width:96%}
-.hiw-modal .body{padding:8px 4px 4px}
-.hiw-section{display:flex;gap:14px;padding:18px 4px;border-top:1px solid var(--line-2)}
-.hiw-section:first-child{border-top:none;padding-top:8px}
-.hiw-num{flex:0 0 36px;height:36px;border-radius:50%;background:rgba(74,158,255,0.12);border:1px solid rgba(74,158,255,0.35);color:#4a9eff;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:16px}
-.hiw-content{flex:1;min-width:0}
-.hiw-content h3{margin:4px 0 6px;font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink);text-transform:uppercase}
-.hiw-lead{margin:0 0 12px;color:var(--ink-2);font-size:13px;line-height:1.5}
-.hiw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.hiw-tile{background:rgba(255,255,255,0.03);border:1px solid var(--line-2);border-radius:8px;padding:12px 8px;text-align:center}
-.hiw-tile-pct{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;color:var(--gold);line-height:1}
-.hiw-tile-lbl{margin-top:4px;font-size:11px;color:var(--ink-3);font-weight:600;letter-spacing:.04em}
-.hiw-table{width:100%;border-collapse:collapse;font-size:13px}
-.hiw-table th{text-align:left;color:var(--ink-3);font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid var(--line-2)}
-.hiw-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--ink-2)}
-.hiw-table td:first-child{color:var(--ink);font-weight:600}
-.hiw-table .up{color:#3ee68f;font-family:'JetBrains Mono',monospace;font-weight:700}
-.hiw-table .dn{color:#ff7884;font-family:'JetBrains Mono',monospace;font-weight:700}
-.hiw-note{margin:10px 0 0;font-size:12px;color:var(--ink-3);font-style:italic}
-.hiw-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.hiw-mode{background:rgba(255,255,255,0.03);border:1px solid var(--line-2);border-radius:8px;padding:12px}
-.hiw-mode.rebuild{border-color:rgba(74,158,255,0.35)}
-.hiw-mode.contend{border-color:rgba(255,215,0,0.35)}
-.hiw-mode.winnow{border-color:rgba(0,210,106,0.35)}
-.hiw-mode-h{font-size:11px;font-weight:800;letter-spacing:.12em;margin-bottom:8px;color:var(--ink)}
-.hiw-mode.rebuild .hiw-mode-h{color:#4a9eff}
-.hiw-mode.contend .hiw-mode-h{color:var(--gold)}
-.hiw-mode.winnow .hiw-mode-h{color:var(--green)}
-.hiw-mode ul{margin:0;padding:0 0 0 14px;font-size:12px;line-height:1.6;color:var(--ink-2)}
-.hiw-mode .up{color:#3ee68f;font-family:'JetBrains Mono',monospace;font-weight:700}
-.hiw-mode .dn{color:#ff7884;font-family:'JetBrains Mono',monospace;font-weight:700}
-.hiw-grades td:first-child{font-weight:700}
-.g-elite{color:#3ee68f;font-weight:800;letter-spacing:.04em}
-.g-strong{color:#7ee7a4;font-weight:800;letter-spacing:.04em}
-.g-fair{color:var(--gold);font-weight:800;letter-spacing:.04em}
-.g-close{color:#ff9f43;font-weight:800;letter-spacing:.04em}
-.g-bad{color:#ff7884;font-weight:800;letter-spacing:.04em}
-@media (max-width:680px){
-  .hiw-grid{grid-template-columns:repeat(2,1fr)}
-  .hiw-modes{grid-template-columns:1fr}
-}
-
 /* Pick Value Chart (Bloomberg-style heat map) */
 .pick-chart-section{margin:32px auto 0;max-width:1200px;padding:0 16px;color:var(--ink)}
 .pick-chart-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;flex-wrap:wrap;gap:8px}
@@ -627,19 +557,16 @@ body{padding-bottom:56px}
 .movers-head h3{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-2);margin:0;font-weight:700}
 .movers-head h3 .subtitle{font-size:11px;color:var(--ink-3);margin-left:10px;text-transform:none;letter-spacing:0;font-weight:400}
 .movers-strip{
-  display:flex;flex-wrap:nowrap;gap:10px;overflow-x:auto;overflow-y:hidden;padding:6px 2px 14px;
-  scrollbar-width:thin;scrollbar-color:var(--line-2) transparent;
-  -webkit-overflow-scrolling:touch;touch-action:pan-x;
-  width:100%;max-width:100%;min-width:0;
-  overscroll-behavior-x:contain
+  display:flex;gap:10px;overflow-x:auto;padding:6px 2px 14px;
+  scrollbar-width:thin;scrollbar-color:var(--line-2) transparent
 }
 .movers-strip::-webkit-scrollbar{height:8px}
 .movers-strip::-webkit-scrollbar-track{background:transparent}
 .movers-strip::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:4px}
 .mover-card{
-  flex:0 0 200px;flex-shrink:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  flex:0 0 200px;background:var(--panel);border:1px solid var(--line);border-radius:10px;
   padding:12px 14px;display:flex;flex-direction:column;gap:6px;position:relative;
-  transition:transform .15s,border-color .15s;scroll-snap-align:start
+  transition:transform .15s,border-color .15s
 }
 .mover-card:hover{transform:translateY(-2px);border-color:var(--line-2)}
 .mover-card.up{border-left:3px solid var(--green)}
@@ -652,7 +579,6 @@ body{padding-bottom:56px}
 .mover-card .trend.up{color:var(--green)}
 .mover-card .trend.down{color:var(--red)}
 .mover-section-grid{display:grid;grid-template-columns:1fr;gap:18px}
-.mover-bucket{min-width:0;overflow:hidden}
 .mover-bucket .bucket-label{
   font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;
   color:var(--ink-3);margin:0 0 8px 2px;display:flex;align-items:center;gap:6px
@@ -711,7 +637,10 @@ body{padding-bottom:56px}
 }
 .featured-asset .nm{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .featured-asset .vl{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:700;font-size:12px;flex:0 0 auto}
-
+.featured-vs{
+  display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-weight:900;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:12px;letter-spacing:.04em;justify-self:center
+}
 .featured-cta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;justify-self:end}
 @media (max-width:760px){.featured-cta{align-items:center;justify-self:center}}
 .featured-cta .label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
@@ -727,31 +656,6 @@ body{padding-bottom:56px}
   -webkit-overflow-scrolling: touch;
 }
 
-/* Splash screen (first paint) */
-.splash{
-  position:fixed;inset:0;z-index:9999;
-  background:radial-gradient(ellipse at center, #0c1322 0%, #04060d 70%, #02030a 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
-  opacity:1;transition:opacity .45s ease;
-  pointer-events:auto;
-}
-.splash.fade-out{opacity:0;pointer-events:none}
-.splash img{
-  width:128px;height:128px;border-radius:50%;
-  box-shadow:0 0 0 3px rgba(0,210,106,.35),0 0 60px rgba(0,210,106,.35),0 12px 40px rgba(0,210,106,.25);
-  background:#04140a;
-  animation:splashIn .9s cubic-bezier(.2,.8,.2,1) both;
-}
-.splash .splash-text{
-  font-size:13px;font-weight:800;letter-spacing:.32em;color:var(--ink-3);text-transform:uppercase;
-  animation:splashIn .9s .1s cubic-bezier(.2,.8,.2,1) both;
-}
-.splash .splash-text span{color:var(--green)}
-@keyframes splashIn{
-  from{opacity:0;transform:scale(.92)}
-  to{opacity:1;transform:scale(1)}
-}
-
 @media (max-width: 768px) {
 
   /* --- Global font size bump --- */
@@ -764,7 +668,6 @@ body{padding-bottom:56px}
   /* --- Header --- */
   .header { padding: 10px 14px; }
   .header-row { gap: 8px; }
-  .brand img { width: 44px; height: 44px; box-shadow: 0 0 0 2px rgba(0,210,106,.55), 0 4px 14px rgba(0,210,106,.35); }
   .brand .name { font-size: 16px; }
   .brand .tag { font-size: 9px; letter-spacing: .12em; }
   .btn { padding: 10px 12px; font-size: 14px; min-height: 44px; }
@@ -861,7 +764,7 @@ body{padding-bottom:56px}
   .v2-hero { padding: 18px; }
   .v2-hero h1 { font-size: 20px; }
   .v2-hero .delta { font-size: 13px; }
-  .v2-grade-card .grade-letter { font-size: 22px; }
+  .v2-grade-card .grade-letter { font-size: 32px; }
   .v2-grade-card .lbl { font-size: 10px; }
   .v2-grade-card .tier { font-size: 11px; }
   .grade-box .grade { font-size: 44px; }
@@ -905,259 +808,17 @@ body{padding-bottom:56px}
   .asset .num { font-size: 17px; }
   .side-total .val { font-size: 19px; }
   .tiers-grid { grid-template-columns: 1fr; }
-  #btn-import { font-size: 11px; padding: 8px 9px; }
+  #btn-import { display: none; }   /* hide on very narrow, still accessible via ⚙ League */
 }
 
-
-/* =====================================================
-   FEATURE 6 — QUICK PARSE (Natural Language Input)
-   ===================================================== */
-.quick-parse-card{
-  background:#0d1322;
-  border:1px solid #1e2d45;
-  border-radius:8px;
-  padding:14px 16px 12px;
-  margin-bottom:16px;
-}
-.qp-header{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin-bottom:10px;
-}
-.qp-icon{ font-size:16px; }
-.qp-label{
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.16em;
-  color:#00ff88;
-}
-#nl-trade-input{
-  width:100%;
-  background:#060c18;
-  border:1px solid #1e2d45;
-  border-radius:5px;
-  color:#e8eef9;
-  font-size:13px;
-  font-family:inherit;
-  padding:9px 12px;
-  outline:none;
-  box-sizing:border-box;
-  transition:border-color .15s;
-}
-#nl-trade-input:focus{ border-color:#00ff88; }
-#nl-trade-input::placeholder{ color:#3a4d6a; }
-.qp-status{
-  font-size:11px;
-  margin-top:7px;
-  min-height:16px;
-  line-height:1.4;
-}
-.qp-status.ok{ color:#00ff88; }
-.qp-status.warn{ color:#ffa500; }
-.qp-status.err{ color:#ff4444; }
-
-/* =====================================================
-   FEATURE 7 — TEAM NEEDS PILLS
-   ===================================================== */
-.team-needs-bar{
-  display:none;
-  align-items:center;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:12px;
-  padding:10px 14px;
-  background:#0d1322;
-  border:1px solid #1e2d45;
-  border-radius:8px;
-}
-.team-needs-bar.show{ display:flex; }
-.tn-label{
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.14em;
-  color:#4a9eff;
-  white-space:nowrap;
-}
-.tn-pill{
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.1em;
-  padding:4px 10px;
-  border-radius:4px;
-  border:1px solid #1e2d45;
-  background:#060c18;
-  color:#e8eef9;
-  cursor:pointer;
-  transition:background .12s, border-color .12s;
-}
-.tn-pill:hover{ background:#1a2540; border-color:#4a9eff; color:#4a9eff; }
-.tn-pill.active{ background:#0d2444; border-color:#4a9eff; color:#4a9eff; }
-.tn-pill.pos-QB{ border-color:#ffa500; color:#ffa500; }
-.tn-pill.pos-QB:hover,.tn-pill.pos-QB.active{ background:#2a1a00; border-color:#ffa500; }
-.tn-pill.pos-RB{ border-color:#00ff88; color:#00ff88; }
-.tn-pill.pos-RB:hover,.tn-pill.pos-RB.active{ background:#002a1a; border-color:#00ff88; }
-.tn-pill.pos-WR{ border-color:#4a9eff; color:#4a9eff; }
-.tn-pill.pos-WR:hover,.tn-pill.pos-WR.active{ background:#0a1e3a; border-color:#4a9eff; }
-.tn-pill.pos-TE{ border-color:#cc88ff; color:#cc88ff; }
-.tn-pill.pos-TE:hover,.tn-pill.pos-TE.active{ background:#1a0a2a; border-color:#cc88ff; }
-
-/* Verdict ROSTER FIT section */
-.v2-roster-fit-row{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:5px 0;
-  border-bottom:1px solid #1e2d45;
-  font-size:12px;
-}
-.v2-roster-fit-row:last-child{ border-bottom:none; }
-.v2-rf-name{ flex:1; color:#e8eef9; font-weight:600; }
-.v2-rf-tag-fills{ color:#00ff88; font-size:11px; font-weight:700; letter-spacing:.08em; }
-.v2-rf-tag-loses{ color:#ffa500; font-size:11px; font-weight:700; letter-spacing:.08em; }
-.v2-rf-neutral{ color:#5a7a9a; font-size:11px; }
-.v2-connect-prompt{ color:#4a9eff; font-size:12px; font-style:italic; }
-
-/* =====================================================
-   FEATURE 10 — MARKET ALERTS (Sell High / Buy Low)
-   ===================================================== */
-.alerts-section{
-  background:#0a0e1a;
-  border:1px solid #1a2540;
-  border-radius:10px;
-  margin:0 0 18px;
-  overflow:hidden;
-  min-width:0;
-}
-.alerts-buckets{ min-width:0; }
-.alert-card{ flex-shrink:0; }
-.alerts-head{
-  padding:14px 18px 10px;
-  border-bottom:1px solid #1a2540;
-}
-.alerts-head h3{
-  margin:0;
-  font-size:13px;
-  font-weight:700;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:#e8eef9;
-}
-.alerts-buckets{
-  padding:14px 18px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-.alert-bucket-label{
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.16em;
-  margin-bottom:8px;
-}
-.alert-bucket-label.sell{ color:#ff4444; }
-.alert-bucket-label.buy{ color:#00ff88; }
-.alerts-strip{
-  display:flex;
-  flex-wrap:nowrap;
-  gap:10px;
-  overflow-x:auto;
-  overflow-y:hidden;
-  padding-bottom:6px;
-  scrollbar-width:thin;
-  scrollbar-color:#1e2d45 transparent;
-  -webkit-overflow-scrolling:touch;
-  touch-action:pan-x;
-  width:100%;
-  max-width:100%;
-  min-width:0;
-  overscroll-behavior-x:contain;
-}
-.alerts-strip::-webkit-scrollbar{ height:4px; }
-.alerts-strip::-webkit-scrollbar-track{ background:transparent; }
-.alerts-strip::-webkit-scrollbar-thumb{ background:#1e2d45; border-radius:2px; }
-.alert-card{
-  flex:0 0 auto;
-  background:#0d1322;
-  border:1px solid #1e2d45;
-  border-radius:7px;
-  padding:11px 13px;
-  min-width:140px;
-  max-width:160px;
-}
-.alert-card.sell{ border-top:2px solid #ff4444; }
-.alert-card.buy{ border-top:2px solid #00ff88; }
-.alert-card .nm{ font-size:12px; font-weight:700; color:#e8eef9; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.alert-card .meta{ font-size:10px; color:#5a7a9a; margin-bottom:6px; }
-.alert-card .row{ display:flex; align-items:center; justify-content:space-between; gap:4px; }
-.alert-card .val{ font-size:13px; font-weight:700; font-family:'JetBrains Mono',monospace; color:#e8eef9; }
-.alert-card .reason{ font-size:9px; font-weight:700; letter-spacing:.1em; padding:2px 5px; border-radius:3px; }
-.alert-card.sell .reason{ background:rgba(255,68,68,.15); color:#ff4444; }
-.alert-card.buy .reason{ background:rgba(0,255,136,.12); color:#00ff88; }
-
-
-/* ═══════════════════════════════════════════════════════
-   PICK CALCULATOR
-═══════════════════════════════════════════════════════ */
-.pick-calc-section{padding:14px 16px 24px}
-.pick-calc-header{margin-bottom:16px}
-.pick-calc-header h3{margin:0;font-size:14px;font-weight:700;color:var(--ink)}
-.pick-calc-header .subtitle{font-size:11px;color:var(--ink-3);font-weight:400;margin-left:6px}
-
-.pc-columns{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:start}
-@media(max-width:540px){
-  .pc-columns{grid-template-columns:1fr;gap:8px}
-  .pc-vs{text-align:center;padding:4px 0}
-}
-
-.pc-side{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
-.pc-side-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.pc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.pc-dot-a{background:var(--green)}
-.pc-dot-b{background:var(--blue)}
-.pc-side-label{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);flex:1}
-.pc-side-total{font-size:13px;font-weight:700;color:var(--ink-2);font-variant-numeric:tabular-nums}
-
-.pc-selectors{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.pc-sel{flex:1;min-width:60px;padding:7px 6px;background:var(--bg-2);border:1px solid var(--line);border-radius:7px;color:var(--ink);font-size:12px;font-weight:600;cursor:pointer;-webkit-appearance:none;appearance:none;text-align:center}
-.pc-sel:focus{outline:none;border-color:var(--green)}
-.pc-add-btn{padding:7px 12px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:7px;color:var(--green);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.06em;transition:background .15s,border-color .15s;white-space:nowrap}
-.pc-add-btn:hover{background:rgba(0,210,106,.12);border-color:var(--green)}
-
-.pc-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:28px}
-.pc-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 8px 4px 10px;background:var(--bg-2);border:1px solid var(--line-2);border-radius:20px;font-size:11px;font-weight:600;color:var(--ink);white-space:nowrap}
-.pc-chip .chip-val{color:var(--ink-3);font-size:10px;margin-left:2px}
-.pc-chip .chip-rm{background:none;border:none;padding:0 0 0 4px;cursor:pointer;color:var(--ink-3);font-size:14px;line-height:1;display:flex;align-items:center;transition:color .12s}
-.pc-chip .chip-rm:hover{color:var(--red)}
-
-.pc-vs{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;letter-spacing:.2em;color:var(--ink-3);padding-top:36px}
-
-.pc-actions{display:flex;gap:10px;margin-top:16px;justify-content:center}
-.pc-actions .btn{min-width:130px}
-
-.pc-result{margin-top:18px;border-radius:12px;overflow:hidden;border:1px solid var(--line-2)}
-.pc-result-inner{padding:18px 16px}
-.pc-result-verdict{font-size:18px;font-weight:800;letter-spacing:.06em;text-align:center;margin-bottom:10px;padding:14px 16px;border-radius:8px}
-.pc-result-verdict.even{background:rgba(163,177,204,.12);color:var(--ink)}
-.pc-result-verdict.side-a{background:rgba(0,210,106,.10);color:var(--green)}
-.pc-result-verdict.side-b{background:rgba(74,158,255,.10);color:var(--blue)}
-.pc-result-breakdown{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;text-align:center}
-.pc-rb-side{padding:10px 8px;background:var(--bg-2);border-radius:8px}
-.pc-rb-side-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
-.pc-rb-side-val{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink)}
-.pc-rb-side-val.winner{color:var(--green)}
-.pc-rb-side-val.winner-b{color:var(--blue)}
-.pc-rb-diff{text-align:center;padding:8px}
-.pc-rb-diff-num{font-size:14px;font-weight:700;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.pc-rb-diff-lbl{font-size:10px;color:var(--ink-3);letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
-<div class="splash" id="splash" aria-hidden="true">
-  <img id="splash-logo" alt="TradeIQ">
-  <div class="splash-text">TRADE<span>IQ</span></div>
+<!-- TICKER -->
+<div class="ticker" id="ticker">
+  <div class="label">LIVE • TOP 25</div>
+  <div class="track" id="ticker-track"></div>
 </div>
 
 <!-- HEADER -->
@@ -1170,68 +831,38 @@ body{padding-bottom:56px}
         <div class="tag">Dynasty Trade Analyzer • EST. 2026</div>
       </div>
     </div>
-  </div>
-</header>
-
-<!-- TICKER -->
-<div class="ticker" id="ticker">
-  <div class="label">LIVE • TOP 25</div>
-  <div class="track" id="ticker-track"></div>
-</div>
-
-<!-- LEAGUE CONTROLS -->
-<div class="league-controls">
-  <div class="header-row">
     <div class="spacer"></div>
     <button class="btn ghost" id="btn-import"><span>⬇</span> Import from Sleeper</button>
-    <button class="btn settings" id="btn-profile">⚙ Set League Format</button>
-    <button class="btn ghost" id="btn-howitworks">How We Grade</button>
+    <button class="btn primary" id="btn-profile">⚙ Set League Format</button>
     <button class="btn ghost" id="btn-clear">Reset</button>
   </div>
   <div class="profile-bar" id="profile-bar"></div>
-</div>
+</header>
 
 <!-- MAIN -->
 <main class="main">
 
-  <!-- TAB: TRADE -->
-  <div id="tab-trade" class="tab-section">
-
-  <!-- TEAM NEEDS BAR (shown after Sleeper import) -->
-  <div class="team-needs-bar" id="team-needs-bar">
-    <span class="tn-label">📊 ROSTER NEEDS</span>
-    <div id="tn-pills"></div>
-  </div>
-
-  <!-- QUICK PARSE — Feature 6 -->
-  <div class="quick-parse-card" id="quick-parse-card">
-    <div class="qp-header">
-      <span class="qp-icon">⚡</span>
-      <span class="qp-label">QUICK PARSE</span>
+  <!-- FIRST-VISIT LEAGUE SETUP BANNER -->
+  <div id="setup-banner" style="display:none;
+    background:linear-gradient(135deg,#0d1f12 0%,#0a1a1a 100%);
+    border:1.5px solid rgba(0,210,106,.45);
+    border-radius:12px;
+    padding:14px 18px;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;">
+    <span style="font-size:22px">⚙️</span>
+    <div style="flex:1;min-width:180px">
+      <div style="font-size:14px;font-weight:700;color:var(--ink)">Configure your league first</div>
+      <div style="font-size:12px;color:var(--ink-2);margin-top:3px">Values auto-adjust for your scoring, format &amp; team count.</div>
     </div>
-    <input id="nl-trade-input" type="text" placeholder='e.g. "I&apos;m giving Puka + 2027 first for Davante"' autocomplete="off">
-    <div class="qp-status" id="qp-status"></div>
+    <button class="btn primary" onclick="openProfile();document.getElementById('setup-banner').style.display='none'" style="white-space:nowrap;flex:0 0 auto">⚙ Set League Format</button>
+    <button onclick="document.getElementById('setup-banner').style.display='none';localStorage.setItem('tradeiq.banner.v1','1')" style="background:none;border:none;color:var(--ink-3);font-size:18px;cursor:pointer;padding:4px 6px;line-height:1" title="Dismiss">×</button>
   </div>
 
   <div class="trade-grid">
-    <!-- YOU GIVE -->
-    <section class="side you-give">
-      <h3><span class="dot"></span>You Give</h3>
-      <div class="searchwrap">
-        <input id="search-give" type="text" placeholder="Search players…" autocomplete="off">
-        <div class="dropdown" id="dropdown-give"></div>
-      </div>
-      <button class="add-pick-btn" data-side="give">+ ADD DRAFT PICK</button>
-      <button class="rookies-btn" data-side="give">★ 2026 ROOKIES</button>
-      <div class="side-total">
-        <span class="lbl">Total Value</span>
-        <span class="val mono" id="total-give">0</span>
-      </div>
-      <div class="assets" id="assets-give">
-        <div class="empty-state">No assets added.<br>Search above to add players or picks.</div>
-      </div>
-    </section>
-
     <!-- YOU GET -->
     <section class="side you-get">
       <h3><span class="dot"></span>You Get</h3>
@@ -1249,6 +880,26 @@ body{padding-bottom:56px}
         <div class="empty-state">No assets added.<br>Search above to add players or picks.</div>
       </div>
     </section>
+
+    <div class="vs">VS</div>
+
+    <!-- YOU GIVE -->
+    <section class="side you-give">
+      <h3><span class="dot"></span>You Give</h3>
+      <div class="searchwrap">
+        <input id="search-give" type="text" placeholder="Search players…" autocomplete="off">
+        <div class="dropdown" id="dropdown-give"></div>
+      </div>
+      <button class="add-pick-btn" data-side="give">+ ADD DRAFT PICK</button>
+      <button class="rookies-btn" data-side="give">★ 2026 ROOKIES</button>
+      <div class="side-total">
+        <span class="lbl">Total Value</span>
+        <span class="val mono" id="total-give">0</span>
+      </div>
+      <div class="assets" id="assets-give">
+        <div class="empty-state">No assets added.<br>Search above to add players or picks.</div>
+      </div>
+    </section>
   </div>
 
   <div class="cta">
@@ -1259,48 +910,10 @@ body{padding-bottom:56px}
   <div class="my-roster" id="my-roster">
     <header>
       <h3 id="my-roster-title">My Roster</h3>
-      <div class="opts roster-side-toggle" id="roster-side-toggle" aria-label="Choose which side a tapped player gets added to">
-        <button class="opt sel" data-side="give" type="button">Add to YOU GIVE</button>
-        <button class="opt" data-side="get" type="button">Add to YOU GET</button>
-      </div>
       <button class="btn ghost" id="btn-roster-clear">Clear</button>
     </header>
     <div class="grid" id="roster-grid"></div>
   </div>
-
-  <!-- FEATURED TRADE -->
-  <section class="featured-section" id="featured-section">
-    <header class="featured-head">
-      <h3>Featured Trade of the Day <span class="subtitle">Tap re-analyze to load it into the builder</span></h3>
-    </header>
-    <div class="featured-card" id="featured-card"></div>
-  </section>
-
-  </div><!-- /tab-trade -->
-
-  <!-- TAB: MARKET -->
-  <div id="tab-market" class="tab-section" hidden>
-
-  <!-- MARKET MOVERS -->
-  <section class="movers-section" id="movers-section">
-    <header class="movers-head">
-      <h3>Market Movers <span class="subtitle">Post-2026-draft consensus shifts · 30-day window</span></h3>
-    </header>
-    <div class="mover-section-grid" id="movers-grid"></div>
-  </section>
-
-  <!-- MARKET ALERTS — Feature 10 -->
-  <section class="alerts-section" id="alerts-section">
-    <header class="alerts-head">
-      <h3>Market Alerts <span class="subtitle">Sell-high &amp; buy-low signals based on age vs. current value</span></h3>
-    </header>
-    <div class="alerts-buckets" id="alerts-grid"></div>
-  </section>
-
-  </div><!-- /tab-market -->
-
-  <!-- TAB: TIERS -->
-  <div id="tab-tiers" class="tab-section" hidden>
 
   <!-- PICK VALUE CHART -->
   <section class="pick-chart-section" id="pick-chart-section">
@@ -1310,7 +923,7 @@ body{padding-bottom:56px}
     </header>
     <div class="pick-chart-grid" id="pick-chart-grid"></div>
     <div class="pick-chart-legend">
-      <span class="legend-label">MID shown · BOTTOM / LATE in subscript ·</span>
+      <span class="legend-label">MID shown · TOP / LATE in subscript ·</span>
       <span class="legend-swatch" style="background:#0a4d28"></span><span>Premium</span>
       <span class="legend-swatch" style="background:#1f6b32"></span><span>High</span>
       <span class="legend-swatch" style="background:#3a8a47"></span><span>Mid</span>
@@ -1322,6 +935,14 @@ body{padding-bottom:56px}
     </div>
   </section>
 
+  <!-- MARKET MOVERS -->
+  <section class="movers-section" id="movers-section">
+    <header class="movers-head">
+      <h3>Market Movers <span class="subtitle">Post-2026-draft consensus shifts · 30-day window</span></h3>
+    </header>
+    <div class="mover-section-grid" id="movers-grid"></div>
+  </section>
+
   <!-- POSITION VALUE TIERS -->
   <section class="tiers-section" id="tiers-section">
     <header class="tiers-head">
@@ -1330,150 +951,15 @@ body{padding-bottom:56px}
     <div class="tiers-grid" id="tiers-grid"></div>
   </section>
 
-  </div><!-- /tab-tiers -->
-
-  <!-- TAB: PICKS CALCULATOR -->
-  <div id="tab-picks" class="tab-section" hidden>
-
-  <section class="pick-calc-section">
-    <header class="pick-calc-header">
-      <h3>Pick Calculator <span class="subtitle">Compare draft pick packages · no players needed</span></h3>
+  <!-- FEATURED TRADE -->
+  <section class="featured-section" id="featured-section">
+    <header class="featured-head">
+      <h3>Featured Trade of the Day <span class="subtitle">Tap re-analyze to load it into the builder</span></h3>
     </header>
-
-    <div class="pc-columns">
-
-      <!-- SIDE A -->
-      <div class="pc-side" id="pc-side-a">
-        <div class="pc-side-head">
-          <span class="pc-dot pc-dot-a"></span>
-          <span class="pc-side-label">SIDE A</span>
-          <span class="pc-side-total" id="pc-total-a">0 pts</span>
-        </div>
-        <div class="pc-selectors">
-          <select class="pc-sel" id="pc-year-a">
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-            <option value="2028">2028</option>
-            <option value="2029">2029</option>
-          </select>
-          <select class="pc-sel" id="pc-round-a">
-            <option value="1">1st</option>
-            <option value="2">2nd</option>
-            <option value="3">3rd</option>
-            <option value="4">4th</option>
-          </select>
-          <select class="pc-sel" id="pc-tier-a">
-            <option value="top3">Early</option>
-            <option value="mid">Mid</option>
-            <option value="late">Late</option>
-          </select>
-          <button class="pc-add-btn" id="pc-add-a">Add</button>
-        </div>
-        <div class="pc-chips" id="pc-chips-a"></div>
-      </div>
-
-      <!-- VS divider -->
-      <div class="pc-vs">VS</div>
-
-      <!-- SIDE B -->
-      <div class="pc-side" id="pc-side-b">
-        <div class="pc-side-head">
-          <span class="pc-dot pc-dot-b"></span>
-          <span class="pc-side-label">SIDE B</span>
-          <span class="pc-side-total" id="pc-total-b">0 pts</span>
-        </div>
-        <div class="pc-selectors">
-          <select class="pc-sel" id="pc-year-b">
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-            <option value="2028">2028</option>
-            <option value="2029">2029</option>
-          </select>
-          <select class="pc-sel" id="pc-round-b">
-            <option value="1">1st</option>
-            <option value="2">2nd</option>
-            <option value="3">3rd</option>
-            <option value="4">4th</option>
-          </select>
-          <select class="pc-sel" id="pc-tier-b">
-            <option value="top3">Early</option>
-            <option value="mid">Mid</option>
-            <option value="late">Late</option>
-          </select>
-          <button class="pc-add-btn" id="pc-add-b">Add</button>
-        </div>
-        <div class="pc-chips" id="pc-chips-b"></div>
-      </div>
-
-    </div><!-- /pc-columns -->
-
-    <!-- Action buttons -->
-    <div class="pc-actions">
-      <button class="btn primary" id="pc-compare-btn">Compare Picks</button>
-      <button class="btn" id="pc-clear-btn">Clear All</button>
-    </div>
-
-    <!-- Result -->
-    <div class="pc-result" id="pc-result" hidden>
-      <div class="pc-result-inner">
-        <div class="pc-result-verdict" id="pc-result-verdict"></div>
-        <div class="pc-result-breakdown" id="pc-result-breakdown"></div>
-      </div>
-    </div>
-
+    <div class="featured-card" id="featured-card"></div>
   </section>
 
-  </div><!-- /tab-picks -->
-
-
 </main>
-
-<!-- BOTTOM TAB NAV -->
-<nav class="bottom-nav" role="tablist" aria-label="Primary">
-  <button type="button" class="nav-tab active" data-tab="trade" role="tab" aria-selected="true">
-    <span class="nav-icon" aria-hidden="true">📊</span>
-    <span class="nav-label">Trade</span>
-  </button>
-  <button type="button" class="nav-tab" data-tab="market" role="tab" aria-selected="false">
-    <span class="nav-icon" aria-hidden="true">📈</span>
-    <span class="nav-label">Market</span>
-  </button>
-  <button type="button" class="nav-tab" data-tab="tiers" role="tab" aria-selected="false">
-    <span class="nav-icon" aria-hidden="true">🏆</span>
-    <span class="nav-label">Tiers</span>
-  </button>
-  <button type="button" class="nav-tab" data-tab="picks" role="tab" aria-selected="false">
-    <span class="nav-icon" aria-hidden="true">🎯</span>
-    <span class="nav-label">Picks</span>
-  </button>
-</nav>
-
-<script>
-(function(){
-  var tabs = document.querySelectorAll('.bottom-nav .nav-tab');
-  var sections = {
-    trade:  document.getElementById('tab-trade'),
-    market: document.getElementById('tab-market'),
-    tiers:  document.getElementById('tab-tiers'),
-    picks:  document.getElementById('tab-picks')
-  };
-  function activate(name){
-    Object.keys(sections).forEach(function(k){
-      var el = sections[k]; if (!el) return;
-      if (k === name) el.removeAttribute('hidden'); else el.setAttribute('hidden','');
-    });
-    tabs.forEach(function(btn){
-      var on = btn.getAttribute('data-tab') === name;
-      btn.classList.toggle('active', on);
-      btn.setAttribute('aria-selected', on ? 'true' : 'false');
-    });
-    try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch(e) { window.scrollTo(0,0); }
-  }
-  tabs.forEach(function(btn){
-    btn.addEventListener('click', function(){ activate(btn.getAttribute('data-tab')); });
-  });
-})();
-</script>
 
 <!-- PROFILE MODAL -->
 <div class="modal-bg" id="profile-modal">
@@ -1515,9 +1001,8 @@ body{padding-bottom:56px}
       <div class="field">
         <label>Team Mode</label>
         <div class="opts" data-group="mode">
-          <button class="opt" data-val="rebuilder">Rebuilder</button>
           <button class="opt sel" data-val="contender">Contender</button>
-          <button class="opt" data-val="winnow">Win-Now</button>
+          <button class="opt" data-val="rebuilder">Rebuilder</button>
         </div>
       </div>
     </div>
@@ -1529,8 +1014,8 @@ body{padding-bottom:56px}
 </div>
 
 <!-- DRAFT PICK MODAL -->
-<div class="modal-bg" id="pick-modal" style="z-index:250">
-  <div class="modal" role="dialog" style="max-height:calc(100vh - 56px);overflow-y:auto">
+<div class="modal-bg" id="pick-modal">
+  <div class="modal" role="dialog">
     <header><h2>Add Draft Pick</h2><button class="close" data-close>×</button></header>
     <div class="body">
       <div class="field">
@@ -1554,14 +1039,10 @@ body{padding-bottom:56px}
       <div class="field">
         <label>Original Team Record (pick origin)</label>
         <div class="opts" data-group="pslot">
-          <button class="opt" data-val="top3">Bottom (Picks 1–3)</button>
-          <button class="opt sel" data-val="mid">Mid (Picks 4–8)</button>
-          <button class="opt" data-val="late">Late (Picks 9–10)</button>
+          <button class="opt" data-val="top3">Top 3 (Bottom of standings)</button>
+          <button class="opt sel" data-val="mid">Mid (4–9)</button>
+          <button class="opt" data-val="late">Late (Top 3 standings)</button>
         </div>
-      </div>
-      <div class="field" id="pick-value-preview-row" style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.25);border-radius:8px;padding:10px 14px;margin-top:6px">
-        <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:700">Estimated Value</div>
-        <div id="pick-value-preview" style="font-family:'JetBrains Mono',monospace;font-weight:800;color:var(--gold);font-size:20px">—</div>
       </div>
     </div>
     <div class="footer">
@@ -1592,126 +1073,6 @@ body{padding-bottom:56px}
     <div class="footer">
       <button class="btn ghost" data-close>Cancel</button>
       <button class="btn primary" id="btn-fetch-sleeper">Fetch Leagues</button>
-    </div>
-  </div>
-</div>
-
-<!-- HOW WE GRADE MODAL -->
-<div class="modal-bg" id="howitworks-modal">
-  <div class="modal hiw-modal" role="dialog">
-    <header><h2>How We Grade Trades</h2><button class="close" data-close>×</button></header>
-    <div class="body">
-      <div class="hiw-section">
-        <div class="hiw-num">1</div>
-        <div class="hiw-content">
-          <h3>Player Values</h3>
-          <p class="hiw-lead">Pulled from a consensus of 4 dynasty sources, blended into a single score for every player.</p>
-          <div class="hiw-grid">
-            <div class="hiw-tile"><div class="hiw-tile-pct">30%</div><div class="hiw-tile-lbl">KTC</div></div>
-            <div class="hiw-tile"><div class="hiw-tile-pct">25%</div><div class="hiw-tile-lbl">FantasyCalc</div></div>
-            <div class="hiw-tile"><div class="hiw-tile-pct">20%</div><div class="hiw-tile-lbl">DynastyProcess</div></div>
-            <div class="hiw-tile"><div class="hiw-tile-pct">25%</div><div class="hiw-tile-lbl">Sleeper ADP</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hiw-section">
-        <div class="hiw-num">2</div>
-        <div class="hiw-content">
-          <h3>League Settings Adjustments</h3>
-          <p class="hiw-lead">How each setting shifts the consensus value.</p>
-          <table class="hiw-table">
-            <tr><th>Setting</th><th>Effect</th></tr>
-            <tr><td>Superflex</td><td><span class="up">QBs +40%</span></td></tr>
-            <tr><td>Standard (1QB)</td><td><span class="dn">QBs −30%</span></td></tr>
-            <tr><td>1.0 TEP</td><td><span class="up">TEs +35%</span></td></tr>
-            <tr><td>0.5 TEP</td><td><span class="up">TEs +18%</span></td></tr>
-            <tr><td>Full PPR</td><td>WRs slight premium · RBs slight discount</td></tr>
-            <tr><td>Non-PPR</td><td>WRs slight discount · RBs slight premium</td></tr>
-            <tr><td>14-team</td><td><span class="up">RBs +6%</span> (scarcity)</td></tr>
-            <tr><td>8-team</td><td><span class="dn">RBs −20%</span></td></tr>
-          </table>
-        </div>
-      </div>
-
-      <div class="hiw-section">
-        <div class="hiw-num">3</div>
-        <div class="hiw-content">
-          <h3>Draft Pick Values</h3>
-          <p class="hiw-lead">Based on round, year, and slot. KTC-calibrated.</p>
-          <table class="hiw-table">
-            <tr><th>Pick</th><th>Bottom (1–3)</th><th>Mid (4–8)</th><th>Late (9–10)</th></tr>
-            <tr><td>2026 1st</td><td>8,500</td><td>6,000</td><td>4,200</td></tr>
-            <tr><td>2026 2nd</td><td>3,000</td><td>2,000</td><td>1,500</td></tr>
-            <tr><td>2027 1st</td><td>7,000</td><td>5,000</td><td>3,500</td></tr>
-            <tr><td>2028 1st</td><td>5,500</td><td>4,000</td><td>2,800</td></tr>
-          </table>
-          <p class="hiw-note">Consensus-calibrated (KTC/FantasyCalc, 10-team SF PPR). Superflex adds +10% to 1st &amp; 2nd round picks.</p>
-        </div>
-      </div>
-
-      <div class="hiw-section">
-        <div class="hiw-num">4</div>
-        <div class="hiw-content">
-          <h3>Team Mode Impact</h3>
-          <p class="hiw-lead">Mode reshapes valuation — it changes the math, not just the verdict text.</p>
-          <div class="hiw-modes">
-            <div class="hiw-mode rebuild">
-              <div class="hiw-mode-h">REBUILDER</div>
-              <ul>
-                <li>Young (≤22): <span class="up">×1.15</span></li>
-                <li>Aging vets (30+): <span class="dn">×0.85</span></li>
-                <li>All future picks: <span class="up">×1.10</span></li>
-                <li>Declining 27–29 RB/WR: <span class="dn">×0.92</span></li>
-              </ul>
-            </div>
-            <div class="hiw-mode contend">
-              <div class="hiw-mode-h">CONTENDER</div>
-              <ul>
-                <li>Prime age (25–29): <span class="up">×1.12</span></li>
-                <li>Raw prospects ≤22: <span class="dn">×0.90</span></li>
-                <li>2026 picks: ×1.00</li>
-                <li>2027+ picks: <span class="dn">×0.88</span></li>
-                <li>Elite WR1/RB1: <span class="up">×1.08</span></li>
-              </ul>
-            </div>
-            <div class="hiw-mode winnow">
-              <div class="hiw-mode-h">WIN-NOW</div>
-              <ul>
-                <li>Prime age (25–29): <span class="up">×1.18</span></li>
-                <li>Rookies/raw prospects: <span class="dn">×0.80</span></li>
-                <li>2026 picks: <span class="dn">×0.92</span></li>
-                <li>2027+ picks: <span class="dn">×0.75</span></li>
-                <li>Elite proven 26–30: <span class="up">×1.15</span></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hiw-section">
-        <div class="hiw-num">5</div>
-        <div class="hiw-content">
-          <h3>How Grades Are Calculated</h3>
-          <p class="hiw-lead">Compare side totals, compute the % gap, map to a label.</p>
-          <table class="hiw-table hiw-grades">
-            <tr><th>Label</th><th>Gap (winning side)</th></tr>
-            <tr><td><span class="g-elite">ELITE</span></td><td>30%+ advantage</td></tr>
-            <tr><td><span class="g-elite">EXCELLENT</span></td><td>20–30%</td></tr>
-            <tr><td><span class="g-strong">GREAT</span></td><td>15–20%</td></tr>
-            <tr><td><span class="g-strong">SOLID</span></td><td>10–15%</td></tr>
-            <tr><td><span class="g-fair">GOOD</span></td><td>7–10%</td></tr>
-            <tr><td><span class="g-fair">FAIR</span></td><td>4–7%</td></tr>
-            <tr><td><span class="g-fair">SLIGHT EDGE</span></td><td>2–4%</td></tr>
-            <tr><td><span class="g-close">CLOSE</span></td><td>0–2%</td></tr>
-            <tr><td><span class="g-close">EVEN</span></td><td>essentially equal</td></tr>
-            <tr><td><span class="g-bad">WEAK / POOR</span></td><td>same gaps, losing side</td></tr>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div class="footer">
-      <button class="btn primary" data-close>Got it</button>
     </div>
   </div>
 </div>
@@ -1765,429 +1126,420 @@ const LOGO_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAFACAYAAADN
 // =================================================================
 const PLAYERS = [
 // QBs
-{n:"Lamar Jackson",p:"QB",t:"BAL",a:29,ktc:8730,fc:8685,dp:8595,sleeper:8730},
-{n:"Josh Allen",p:"QB",t:"BUF",a:29,ktc:8500,fc:8500,dp:8350,sleeper:8500},
-{n:"Jalen Hurts",p:"QB",t:"PHI",a:27,ktc:8872,fc:8824,dp:8678,sleeper:8775},
-{n:"Patrick Mahomes",p:"QB",t:"KC",a:30,ktc:8055,fc:8100,dp:7965,sleeper:8055},
-{n:"Joe Burrow",p:"QB",t:"CIN",a:29,ktc:7560,fc:7650,dp:7470,sleeper:7605},
+{n:"Lamar Jackson",p:"QB",t:"BAL",a:29,ktc:9700,fc:9650,dp:9550,sleeper:9700},
+{n:"Josh Allen",p:"QB",t:"BUF",a:30,ktc:9450,fc:9500,dp:9300,sleeper:9500},
+{n:"Jalen Hurts",p:"QB",t:"PHI",a:27,ktc:9100,fc:9050,dp:8900,sleeper:9000},
+{n:"Patrick Mahomes",p:"QB",t:"KC",a:30,ktc:8950,fc:9000,dp:8850,sleeper:8950},
+{n:"Joe Burrow",p:"QB",t:"CIN",a:29,ktc:8400,fc:8500,dp:8300,sleeper:8450},
 {n:"Jayden Daniels",p:"QB",t:"WAS",a:25,ktc:9350,fc:9300,dp:9450,sleeper:9300},
 {n:"CJ Stroud",p:"QB",t:"HOU",a:24,ktc:9050,fc:8950,dp:9100,sleeper:9000},
 {n:"Caleb Williams",p:"QB",t:"CHI",a:24,ktc:8200,fc:8100,dp:8400,sleeper:8200},
-{n:"Drake Maye",p:"QB",t:"NE",a:23,ktc:8910,fc:8858,dp:9064,sleeper:8910},
+{n:"Drake Maye",p:"QB",t:"NE",a:23,ktc:8650,fc:8600,dp:8800,sleeper:8650},
 {n:"Bo Nix",p:"QB",t:"DEN",a:26,ktc:7100,fc:7050,dp:7000,sleeper:7100},
-{n:"Anthony Richardson",p:"QB",t:"IND",a:23,ktc:5300,fc:5200,dp:5500,sleeper:5400},
-{n:"Bryce Young",p:"QB",t:"CAR",a:24,ktc:5800,fc:5750,dp:5900,sleeper:5800},
+{n:"Anthony Richardson",p:"QB",t:"IND",a:24,ktc:5300,fc:5200,dp:5500,sleeper:5400},
+{n:"Bryce Young",p:"QB",t:"CAR",a:25,ktc:5800,fc:5750,dp:5900,sleeper:5800},
 {n:"Trevor Lawrence",p:"QB",t:"JAX",a:26,ktc:6700,fc:6800,dp:6600,sleeper:6750},
-{n:"Justin Herbert",p:"QB",t:"LAC",a:28,ktc:7030,fc:7125,dp:6935,sleeper:7030},
-{n:"Jordan Love",p:"QB",t:"GB",a:27,ktc:7410,fc:7361,dp:7312,sleeper:7410},
+{n:"Justin Herbert",p:"QB",t:"LAC",a:28,ktc:7400,fc:7500,dp:7300,sleeper:7400},
+{n:"Jordan Love",p:"QB",t:"GB",a:27,ktc:7600,fc:7550,dp:7500,sleeper:7600},
 {n:"Brock Purdy",p:"QB",t:"SF",a:26,ktc:7000,fc:7050,dp:6900,sleeper:7000},
-{n:"Dak Prescott",p:"QB",t:"DAL",a:32,ktc:4950,fc:5040,dp:4770,sleeper:4950},
-{n:"Tua Tagovailoa",p:"QB",t:"MIA",a:28,ktc:4940,fc:5035,dp:4845,sleeper:4940},
-{n:"Sam Darnold",p:"QB",t:"SEA",a:28,ktc:4180,fc:4275,dp:4085,sleeper:4180},
-{n:"Geno Smith",p:"QB",t:"LV",a:35,ktc:2520,fc:2610,dp:2430,sleeper:2520},
-{n:"Baker Mayfield",p:"QB",t:"TB",a:31,ktc:4410,fc:4500,dp:4320,sleeper:4410},
-{n:"Cam Ward",p:"QB",t:"TEN",a:23,ktc:7519,fc:7468,dp:7622,sleeper:7519},
+{n:"Dak Prescott",p:"QB",t:"DAL",a:32,ktc:5500,fc:5600,dp:5300,sleeper:5500},
+{n:"Tua Tagovailoa",p:"QB",t:"MIA",a:28,ktc:5200,fc:5300,dp:5100,sleeper:5200},
+{n:"Sam Darnold",p:"QB",t:"SEA",a:28,ktc:4400,fc:4500,dp:4300,sleeper:4400},
+{n:"Geno Smith",p:"QB",t:"LV",a:35,ktc:2800,fc:2900,dp:2700,sleeper:2800},
+{n:"Baker Mayfield",p:"QB",t:"TB",a:31,ktc:4900,fc:5000,dp:4800,sleeper:4900},
+{n:"Cam Ward",p:"QB",t:"TEN",a:23,ktc:7300,fc:7250,dp:7400,sleeper:7300},
 {n:"Shedeur Sanders",p:"QB",t:"CLE",a:24,ktc:5400,fc:5300,dp:5500,sleeper:5400},
 
 // RBs
-{n:"Bijan Robinson",p:"RB",t:"ATL",a:24,ktc:11250,fc:11150,dp:11200,sleeper:11200},
-{n:"Jahmyr Gibbs",p:"RB",t:"DET",a:24,ktc:10850,fc:10750,dp:10800,sleeper:10800},
-{n:"Saquon Barkley",p:"RB",t:"PHI",a:29,ktc:7400,fc:7300,dp:7350,sleeper:7400},
-{n:"Breece Hall",p:"RB",t:"NYJ",a:24,ktc:9150,fc:9050,dp:9100,sleeper:9100},
-{n:"De'Von Achane",p:"RB",t:"MIA",a:24,ktc:9250,fc:9150,dp:9200,sleeper:9200},
-{n:"Ashton Jeanty",p:"RB",t:"LV",a:22,ktc:11250,fc:11150,dp:11250,sleeper:11200},
-{n:"Omarion Hampton",p:"RB",t:"LAC",a:23,ktc:7931,fc:7880,dp:8034,sleeper:7931},
-{n:"TreVeyon Henderson",p:"RB",t:"NE",a:23,ktc:7725,fc:7622,dp:7828,sleeper:7725},
-{n:"Quinshon Judkins",p:"RB",t:"CLE",a:22,ktc:7416,fc:7364,dp:7519,sleeper:7416},
+{n:"Bijan Robinson",p:"RB",t:"ATL",a:24,ktc:8550,fc:8600,dp:8500,sleeper:8500},
+{n:"Jahmyr Gibbs",p:"RB",t:"DET",a:24,ktc:9600,fc:9500,dp:9600,sleeper:9600},
+{n:"Saquon Barkley",p:"RB",t:"PHI",a:29,ktc:7400,fc:7500,dp:7100,sleeper:7400},
+{n:"Breece Hall",p:"RB",t:"NYJ",a:25,ktc:8200,fc:8150,dp:8100,sleeper:8200},
+{n:"De'Von Achane",p:"RB",t:"MIA",a:25,ktc:8100,fc:8050,dp:8000,sleeper:8100},
+{n:"Ashton Jeanty",p:"RB",t:"LV",a:22,ktc:9000,fc:8950,dp:9100,sleeper:9000},
+{n:"Omarion Hampton",p:"RB",t:"LAC",a:22,ktc:7700,fc:7650,dp:7800,sleeper:7700},
+{n:"TreVeyon Henderson",p:"RB",t:"NE",a:22,ktc:7500,fc:7400,dp:7600,sleeper:7500},
+{n:"Quinshon Judkins",p:"RB",t:"CLE",a:22,ktc:7200,fc:7150,dp:7300,sleeper:7200},
 {n:"Cam Skattebo",p:"RB",t:"NYG",a:24,ktc:5900,fc:5850,dp:6000,sleeper:5900},
-{n:"Kyren Williams",p:"RB",t:"LAR",a:25,ktc:6300,fc:6400,dp:6200,sleeper:6300},
-{n:"Josh Jacobs",p:"RB",t:"GB",a:28,ktc:6175,fc:6222,dp:6080,sleeper:6175},
-{n:"Jonathan Taylor",p:"RB",t:"IND",a:27,ktc:7020,fc:7069,dp:6922,sleeper:7020},
+{n:"Kyren Williams",p:"RB",t:"LAR",a:26,ktc:6300,fc:6400,dp:6200,sleeper:6300},
+{n:"Josh Jacobs",p:"RB",t:"GB",a:28,ktc:6500,fc:6550,dp:6400,sleeper:6500},
+{n:"Jonathan Taylor",p:"RB",t:"IND",a:27,ktc:7200,fc:7250,dp:7100,sleeper:7200},
 {n:"James Cook",p:"RB",t:"BUF",a:26,ktc:6100,fc:6150,dp:6000,sleeper:6100},
-{n:"Joe Mixon",p:"RB",t:"HOU",a:29,ktc:4435,fc:4536,dp:4234,sleeper:4435},
-{n:"David Montgomery",p:"RB",t:"DET",a:28,ktc:3762,fc:3812,dp:3663,sleeper:3762},
-{n:"Aaron Jones",p:"RB",t:"MIN",a:31,ktc:2700,fc:2790,dp:2520,sleeper:2700},
-{n:"Tony Pollard",p:"RB",t:"TEN",a:29,ktc:3240,fc:3330,dp:3060,sleeper:3240},
-{n:"Jonathon Brooks",p:"RB",t:"CAR",a:22,ktc:5552,fc:5438,dp:5665,sleeper:5552},
-{n:"Travis Etienne",p:"RB",t:"JAX",a:27,ktc:4095,fc:4192,dp:3998,sleeper:4095},
+{n:"Joe Mixon",p:"RB",t:"HOU",a:30,ktc:4400,fc:4500,dp:4200,sleeper:4400},
+{n:"David Montgomery",p:"RB",t:"DET",a:29,ktc:3800,fc:3850,dp:3700,sleeper:3800},
+{n:"Aaron Jones",p:"RB",t:"MIN",a:31,ktc:3000,fc:3100,dp:2800,sleeper:3000},
+{n:"Tony Pollard",p:"RB",t:"TEN",a:29,ktc:3600,fc:3700,dp:3400,sleeper:3600},
+{n:"Jonathon Brooks",p:"RB",t:"CAR",a:23,ktc:4900,fc:4800,dp:5000,sleeper:4900},
+{n:"Travis Etienne",p:"RB",t:"JAX",a:27,ktc:4200,fc:4300,dp:4100,sleeper:4200},
 {n:"Javonte Williams",p:"RB",t:"DAL",a:26,ktc:3700,fc:3800,dp:3600,sleeper:3700},
-{n:"Rachaad White",p:"RB",t:"TB",a:27,ktc:3315,fc:3412,dp:3218,sleeper:3315},
-{n:"Rhamondre Stevenson",p:"RB",t:"NE",a:28,ktc:3040,fc:3135,dp:2945,sleeper:3040},
-{n:"Devin Singletary",p:"RB",t:"NYG",a:28,ktc:1805,fc:1900,dp:1710,sleeper:1805},
-{n:"Rico Dowdle",p:"RB",t:"CAR",a:27,ktc:3078,fc:3181,dp:2975,sleeper:3078},
-{n:"Kareem Hunt",p:"RB",t:"KC",a:30,ktc:1530,fc:1620,dp:1440,sleeper:1530},
-{n:"Jaylen Warren",p:"RB",t:"PIT",a:27,ktc:3022,fc:3120,dp:2925,sleeper:3022},
-{n:"Isiah Pacheco",p:"RB",t:"KC",a:27,ktc:3412,fc:3510,dp:3315,sleeper:3412},
-{n:"Bucky Irving",p:"RB",t:"TB",a:23,ktc:7004,fc:6952,dp:7107,sleeper:7004},
-{n:"Kaleb Johnson",p:"RB",t:"PIT",a:22,ktc:5768,fc:5716,dp:5871,sleeper:5768},
-{n:"RJ Harvey",p:"RB",t:"DEN",a:25,ktc:5300,fc:5250,dp:5400,sleeper:5300},
-{n:"Tyrone Tracy",p:"RB",t:"NYG",a:26,ktc:4100,fc:4050,dp:4200,sleeper:4100},
+{n:"Rachaad White",p:"RB",t:"TB",a:27,ktc:3400,fc:3500,dp:3300,sleeper:3400},
+{n:"Rhamondre Stevenson",p:"RB",t:"NE",a:28,ktc:3200,fc:3300,dp:3100,sleeper:3200},
+{n:"Devin Singletary",p:"RB",t:"NYG",a:28,ktc:1900,fc:2000,dp:1800,sleeper:1900},
+{n:"Rico Dowdle",p:"RB",t:"CAR",a:28,ktc:3000,fc:3100,dp:2900,sleeper:3000},
+{n:"Kareem Hunt",p:"RB",t:"KC",a:30,ktc:1700,fc:1800,dp:1600,sleeper:1700},
+{n:"Jaylen Warren",p:"RB",t:"PIT",a:27,ktc:3100,fc:3200,dp:3000,sleeper:3100},
+{n:"Isiah Pacheco",p:"RB",t:"KC",a:27,ktc:3500,fc:3600,dp:3400,sleeper:3500},
+{n:"Bucky Irving",p:"RB",t:"TB",a:23,ktc:5000,fc:4950,dp:5050,sleeper:5000},
+{n:"Kaleb Johnson",p:"RB",t:"PIT",a:22,ktc:5600,fc:5550,dp:5700,sleeper:5600},
+{n:"RJ Harvey",p:"RB",t:"DEN",a:24,ktc:5300,fc:5250,dp:5400,sleeper:5300},
+{n:"Tyrone Tracy",p:"RB",t:"NYG",a:25,ktc:4100,fc:4050,dp:4200,sleeper:4100},
 {n:"Chuba Hubbard",p:"RB",t:"CAR",a:26,ktc:3900,fc:3950,dp:3800,sleeper:3900},
-{n:"Najee Harris",p:"RB",t:"LAC",a:28,ktc:2660,fc:2755,dp:2565,sleeper:2660},
+{n:"Najee Harris",p:"RB",t:"LAC",a:28,ktc:2800,fc:2900,dp:2700,sleeper:2800},
 
 // WRs
-{n:"Ja'Marr Chase",p:"WR",t:"CIN",a:26,ktc:11500,fc:11450,dp:11350,sleeper:11500},
-{n:"Justin Jefferson",p:"WR",t:"MIN",a:26,ktc:10550,fc:10450,dp:10550,sleeper:10500},
-{n:"CeeDee Lamb",p:"WR",t:"DAL",a:27,ktc:10050,fc:9950,dp:10050,sleeper:10000},
-{n:"Malik Nabers",p:"WR",t:"NYG",a:22,ktc:8700,fc:8600,dp:8650,sleeper:8650},
-{n:"Puka Nacua",p:"WR",t:"LAR",a:24,ktc:9350,fc:9250,dp:9350,sleeper:9300},
-{n:"Brian Thomas Jr",p:"WR",t:"JAX",a:23,ktc:8850,fc:8750,dp:8850,sleeper:8800},
-{n:"Marvin Harrison Jr",p:"WR",t:"ARI",a:23,ktc:8850,fc:8750,dp:8850,sleeper:8800},
-{n:"Drake London",p:"WR",t:"ATL",a:24,ktc:8450,fc:8350,dp:8450,sleeper:8400},
-{n:"Amon-Ra St. Brown",p:"WR",t:"DET",a:26,ktc:9150,fc:9050,dp:9100,sleeper:9100},
-{n:"Garrett Wilson",p:"WR",t:"NYJ",a:25,ktc:8050,fc:7950,dp:8050,sleeper:8000},
-{n:"Rome Odunze",p:"WR",t:"CHI",a:23,ktc:8525,fc:8415,dp:8525,sleeper:8470},
-{n:"Tetairoa McMillan",p:"WR",t:"CAR",a:23,ktc:8250,fc:8150,dp:8250,sleeper:8200},
-{n:"Travis Hunter",p:"WR",t:"JAX",a:22,ktc:8855,fc:8745,dp:8855,sleeper:8800},
-{n:"Luther Burden III",p:"WR",t:"CHI",a:22,ktc:7313,fc:7262,dp:7416,sleeper:7313},
-{n:"Emeka Egbuka",p:"WR",t:"TB",a:23,ktc:7210,fc:7158,dp:7313,sleeper:7210},
-{n:"Matthew Golden",p:"WR",t:"GB",a:22,ktc:7622,fc:7570,dp:7725,sleeper:7622},
-{n:"Tyreek Hill",p:"WR",t:"MIA",a:32,ktc:4860,fc:4950,dp:4680,sleeper:4860},
-{n:"Stefon Diggs",p:"WR",t:"NE",a:32,ktc:2520,fc:2610,dp:2430,sleeper:2520},
-{n:"DK Metcalf",p:"WR",t:"PIT",a:28,ktc:5510,fc:5605,dp:5415,sleeper:5510},
-{n:"Tyler Lockett",p:"WR",t:"FA",a:33,ktc:990,fc:1080,dp:900,sleeper:990},
-{n:"Davante Adams",p:"WR",t:"LAR",a:33,ktc:2610,fc:2700,dp:2520,sleeper:2610},
-{n:"Cooper Kupp",p:"WR",t:"SEA",a:32,ktc:2790,fc:2880,dp:2700,sleeper:2790},
-{n:"Mike Evans",p:"WR",t:"TB",a:32,ktc:3060,fc:3150,dp:2970,sleeper:3060},
-{n:"Chris Godwin",p:"WR",t:"TB",a:30,ktc:3240,fc:3330,dp:3150,sleeper:3240},
-{n:"Tee Higgins",p:"WR",t:"CIN",a:27,ktc:6728,fc:6825,dp:6630,sleeper:6728},
-{n:"DeVonta Smith",p:"WR",t:"PHI",a:27,ktc:6532,fc:6630,dp:6435,sleeper:6532},
-{n:"AJ Brown",p:"WR",t:"PHI",a:28,ktc:6840,fc:6935,dp:6745,sleeper:6840},
-{n:"Keenan Allen",p:"WR",t:"FA",a:34,ktc:810,fc:900,dp:720,sleeper:810},
-{n:"Calvin Ridley",p:"WR",t:"TEN",a:31,ktc:2790,fc:2880,dp:2700,sleeper:2790},
-{n:"Tank Dell",p:"WR",t:"HOU",a:26,ktc:3400,fc:3300,dp:3500,sleeper:3400},
-{n:"Christian Kirk",p:"WR",t:"HOU",a:29,ktc:2160,fc:2250,dp:2070,sleeper:2160},
-{n:"Rashee Rice",p:"WR",t:"KC",a:26,ktc:7500,fc:7600,dp:7400,sleeper:7500},
-{n:"Jaxon Smith-Njigba",p:"WR",t:"SEA",a:24,ktc:9800,fc:9700,dp:9700,sleeper:9750},
+{n:"Ja'Marr Chase",p:"WR",t:"CIN",a:26,ktc:9300,fc:9250,dp:9200,sleeper:9300},
+{n:"Justin Jefferson",p:"WR",t:"MIN",a:27,ktc:8700,fc:8800,dp:8600,sleeper:8700},
+{n:"CeeDee Lamb",p:"WR",t:"DAL",a:27,ktc:9050,fc:9100,dp:8950,sleeper:9050},
+{n:"Malik Nabers",p:"WR",t:"NYG",a:23,ktc:8800,fc:8750,dp:8900,sleeper:8800},
+{n:"Puka Nacua",p:"WR",t:"LAR",a:25,ktc:8550,fc:8500,dp:8600,sleeper:8550},
+{n:"Brian Thomas Jr",p:"WR",t:"JAX",a:24,ktc:8400,fc:8350,dp:8500,sleeper:8400},
+{n:"Marvin Harrison Jr",p:"WR",t:"ARI",a:24,ktc:8000,fc:7900,dp:8200,sleeper:8000},
+{n:"Drake London",p:"WR",t:"ATL",a:25,ktc:7900,fc:7850,dp:7950,sleeper:7900},
+{n:"Amon-Ra St. Brown",p:"WR",t:"DET",a:27,ktc:8100,fc:8200,dp:8000,sleeper:8100},
+{n:"Garrett Wilson",p:"WR",t:"NYJ",a:26,ktc:7600,fc:7700,dp:7500,sleeper:7600},
+{n:"Rome Odunze",p:"WR",t:"CHI",a:24,ktc:7300,fc:7250,dp:7400,sleeper:7300},
+{n:"Tetairoa McMillan",p:"WR",t:"CAR",a:23,ktc:8200,fc:8150,dp:8300,sleeper:8200},
+{n:"Travis Hunter",p:"WR",t:"JAX",a:23,ktc:8500,fc:8450,dp:8600,sleeper:8500},
+{n:"Luther Burden III",p:"WR",t:"CHI",a:22,ktc:7100,fc:7050,dp:7200,sleeper:7100},
+{n:"Emeka Egbuka",p:"WR",t:"TB",a:23,ktc:7000,fc:6950,dp:7100,sleeper:7000},
+{n:"Matthew Golden",p:"WR",t:"GB",a:22,ktc:7400,fc:7350,dp:7500,sleeper:7400},
+{n:"Tyreek Hill",p:"WR",t:"MIA",a:32,ktc:5400,fc:5500,dp:5200,sleeper:5400},
+{n:"Stefon Diggs",p:"WR",t:"NE",a:32,ktc:2800,fc:2900,dp:2700,sleeper:2800},
+{n:"DK Metcalf",p:"WR",t:"PIT",a:28,ktc:5800,fc:5900,dp:5700,sleeper:5800},
+{n:"Tyler Lockett",p:"WR",t:"FA",a:33,ktc:1100,fc:1200,dp:1000,sleeper:1100},
+{n:"Davante Adams",p:"WR",t:"LAR",a:33,ktc:2900,fc:3000,dp:2800,sleeper:2900},
+{n:"Cooper Kupp",p:"WR",t:"SEA",a:32,ktc:3100,fc:3200,dp:3000,sleeper:3100},
+{n:"Mike Evans",p:"WR",t:"TB",a:32,ktc:3400,fc:3500,dp:3300,sleeper:3400},
+{n:"Chris Godwin",p:"WR",t:"TB",a:30,ktc:3600,fc:3700,dp:3500,sleeper:3600},
+{n:"Tee Higgins",p:"WR",t:"CIN",a:27,ktc:6900,fc:7000,dp:6800,sleeper:6900},
+{n:"DeVonta Smith",p:"WR",t:"PHI",a:27,ktc:6700,fc:6800,dp:6600,sleeper:6700},
+{n:"AJ Brown",p:"WR",t:"PHI",a:28,ktc:7200,fc:7300,dp:7100,sleeper:7200},
+{n:"Keenan Allen",p:"WR",t:"FA",a:34,ktc:900,fc:1000,dp:800,sleeper:900},
+{n:"Calvin Ridley",p:"WR",t:"TEN",a:31,ktc:3100,fc:3200,dp:3000,sleeper:3100},
+{n:"Tank Dell",p:"WR",t:"HOU",a:26,ktc:1800,fc:1700,dp:1900,sleeper:1800},
+{n:"Christian Kirk",p:"WR",t:"HOU",a:29,ktc:2400,fc:2500,dp:2300,sleeper:2400},
+{n:"Rashee Rice",p:"WR",t:"KC",a:25,ktc:7500,fc:7600,dp:7400,sleeper:7500},
+{n:"Jaxon Smith-Njigba",p:"WR",t:"SEA",a:24,ktc:7800,fc:7900,dp:7700,sleeper:7800},
 {n:"Xavier Legette",p:"WR",t:"CAR",a:25,ktc:4200,fc:4150,dp:4300,sleeper:4200},
 {n:"Ladd McConkey",p:"WR",t:"LAC",a:24,ktc:7700,fc:7800,dp:7600,sleeper:7700},
 {n:"Quentin Johnston",p:"WR",t:"LAC",a:24,ktc:3900,fc:3850,dp:3950,sleeper:3900},
-{n:"Michael Pittman",p:"WR",t:"IND",a:28,ktc:3895,fc:3990,dp:3800,sleeper:3895},
+{n:"Michael Pittman",p:"WR",t:"IND",a:28,ktc:4100,fc:4200,dp:4000,sleeper:4100},
 {n:"Josh Downs",p:"WR",t:"IND",a:24,ktc:5000,fc:4950,dp:5100,sleeper:5000},
-{n:"Courtland Sutton",p:"WR",t:"DEN",a:30,ktc:3870,fc:3960,dp:3780,sleeper:3870},
+{n:"Courtland Sutton",p:"WR",t:"DEN",a:30,ktc:4300,fc:4400,dp:4200,sleeper:4300},
 {n:"Jameson Williams",p:"WR",t:"DET",a:25,ktc:5700,fc:5750,dp:5600,sleeper:5700},
 {n:"Khalil Shakir",p:"WR",t:"BUF",a:26,ktc:5100,fc:5050,dp:5200,sleeper:5100},
 {n:"Jordan Addison",p:"WR",t:"MIN",a:24,ktc:5500,fc:5450,dp:5600,sleeper:5500},
 {n:"Jayden Reed",p:"WR",t:"GB",a:26,ktc:4800,fc:4850,dp:4700,sleeper:4800},
-{n:"Jerry Jeudy",p:"WR",t:"CLE",a:27,ktc:4388,fc:4485,dp:4290,sleeper:4388},
-{n:"Zay Flowers",p:"WR",t:"BAL",a:25,ktc:7040,fc:7095,dp:6930,sleeper:7040},
-{n:"Deebo Samuel",p:"WR",t:"WAS",a:30,ktc:2970,fc:3060,dp:2880,sleeper:2970},
-{n:"Brandon Aiyuk",p:"WR",t:"SF",a:28,ktc:5035,fc:5130,dp:4940,sleeper:5035},
-{n:"DJ Moore",p:"WR",t:"CHI",a:29,ktc:4230,fc:4320,dp:4140,sleeper:4230},
-{n:"Terry McLaurin",p:"WR",t:"WAS",a:30,ktc:5148,fc:5247,dp:5049,sleeper:5148},
+{n:"Jerry Jeudy",p:"WR",t:"CLE",a:27,ktc:4500,fc:4600,dp:4400,sleeper:4500},
+{n:"Zay Flowers",p:"WR",t:"BAL",a:26,ktc:6400,fc:6450,dp:6300,sleeper:6400},
+{n:"Deebo Samuel",p:"WR",t:"WAS",a:30,ktc:3300,fc:3400,dp:3200,sleeper:3300},
+{n:"Brandon Aiyuk",p:"WR",t:"SF",a:28,ktc:5300,fc:5400,dp:5200,sleeper:5300},
+{n:"DJ Moore",p:"WR",t:"CHI",a:29,ktc:4700,fc:4800,dp:4600,sleeper:4700},
+{n:"Terry McLaurin",p:"WR",t:"WAS",a:31,ktc:5200,fc:5300,dp:5100,sleeper:5200},
 
 // TEs
-{n:"Brock Bowers",p:"TE",t:"LV",a:23,ktc:9167,fc:9218,dp:9064,sleeper:9167},
+{n:"Brock Bowers",p:"TE",t:"LV",a:23,ktc:8900,fc:8950,dp:8800,sleeper:8900},
 {n:"Trey McBride",p:"TE",t:"ARI",a:26,ktc:7600,fc:7650,dp:7500,sleeper:7600},
-{n:"Sam LaPorta",p:"TE",t:"DET",a:25,ktc:7100,fc:7050,dp:7200,sleeper:7100},
-{n:"Tucker Kraft",p:"TE",t:"GB",a:25,ktc:5900,fc:5850,dp:6000,sleeper:5900},
-{n:"Travis Kelce",p:"TE",t:"KC",a:36,ktc:1620,fc:1800,dp:1350,sleeper:1530},
-{n:"George Kittle",p:"TE",t:"SF",a:32,ktc:3060,fc:3150,dp:2880,sleeper:2970},
-{n:"Mark Andrews",p:"TE",t:"BAL",a:30,ktc:2520,fc:2610,dp:2430,sleeper:2520},
-{n:"T.J. Hockenson",p:"TE",t:"MIN",a:28,ktc:3325,fc:3420,dp:3230,sleeper:3325},
-{n:"Evan Engram",p:"TE",t:"DEN",a:31,ktc:1710,fc:1800,dp:1620,sleeper:1710},
-{n:"Dalton Kincaid",p:"TE",t:"BUF",a:26,ktc:4400,fc:4500,dp:4300,sleeper:4400},
-{n:"Jake Ferguson",p:"TE",t:"DAL",a:27,ktc:3022,fc:3120,dp:2925,sleeper:3022},
-{n:"Pat Freiermuth",p:"TE",t:"PIT",a:27,ktc:2340,fc:2438,dp:2242,sleeper:2340},
-{n:"Cade Otton",p:"TE",t:"TB",a:27,ktc:2100,fc:2200,dp:2000,sleeper:2100},
+{n:"Sam LaPorta",p:"TE",t:"DET",a:25,ktc:4200,fc:4150,dp:4300,sleeper:4200},
+{n:"Tucker Kraft",p:"TE",t:"GB",a:25,ktc:4800,fc:4750,dp:4850,sleeper:4800},
+{n:"Travis Kelce",p:"TE",t:"KC",a:36,ktc:1800,fc:2000,dp:1500,sleeper:1700},
+{n:"George Kittle",p:"TE",t:"SF",a:32,ktc:3400,fc:3500,dp:3200,sleeper:3300},
+{n:"Mark Andrews",p:"TE",t:"BAL",a:30,ktc:2800,fc:2900,dp:2700,sleeper:2800},
+{n:"T.J. Hockenson",p:"TE",t:"MIN",a:28,ktc:3500,fc:3600,dp:3400,sleeper:3500},
+{n:"Evan Engram",p:"TE",t:"DEN",a:31,ktc:1900,fc:2000,dp:1800,sleeper:1900},
+{n:"Dalton Kincaid",p:"TE",t:"BUF",a:26,ktc:2800,fc:2900,dp:2700,sleeper:2800},
+{n:"Jake Ferguson",p:"TE",t:"DAL",a:27,ktc:3100,fc:3200,dp:3000,sleeper:3100},
+{n:"Pat Freiermuth",p:"TE",t:"PIT",a:27,ktc:2400,fc:2500,dp:2300,sleeper:2400},
+{n:"Cade Otton",p:"TE",t:"TB",a:26,ktc:2100,fc:2200,dp:2000,sleeper:2100},
 {n:"Isaiah Likely",p:"TE",t:"BAL",a:26,ktc:3300,fc:3400,dp:3200,sleeper:3300},
 {n:"Brenton Strange",p:"TE",t:"JAX",a:25,ktc:3700,fc:3650,dp:3800,sleeper:3700},
 {n:"Kyle Pitts",p:"TE",t:"ATL",a:25,ktc:3200,fc:3300,dp:3100,sleeper:3200},
-{n:"Colston Loveland",p:"TE",t:"CHI",a:22,ktc:5562,fc:5510,dp:5665,sleeper:5562},
-{n:"Tyler Warren",p:"TE",t:"IND",a:23,ktc:5974,fc:5922,dp:6077,sleeper:5974},
+{n:"Colston Loveland",p:"TE",t:"CHI",a:22,ktc:5400,fc:5350,dp:5500,sleeper:5400},
+{n:"Tyler Warren",p:"TE",t:"IND",a:23,ktc:5800,fc:5750,dp:5900,sleeper:5800},
 
 // QBs — additions
-{n:"Kirk Cousins",p:"QB",t:"ATL",a:37,ktc:540,fc:630,dp:450,sleeper:540},
-{n:"Russell Wilson",p:"QB",t:"NYG",a:37,ktc:720,fc:810,dp:630,sleeper:720},
-{n:"Aaron Rodgers",p:"QB",t:"FA",a:42,ktc:180,fc:270,dp:90,sleeper:180},
-{n:"Jared Goff",p:"QB",t:"DET",a:31,ktc:2880,fc:2970,dp:2790,sleeper:2880},
-{n:"Matthew Stafford",p:"QB",t:"LAR",a:38,ktc:1350,fc:1440,dp:1260,sleeper:1350},
-{n:"Daniel Jones",p:"QB",t:"IND",a:28,ktc:2160,fc:2250,dp:2070,sleeper:2160},
+{n:"Kirk Cousins",p:"QB",t:"ATL",a:38,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Russell Wilson",p:"QB",t:"NYG",a:37,ktc:800,fc:900,dp:700,sleeper:800},
+{n:"Aaron Rodgers",p:"QB",t:"FA",a:42,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Jared Goff",p:"QB",t:"DET",a:31,ktc:3200,fc:3300,dp:3100,sleeper:3200},
+{n:"Matthew Stafford",p:"QB",t:"LAR",a:38,ktc:1500,fc:1600,dp:1400,sleeper:1500},
+{n:"Daniel Jones",p:"QB",t:"IND",a:29,ktc:2400,fc:2500,dp:2300,sleeper:2400},
 {n:"Will Levis",p:"QB",t:"FA",a:26,ktc:600,fc:700,dp:500,sleeper:600},
-{n:"Malik Willis",p:"QB",t:"GB",a:26,ktc:878,fc:975,dp:780,sleeper:878},
-{n:"Aidan O'Connell",p:"QB",t:"LV",a:27,ktc:488,fc:585,dp:390,sleeper:488},
-{n:"Michael Penix Jr",p:"QB",t:"ATL",a:25,ktc:6944,fc:6832,dp:7056,sleeper:6944},
-{n:"JJ McCarthy",p:"QB",t:"MIN",a:23,ktc:6798,fc:6695,dp:6901,sleeper:6798},
-{n:"Kyler Murray",p:"QB",t:"ARI",a:28,ktc:4658,fc:4761,dp:4554,sleeper:4658},
-{n:"Mac Jones",p:"QB",t:"FA",a:27,ktc:285,fc:380,dp:190,sleeper:285},
-{n:"Jaxson Dart",p:"QB",t:"NYG",a:22,ktc:7004,fc:6952,dp:7107,sleeper:7004},
-{n:"Joe Flacco",p:"QB",t:"CLE",a:41,ktc:180,fc:270,dp:90,sleeper:180},
-{n:"Jameis Winston",p:"QB",t:"NYG",a:32,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"Tyler Huntley",p:"QB",t:"FA",a:28,ktc:190,fc:285,dp:95,sleeper:190},
-{n:"Sam Howell",p:"QB",t:"MIN",a:25,ktc:400,fc:500,dp:300,sleeper:400},
-{n:"Cooper Rush",p:"QB",t:"BAL",a:32,ktc:180,fc:270,dp:90,sleeper:180},
-{n:"Jacoby Brissett",p:"QB",t:"ARI",a:33,ktc:180,fc:270,dp:90,sleeper:180},
-{n:"Davis Mills",p:"QB",t:"FA",a:27,ktc:195,fc:292,dp:98,sleeper:195},
+{n:"Malik Willis",p:"QB",t:"GB",a:27,ktc:900,fc:1000,dp:800,sleeper:900},
+{n:"Aidan O'Connell",p:"QB",t:"LV",a:27,ktc:500,fc:600,dp:400,sleeper:500},
+{n:"Michael Penix Jr",p:"QB",t:"ATL",a:26,ktc:6200,fc:6100,dp:6300,sleeper:6200},
+{n:"JJ McCarthy",p:"QB",t:"MIN",a:23,ktc:6600,fc:6500,dp:6700,sleeper:6600},
+{n:"Kyler Murray",p:"QB",t:"ARI",a:29,ktc:4500,fc:4600,dp:4400,sleeper:4500},
+{n:"Mac Jones",p:"QB",t:"FA",a:28,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Jaxson Dart",p:"QB",t:"NYG",a:22,ktc:6800,fc:6750,dp:6900,sleeper:6800},
+{n:"Joe Flacco",p:"QB",t:"CLE",a:41,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Jameis Winston",p:"QB",t:"NYG",a:32,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Tyler Huntley",p:"QB",t:"FA",a:28,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Sam Howell",p:"QB",t:"MIN",a:26,ktc:400,fc:500,dp:300,sleeper:400},
+{n:"Cooper Rush",p:"QB",t:"BAL",a:32,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Jacoby Brissett",p:"QB",t:"ARI",a:33,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Davis Mills",p:"QB",t:"FA",a:27,ktc:200,fc:300,dp:100,sleeper:200},
 {n:"Zach Wilson",p:"QB",t:"MIA",a:26,ktc:200,fc:300,dp:100,sleeper:200},
-{n:"Drew Lock",p:"QB",t:"NYG",a:29,ktc:90,fc:180,dp:90,sleeper:90},
+{n:"Drew Lock",p:"QB",t:"NYG",a:29,ktc:100,fc:200,dp:100,sleeper:100},
 
 // RBs — additions
-{n:"Christian McCaffrey",p:"RB",t:"SF",a:29,ktc:5692,fc:5796,dp:5589,sleeper:5692},
-{n:"Derrick Henry",p:"RB",t:"BAL",a:32,ktc:4050,fc:4140,dp:3960,sleeper:4050},
-{n:"Nick Chubb",p:"RB",t:"FA",a:30,ktc:990,fc:1080,dp:900,sleeper:990},
-{n:"Alvin Kamara",p:"RB",t:"NO",a:30,ktc:2376,fc:2475,dp:2277,sleeper:2376},
-{n:"Austin Ekeler",p:"RB",t:"WAS",a:30,ktc:1350,fc:1440,dp:1260,sleeper:1350},
-{n:"Miles Sanders",p:"RB",t:"FA",a:29,ktc:630,fc:720,dp:540,sleeper:630},
+{n:"Christian McCaffrey",p:"RB",t:"SF",a:30,ktc:5500,fc:5600,dp:5400,sleeper:5500},
+{n:"Derrick Henry",p:"RB",t:"BAL",a:32,ktc:4500,fc:4600,dp:4400,sleeper:4500},
+{n:"Nick Chubb",p:"RB",t:"FA",a:30,ktc:1100,fc:1200,dp:1000,sleeper:1100},
+{n:"Alvin Kamara",p:"RB",t:"NO",a:31,ktc:2400,fc:2500,dp:2300,sleeper:2400},
+{n:"Austin Ekeler",p:"RB",t:"WAS",a:31,ktc:1500,fc:1600,dp:1400,sleeper:1500},
+{n:"Miles Sanders",p:"RB",t:"FA",a:29,ktc:700,fc:800,dp:600,sleeper:700},
 {n:"Zach Charbonnet",p:"RB",t:"SEA",a:25,ktc:3300,fc:3250,dp:3400,sleeper:3300},
-{n:"Kenneth Walker III",p:"RB",t:"SEA",a:25,ktc:4592,fc:4704,dp:4480,sleeper:4592},
-{n:"D'Andre Swift",p:"RB",t:"CHI",a:27,ktc:2828,fc:2925,dp:2730,sleeper:2828},
-{n:"AJ Dillon",p:"RB",t:"FA",a:28,ktc:570,fc:665,dp:475,sleeper:570},
+{n:"Kenneth Walker III",p:"RB",t:"SEA",a:26,ktc:4100,fc:4200,dp:4000,sleeper:4100},
+{n:"D'Andre Swift",p:"RB",t:"CHI",a:27,ktc:2900,fc:3000,dp:2800,sleeper:2900},
+{n:"AJ Dillon",p:"RB",t:"FA",a:28,ktc:600,fc:700,dp:500,sleeper:600},
 {n:"Dameon Pierce",p:"RB",t:"FA",a:26,ktc:800,fc:900,dp:700,sleeper:800},
-{n:"Raheem Mostert",p:"RB",t:"FA",a:34,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"Tyjae Spears",p:"RB",t:"TEN",a:24,ktc:4070,fc:4015,dp:4180,sleeper:4070},
+{n:"Raheem Mostert",p:"RB",t:"FA",a:34,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Tyjae Spears",p:"RB",t:"TEN",a:25,ktc:3700,fc:3650,dp:3800,sleeper:3700},
 {n:"Hassan Haskins",p:"RB",t:"FA",a:26,ktc:300,fc:400,dp:200,sleeper:300},
-{n:"Blake Corum",p:"RB",t:"LAR",a:25,ktc:2700,fc:2650,dp:2800,sleeper:2700},
-{n:"MarShawn Lloyd",p:"RB",t:"GB",a:25,ktc:3100,fc:3050,dp:3200,sleeper:3100},
+{n:"Blake Corum",p:"RB",t:"LAR",a:24,ktc:2700,fc:2650,dp:2800,sleeper:2700},
+{n:"MarShawn Lloyd",p:"RB",t:"GB",a:24,ktc:3100,fc:3050,dp:3200,sleeper:3100},
 {n:"Ray Davis",p:"RB",t:"BUF",a:26,ktc:2300,fc:2350,dp:2250,sleeper:2300},
-{n:"Jaylen Wright",p:"RB",t:"MIA",a:23,ktc:3399,fc:3348,dp:3502,sleeper:3399},
-{n:"Braelon Allen",p:"RB",t:"NYJ",a:22,ktc:4635,fc:4584,dp:4738,sleeper:4635},
-{n:"Dylan Sampson",p:"RB",t:"CLE",a:21,ktc:4326,fc:4274,dp:4429,sleeper:4326},
-{n:"Ollie Gordon II",p:"RB",t:"MIA",a:22,ktc:4895,fc:4838,dp:5006,sleeper:4895},
-{n:"Bhayshul Tuten",p:"RB",t:"JAX",a:23,ktc:5253,fc:5202,dp:5356,sleeper:5253},
+{n:"Jaylen Wright",p:"RB",t:"MIA",a:23,ktc:3300,fc:3250,dp:3400,sleeper:3300},
+{n:"Braelon Allen",p:"RB",t:"NYJ",a:22,ktc:4500,fc:4450,dp:4600,sleeper:4500},
+{n:"Dylan Sampson",p:"RB",t:"CLE",a:22,ktc:4200,fc:4150,dp:4300,sleeper:4200},
+{n:"Ollie Gordon II",p:"RB",t:"MIA",a:23,ktc:4400,fc:4350,dp:4500,sleeper:4400},
+{n:"Bhayshul Tuten",p:"RB",t:"JAX",a:23,ktc:5100,fc:5050,dp:5200,sleeper:5100},
 {n:"Tyler Allgeier",p:"RB",t:"ATL",a:26,ktc:1700,fc:1650,dp:1800,sleeper:1700},
-{n:"Will Shipley",p:"RB",t:"PHI",a:23,ktc:1500,fc:1450,dp:1600,sleeper:1500},
-{n:"Trey Benson",p:"RB",t:"ARI",a:23,ktc:3000,fc:2950,dp:3100,sleeper:3000},
-{n:"Audric Estime",p:"RB",t:"DEN",a:22,ktc:1957,fc:1906,dp:2060,sleeper:1957},
+{n:"Will Shipley",p:"RB",t:"PHI",a:24,ktc:1500,fc:1450,dp:1600,sleeper:1500},
+{n:"Trey Benson",p:"RB",t:"ARI",a:24,ktc:3000,fc:2950,dp:3100,sleeper:3000},
+{n:"Audric Estime",p:"RB",t:"DEN",a:23,ktc:1900,fc:1850,dp:2000,sleeper:1900},
 {n:"Roschon Johnson",p:"RB",t:"CHI",a:25,ktc:1500,fc:1450,dp:1600,sleeper:1500},
-{n:"Antonio Gibson",p:"RB",t:"NE",a:27,ktc:1235,fc:1330,dp:1140,sleeper:1235},
-{n:"Cordarrelle Patterson",p:"RB",t:"FA",a:35,ktc:180,fc:270,dp:90,sleeper:180},
-{n:"Tahj Brooks",p:"RB",t:"CIN",a:23,ktc:2400,fc:2350,dp:2500,sleeper:2400},
-{n:"Jaydon Blue",p:"RB",t:"DAL",a:22,ktc:3605,fc:3554,dp:3708,sleeper:3605},
-{n:"DJ Giddens",p:"RB",t:"IND",a:22,ktc:3811,fc:3760,dp:3914,sleeper:3811},
-{n:"Cam Akers",p:"RB",t:"FA",a:26,ktc:585,fc:682,dp:488,sleeper:585},
-{n:"Khalil Herbert",p:"RB",t:"FA",a:28,ktc:380,fc:475,dp:285,sleeper:380},
-{n:"Justice Hill",p:"RB",t:"BAL",a:28,ktc:855,fc:950,dp:760,sleeper:855},
-{n:"Sean Tucker",p:"RB",t:"TB",a:24,ktc:1700,fc:1650,dp:1800,sleeper:1700},
-{n:"Kendre Miller",p:"RB",t:"NO",a:23,ktc:1500,fc:1450,dp:1600,sleeper:1500},
+{n:"Antonio Gibson",p:"RB",t:"NE",a:28,ktc:1300,fc:1400,dp:1200,sleeper:1300},
+{n:"Cordarrelle Patterson",p:"RB",t:"FA",a:35,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Tahj Brooks",p:"RB",t:"CIN",a:24,ktc:2400,fc:2350,dp:2500,sleeper:2400},
+{n:"Jaydon Blue",p:"RB",t:"DAL",a:23,ktc:3500,fc:3450,dp:3600,sleeper:3500},
+{n:"DJ Giddens",p:"RB",t:"IND",a:23,ktc:3700,fc:3650,dp:3800,sleeper:3700},
+{n:"Cam Akers",p:"RB",t:"FA",a:27,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Khalil Herbert",p:"RB",t:"FA",a:28,ktc:400,fc:500,dp:300,sleeper:400},
+{n:"Justice Hill",p:"RB",t:"BAL",a:28,ktc:900,fc:1000,dp:800,sleeper:900},
+{n:"Sean Tucker",p:"RB",t:"TB",a:25,ktc:1700,fc:1650,dp:1800,sleeper:1700},
+{n:"Kendre Miller",p:"RB",t:"NO",a:24,ktc:1500,fc:1450,dp:1600,sleeper:1500},
 {n:"Kimani Vidal",p:"RB",t:"LAC",a:24,ktc:1500,fc:1450,dp:1600,sleeper:1500},
-{n:"Tyler Goodson",p:"RB",t:"IND",a:25,ktc:1100,fc:1050,dp:1200,sleeper:1100},
+{n:"Tyler Goodson",p:"RB",t:"IND",a:26,ktc:1100,fc:1050,dp:1200,sleeper:1100},
 {n:"Isaac Guerendo",p:"RB",t:"SF",a:25,ktc:2200,fc:2150,dp:2300,sleeper:2200},
 {n:"Tank Bigsby",p:"RB",t:"JAX",a:24,ktc:2400,fc:2350,dp:2500,sleeper:2400},
 
 // WRs — additions
-{n:"Adam Thielen",p:"WR",t:"CAR",a:35,ktc:450,fc:540,dp:360,sleeper:450},
-{n:"Allen Robinson",p:"WR",t:"FA",a:32,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"Tyler Boyd",p:"WR",t:"FA",a:31,ktc:540,fc:630,dp:450,sleeper:540},
-{n:"Gabe Davis",p:"WR",t:"FA",a:27,ktc:1072,fc:1170,dp:975,sleeper:1072},
+{n:"Adam Thielen",p:"WR",t:"CAR",a:35,ktc:500,fc:600,dp:400,sleeper:500},
+{n:"Allen Robinson",p:"WR",t:"FA",a:32,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Tyler Boyd",p:"WR",t:"FA",a:31,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Gabe Davis",p:"WR",t:"FA",a:27,ktc:1100,fc:1200,dp:1000,sleeper:1100},
 {n:"Wan'Dale Robinson",p:"WR",t:"NYG",a:25,ktc:2700,fc:2650,dp:2800,sleeper:2700},
 {n:"Rashod Bateman",p:"WR",t:"BAL",a:26,ktc:3000,fc:2950,dp:3100,sleeper:3000},
-{n:"Darius Slayton",p:"WR",t:"NYG",a:29,ktc:1170,fc:1260,dp:1080,sleeper:1170},
-{n:"Sterling Shepard",p:"WR",t:"FA",a:33,ktc:180,fc:270,dp:90,sleeper:180},
-{n:"Kadarius Toney",p:"WR",t:"FA",a:27,ktc:390,fc:488,dp:292,sleeper:390},
-{n:"Chase Claypool",p:"WR",t:"FA",a:27,ktc:292,fc:390,dp:195,sleeper:292},
-{n:"N'Keal Harry",p:"WR",t:"FA",a:29,ktc:190,fc:285,dp:95,sleeper:190},
-{n:"Antonio Brown",p:"WR",t:"FA",a:38,ktc:45,fc:90,dp:45,sleeper:45},
-{n:"Demarcus Robinson",p:"WR",t:"SF",a:32,ktc:540,fc:630,dp:450,sleeper:540},
-{n:"Josh Reynolds",p:"WR",t:"DEN",a:32,ktc:630,fc:720,dp:540,sleeper:630},
-{n:"Kendall Hinton",p:"WR",t:"DEN",a:29,ktc:380,fc:475,dp:285,sleeper:380},
-{n:"Dontayvion Wicks",p:"WR",t:"GB",a:24,ktc:1836,fc:1782,dp:1944,sleeper:1836},
-{n:"Darnell Mooney",p:"WR",t:"ATL",a:28,ktc:2375,fc:2470,dp:2280,sleeper:2375},
-{n:"Michael Wilson",p:"WR",t:"ARI",a:26,ktc:2000,fc:1950,dp:2100,sleeper:2000},
-{n:"Zay Jones",p:"WR",t:"FA",a:32,ktc:450,fc:540,dp:360,sleeper:450},
+{n:"Darius Slayton",p:"WR",t:"NYG",a:29,ktc:1300,fc:1400,dp:1200,sleeper:1300},
+{n:"Sterling Shepard",p:"WR",t:"FA",a:33,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Kadarius Toney",p:"WR",t:"FA",a:27,ktc:400,fc:500,dp:300,sleeper:400},
+{n:"Chase Claypool",p:"WR",t:"FA",a:27,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"N'Keal Harry",p:"WR",t:"FA",a:28,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Antonio Brown",p:"WR",t:"FA",a:37,ktc:50,fc:100,dp:50,sleeper:50},
+{n:"Demarcus Robinson",p:"WR",t:"SF",a:31,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Josh Reynolds",p:"WR",t:"DEN",a:31,ktc:700,fc:800,dp:600,sleeper:700},
+{n:"Kendall Hinton",p:"WR",t:"DEN",a:28,ktc:400,fc:500,dp:300,sleeper:400},
+{n:"Dontayvion Wicks",p:"WR",t:"GB",a:25,ktc:1700,fc:1650,dp:1800,sleeper:1700},
+{n:"Darnell Mooney",p:"WR",t:"ATL",a:28,ktc:2500,fc:2600,dp:2400,sleeper:2500},
+{n:"Michael Wilson",p:"WR",t:"ARI",a:25,ktc:2000,fc:1950,dp:2100,sleeper:2000},
+{n:"Zay Jones",p:"WR",t:"FA",a:31,ktc:500,fc:600,dp:400,sleeper:500},
 {n:"Tyquan Thornton",p:"WR",t:"KC",a:25,ktc:1300,fc:1250,dp:1400,sleeper:1300},
-{n:"Mecole Hardman",p:"WR",t:"KC",a:28,ktc:855,fc:950,dp:760,sleeper:855},
-{n:"Marquise Brown",p:"WR",t:"KC",a:28,ktc:1260,fc:1350,dp:1170,sleeper:1260},
-{n:"Deonte Harty",p:"WR",t:"FA",a:29,ktc:380,fc:475,dp:285,sleeper:380},
-{n:"Ihmir Smith-Marsette",p:"WR",t:"FA",a:27,ktc:300,fc:400,dp:200,sleeper:300},
-{n:"Romeo Doubs",p:"WR",t:"GB",a:27,ktc:2200,fc:2250,dp:2150,sleeper:2200},
-{n:"Christian Watson",p:"WR",t:"GB",a:26,ktc:2527,fc:2580,dp:2474,sleeper:2527},
-{n:"Ben Skowronek",p:"WR",t:"FA",a:29,ktc:190,fc:285,dp:95,sleeper:190},
-{n:"Van Jefferson",p:"WR",t:"FA",a:31,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"Laviska Shenault",p:"WR",t:"SEA",a:29,ktc:475,fc:570,dp:380,sleeper:475},
+{n:"Mecole Hardman",p:"WR",t:"KC",a:28,ktc:900,fc:1000,dp:800,sleeper:900},
+{n:"Marquise Brown",p:"WR",t:"KC",a:29,ktc:1400,fc:1500,dp:1300,sleeper:1400},
+{n:"Deonte Harty",p:"WR",t:"FA",a:28,ktc:400,fc:500,dp:300,sleeper:400},
+{n:"Ihmir Smith-Marsette",p:"WR",t:"FA",a:26,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Romeo Doubs",p:"WR",t:"GB",a:26,ktc:2200,fc:2250,dp:2150,sleeper:2200},
+{n:"Christian Watson",p:"WR",t:"GB",a:27,ktc:2400,fc:2450,dp:2350,sleeper:2400},
+{n:"Ben Skowronek",p:"WR",t:"FA",a:28,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Van Jefferson",p:"WR",t:"FA",a:30,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Laviska Shenault",p:"WR",t:"SEA",a:28,ktc:500,fc:600,dp:400,sleeper:500},
 {n:"Cedric Tillman",p:"WR",t:"CLE",a:26,ktc:2300,fc:2250,dp:2400,sleeper:2300},
-{n:"Tre Tucker",p:"WR",t:"LV",a:25,ktc:2100,fc:2050,dp:2200,sleeper:2100},
-{n:"Xavier Hutchinson",p:"WR",t:"HOU",a:25,ktc:1100,fc:1050,dp:1200,sleeper:1100},
+{n:"Tre Tucker",p:"WR",t:"LV",a:26,ktc:2100,fc:2050,dp:2200,sleeper:2100},
+{n:"Xavier Hutchinson",p:"WR",t:"HOU",a:26,ktc:1100,fc:1050,dp:1200,sleeper:1100},
 {n:"Jonathan Mingo",p:"WR",t:"DAL",a:25,ktc:1500,fc:1450,dp:1600,sleeper:1500},
-{n:"Jalin Hyatt",p:"WR",t:"NYG",a:24,ktc:1200,fc:1150,dp:1300,sleeper:1200},
+{n:"Jalin Hyatt",p:"WR",t:"NYG",a:25,ktc:1200,fc:1150,dp:1300,sleeper:1200},
 {n:"Andrei Iosivas",p:"WR",t:"CIN",a:26,ktc:1900,fc:1850,dp:2000,sleeper:1900},
-{n:"Jalen Virgil",p:"WR",t:"FA",a:27,ktc:195,fc:292,dp:98,sleeper:195},
-{n:"Lil'Jordan Humphrey",p:"WR",t:"FA",a:31,ktc:270,fc:360,dp:180,sleeper:270},
+{n:"Jalen Virgil",p:"WR",t:"FA",a:27,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Lil'Jordan Humphrey",p:"WR",t:"FA",a:30,ktc:300,fc:400,dp:200,sleeper:300},
 {n:"Elijah Moore",p:"WR",t:"BUF",a:26,ktc:1700,fc:1750,dp:1650,sleeper:1700},
-{n:"Corey Davis",p:"WR",t:"FA",a:32,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"Diontae Johnson",p:"WR",t:"FA",a:31,ktc:900,fc:990,dp:810,sleeper:900},
-{n:"Chris Moore",p:"WR",t:"FA",a:33,ktc:180,fc:270,dp:90,sleeper:180},
-{n:"Brandin Cooks",p:"WR",t:"NO",a:33,ktc:540,fc:630,dp:450,sleeper:540},
-{n:"Odell Beckham Jr",p:"WR",t:"FA",a:34,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"JuJu Smith-Schuster",p:"WR",t:"KC",a:30,ktc:540,fc:630,dp:450,sleeper:540},
-{n:"Emmanuel Sanders",p:"WR",t:"FA",a:40,ktc:45,fc:90,dp:45,sleeper:45},
-{n:"Amari Cooper",p:"WR",t:"FA",a:31,ktc:990,fc:1080,dp:900,sleeper:990},
-{n:"Michael Gallup",p:"WR",t:"FA",a:31,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"Donovan Peoples-Jones",p:"WR",t:"FA",a:28,ktc:390,fc:488,dp:292,sleeper:390},
+{n:"Corey Davis",p:"WR",t:"FA",a:31,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Diontae Johnson",p:"WR",t:"FA",a:30,ktc:1000,fc:1100,dp:900,sleeper:1000},
+{n:"Chris Moore",p:"WR",t:"FA",a:32,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Brandin Cooks",p:"WR",t:"NO",a:32,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Odell Beckham Jr",p:"WR",t:"FA",a:33,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"JuJu Smith-Schuster",p:"WR",t:"KC",a:29,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Emmanuel Sanders",p:"WR",t:"FA",a:39,ktc:50,fc:100,dp:50,sleeper:50},
+{n:"Amari Cooper",p:"WR",t:"FA",a:32,ktc:1100,fc:1200,dp:1000,sleeper:1100},
+{n:"Michael Gallup",p:"WR",t:"FA",a:30,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Donovan Peoples-Jones",p:"WR",t:"FA",a:27,ktc:400,fc:500,dp:300,sleeper:400},
 {n:"Tutu Atwell",p:"WR",t:"LAR",a:26,ktc:1900,fc:1850,dp:2000,sleeper:1900},
-{n:"Anthony Schwartz",p:"WR",t:"FA",a:27,ktc:200,fc:300,dp:100,sleeper:200},
-{n:"Tyrell Williams",p:"WR",t:"FA",a:35,ktc:45,fc:90,dp:45,sleeper:45},
-{n:"James Washington",p:"WR",t:"FA",a:33,ktc:90,fc:180,dp:90,sleeper:90},
-{n:"Savion Williams",p:"WR",t:"GB",a:24,ktc:4635,fc:4584,dp:4738,sleeper:4635},
-{n:"Jayden Higgins",p:"WR",t:"HOU",a:23,ktc:5047,fc:4996,dp:5150,sleeper:5047},
-{n:"Jack Bech",p:"WR",t:"LV",a:23,ktc:4841,fc:4790,dp:4944,sleeper:4841},
-{n:"Dont'e Thornton",p:"WR",t:"LV",a:23,ktc:3399,fc:3348,dp:3502,sleeper:3399},
-{n:"DeAndre Hopkins",p:"WR",t:"BAL",a:33,ktc:990,fc:1080,dp:900,sleeper:990},
-{n:"Curtis Samuel",p:"WR",t:"BUF",a:29,ktc:540,fc:630,dp:450,sleeper:540},
-{n:"Allen Lazard",p:"WR",t:"FA",a:31,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"Adonai Mitchell",p:"WR",t:"IND",a:23,ktc:2970,fc:2915,dp:3080,sleeper:2970},
-{n:"Xavier Worthy",p:"WR",t:"KC",a:23,ktc:5974,fc:5922,dp:6077,sleeper:5974},
-{n:"Ricky Pearsall",p:"WR",t:"SF",a:25,ktc:4840,fc:4785,dp:4950,sleeper:4840},
-{n:"Keon Coleman",p:"WR",t:"BUF",a:22,ktc:5325,fc:5269,dp:5438,sleeper:5325},
-{n:"Jalen McMillan",p:"WR",t:"TB",a:24,ktc:3132,fc:3078,dp:3240,sleeper:3132},
-{n:"Malachi Corley",p:"WR",t:"NYJ",a:24,ktc:1545,fc:1494,dp:1648,sleeper:1545},
+{n:"Anthony Schwartz",p:"WR",t:"FA",a:26,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Tyrell Williams",p:"WR",t:"FA",a:34,ktc:50,fc:100,dp:50,sleeper:50},
+{n:"James Washington",p:"WR",t:"FA",a:32,ktc:100,fc:200,dp:100,sleeper:100},
+{n:"Savion Williams",p:"WR",t:"GB",a:23,ktc:4500,fc:4450,dp:4600,sleeper:4500},
+{n:"Jayden Higgins",p:"WR",t:"HOU",a:23,ktc:4900,fc:4850,dp:5000,sleeper:4900},
+{n:"Jack Bech",p:"WR",t:"LV",a:23,ktc:4700,fc:4650,dp:4800,sleeper:4700},
+{n:"Dont'e Thornton",p:"WR",t:"LV",a:23,ktc:3300,fc:3250,dp:3400,sleeper:3300},
+{n:"DeAndre Hopkins",p:"WR",t:"BAL",a:34,ktc:1100,fc:1200,dp:1000,sleeper:1100},
+{n:"Curtis Samuel",p:"WR",t:"BUF",a:30,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Allen Lazard",p:"WR",t:"FA",a:30,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Adonai Mitchell",p:"WR",t:"IND",a:24,ktc:2700,fc:2650,dp:2800,sleeper:2700},
+{n:"Xavier Worthy",p:"WR",t:"KC",a:23,ktc:5800,fc:5750,dp:5900,sleeper:5800},
+{n:"Ricky Pearsall",p:"WR",t:"SF",a:26,ktc:4400,fc:4350,dp:4500,sleeper:4400},
+{n:"Keon Coleman",p:"WR",t:"BUF",a:23,ktc:4700,fc:4650,dp:4800,sleeper:4700},
+{n:"Jalen McMillan",p:"WR",t:"TB",a:25,ktc:2900,fc:2850,dp:3000,sleeper:2900},
+{n:"Malachi Corley",p:"WR",t:"NYJ",a:23,ktc:1500,fc:1450,dp:1600,sleeper:1500},
 {n:"Ja'Lynn Polk",p:"WR",t:"NE",a:24,ktc:1300,fc:1250,dp:1400,sleeper:1300},
-{n:"Roman Wilson",p:"WR",t:"PIT",a:24,ktc:1836,fc:1782,dp:1944,sleeper:1836},
-{n:"Troy Franklin",p:"WR",t:"DEN",a:23,ktc:2163,fc:2112,dp:2266,sleeper:2163},
+{n:"Roman Wilson",p:"WR",t:"PIT",a:25,ktc:1700,fc:1650,dp:1800,sleeper:1700},
+{n:"Troy Franklin",p:"WR",t:"DEN",a:23,ktc:2100,fc:2050,dp:2200,sleeper:2100},
 {n:"Marvin Mims",p:"WR",t:"DEN",a:24,ktc:3300,fc:3250,dp:3400,sleeper:3300},
-{n:"Jakobi Meyers",p:"WR",t:"LV",a:29,ktc:1980,fc:2070,dp:1890,sleeper:1980},
-{n:"Calvin Austin",p:"WR",t:"PIT",a:27,ktc:2340,fc:2291,dp:2438,sleeper:2340},
-{n:"Greg Dortch",p:"WR",t:"ARI",a:27,ktc:570,fc:665,dp:475,sleeper:570},
+{n:"Jakobi Meyers",p:"WR",t:"LV",a:29,ktc:2200,fc:2300,dp:2100,sleeper:2200},
+{n:"Calvin Austin",p:"WR",t:"PIT",a:27,ktc:2400,fc:2350,dp:2500,sleeper:2400},
+{n:"Greg Dortch",p:"WR",t:"ARI",a:28,ktc:600,fc:700,dp:500,sleeper:600},
 {n:"Treylon Burks",p:"WR",t:"FA",a:26,ktc:700,fc:650,dp:750,sleeper:700},
-{n:"Skyy Moore",p:"WR",t:"FA",a:25,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Skyy Moore",p:"WR",t:"FA",a:26,ktc:300,fc:400,dp:200,sleeper:300},
 {n:"Jahan Dotson",p:"WR",t:"PHI",a:26,ktc:1900,fc:1850,dp:2000,sleeper:1900},
-{n:"Marquez Valdes-Scantling",p:"WR",t:"FA",a:32,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"Hunter Renfrow",p:"WR",t:"FA",a:31,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"KJ Osborn",p:"WR",t:"WAS",a:28,ktc:570,fc:665,dp:475,sleeper:570},
+{n:"Marquez Valdes-Scantling",p:"WR",t:"FA",a:31,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Hunter Renfrow",p:"WR",t:"FA",a:30,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"KJ Osborn",p:"WR",t:"WAS",a:28,ktc:600,fc:700,dp:500,sleeper:600},
 {n:"Tre Harris",p:"WR",t:"LAC",a:24,ktc:4500,fc:4450,dp:4600,sleeper:4500},
 {n:"Demario Douglas",p:"WR",t:"NE",a:25,ktc:1700,fc:1650,dp:1800,sleeper:1700},
-{n:"Pat Bryant",p:"WR",t:"DEN",a:23,ktc:3605,fc:3554,dp:3708,sleeper:3605},
-{n:"Devontez Walker",p:"WR",t:"BAL",a:24,ktc:1133,fc:1082,dp:1236,sleeper:1133},
-{n:"Velus Jones",p:"WR",t:"FA",a:29,ktc:95,fc:190,dp:95,sleeper:95},
-{n:"Rondale Moore",p:"WR",t:"ATL",a:25,ktc:1000,fc:1050,dp:950,sleeper:1000},
-{n:"KJ Hamler",p:"WR",t:"FA",a:28,ktc:98,fc:195,dp:98,sleeper:98},
-{n:"Tylan Wallace",p:"WR",t:"FA",a:27,ktc:100,fc:200,dp:100,sleeper:100},
+{n:"Pat Bryant",p:"WR",t:"DEN",a:22,ktc:3500,fc:3450,dp:3600,sleeper:3500},
+{n:"Devontez Walker",p:"WR",t:"BAL",a:23,ktc:1100,fc:1050,dp:1200,sleeper:1100},
+{n:"Velus Jones",p:"WR",t:"FA",a:28,ktc:100,fc:200,dp:100,sleeper:100},
+{n:"Rondale Moore",p:"WR",t:"ATL",a:26,ktc:1000,fc:1050,dp:950,sleeper:1000},
+{n:"KJ Hamler",p:"WR",t:"FA",a:27,ktc:100,fc:200,dp:100,sleeper:100},
+{n:"Tylan Wallace",p:"WR",t:"FA",a:26,ktc:100,fc:200,dp:100,sleeper:100},
 
 // TEs — additions
-{n:"Dalton Schultz",p:"TE",t:"HOU",a:29,ktc:2178,fc:2277,dp:2079,sleeper:2178},
-{n:"Gerald Everett",p:"TE",t:"FA",a:31,ktc:540,fc:630,dp:450,sleeper:540},
-{n:"Noah Fant",p:"TE",t:"SEA",a:28,ktc:1425,fc:1520,dp:1330,sleeper:1425},
-{n:"Cole Kmet",p:"TE",t:"CHI",a:27,ktc:2340,fc:2438,dp:2242,sleeper:2340},
-{n:"Hunter Henry",p:"TE",t:"NE",a:31,ktc:1530,fc:1620,dp:1440,sleeper:1530},
-{n:"Tyler Higbee",p:"TE",t:"LAR",a:33,ktc:630,fc:720,dp:540,sleeper:630},
-{n:"Foster Moreau",p:"TE",t:"NO",a:28,ktc:855,fc:950,dp:760,sleeper:855},
-{n:"Juwan Johnson",p:"TE",t:"NO",a:29,ktc:1170,fc:1260,dp:1080,sleeper:1170},
+{n:"Dalton Schultz",p:"TE",t:"HOU",a:30,ktc:2200,fc:2300,dp:2100,sleeper:2200},
+{n:"Gerald Everett",p:"TE",t:"FA",a:31,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Noah Fant",p:"TE",t:"SEA",a:28,ktc:1500,fc:1600,dp:1400,sleeper:1500},
+{n:"Cole Kmet",p:"TE",t:"CHI",a:27,ktc:2400,fc:2500,dp:2300,sleeper:2400},
+{n:"Hunter Henry",p:"TE",t:"NE",a:31,ktc:1700,fc:1800,dp:1600,sleeper:1700},
+{n:"Tyler Higbee",p:"TE",t:"LAR",a:33,ktc:700,fc:800,dp:600,sleeper:700},
+{n:"Foster Moreau",p:"TE",t:"NO",a:28,ktc:900,fc:1000,dp:800,sleeper:900},
+{n:"Juwan Johnson",p:"TE",t:"NO",a:29,ktc:1300,fc:1400,dp:1200,sleeper:1300},
 {n:"Greg Dulcich",p:"TE",t:"FA",a:26,ktc:600,fc:700,dp:500,sleeper:600},
 {n:"Chig Okonkwo",p:"TE",t:"TEN",a:26,ktc:1900,fc:2000,dp:1800,sleeper:1900},
 {n:"Luke Musgrave",p:"TE",t:"GB",a:25,ktc:1700,fc:1800,dp:1600,sleeper:1700},
-{n:"Darnell Washington",p:"TE",t:"PIT",a:24,ktc:1500,fc:1550,dp:1450,sleeper:1500},
-{n:"Michael Mayer",p:"TE",t:"LV",a:24,ktc:2310,fc:2365,dp:2255,sleeper:2310},
+{n:"Darnell Washington",p:"TE",t:"PIT",a:25,ktc:1500,fc:1550,dp:1450,sleeper:1500},
+{n:"Michael Mayer",p:"TE",t:"LV",a:25,ktc:2100,fc:2150,dp:2050,sleeper:2100},
 {n:"Theo Johnson",p:"TE",t:"NYG",a:25,ktc:2700,fc:2750,dp:2650,sleeper:2700},
 {n:"AJ Barner",p:"TE",t:"SEA",a:24,ktc:2300,fc:2350,dp:2250,sleeper:2300},
-{n:"Oscar Delp",p:"TE",t:"FA",a:22,ktc:1339,fc:1288,dp:1442,sleeper:1339},
-{n:"Ja'Tavion Sanders",p:"TE",t:"CAR",a:23,ktc:2987,fc:2936,dp:3090,sleeper:2987},
+{n:"Oscar Delp",p:"TE",t:"FA",a:22,ktc:1300,fc:1250,dp:1400,sleeper:1300},
+{n:"Ja'Tavion Sanders",p:"TE",t:"CAR",a:23,ktc:2900,fc:2850,dp:3000,sleeper:2900},
 {n:"Cade Stover",p:"TE",t:"HOU",a:25,ktc:1500,fc:1450,dp:1600,sleeper:1500},
-{n:"Will Dissly",p:"TE",t:"LAC",a:29,ktc:630,fc:720,dp:540,sleeper:630},
-{n:"Jonnu Smith",p:"TE",t:"PIT",a:30,ktc:1350,fc:1440,dp:1260,sleeper:1350},
-{n:"David Njoku",p:"TE",t:"CLE",a:29,ktc:2871,fc:2970,dp:2772,sleeper:2871},
-{n:"Hayden Hurst",p:"TE",t:"FA",a:32,ktc:180,fc:270,dp:90,sleeper:180},
-{n:"Mike Gesicki",p:"TE",t:"CIN",a:30,ktc:1170,fc:1260,dp:1080,sleeper:1170},
-{n:"Tyler Conklin",p:"TE",t:"NYJ",a:30,ktc:540,fc:630,dp:450,sleeper:540},
-{n:"Zach Ertz",p:"TE",t:"WAS",a:35,ktc:270,fc:360,dp:180,sleeper:270},
-{n:"Dallas Goedert",p:"TE",t:"PHI",a:31,ktc:1170,fc:1260,dp:1080,sleeper:1170},
-{n:"Mason Taylor",p:"TE",t:"NYJ",a:21,ktc:3966,fc:3909,dp:4079,sleeper:3966},
-{n:"Harold Fannin Jr",p:"TE",t:"CLE",a:21,ktc:3811,fc:3760,dp:3914,sleeper:3811},
-{n:"Logan Thomas",p:"TE",t:"FA",a:34,ktc:180,fc:270,dp:90,sleeper:180},
-{n:"Taysom Hill",p:"TE",t:"NO",a:35,ktc:990,fc:1080,dp:900,sleeper:990},
-{n:"Noah Gray",p:"TE",t:"KC",a:27,ktc:780,fc:829,dp:731,sleeper:780},
+{n:"Will Dissly",p:"TE",t:"LAC",a:30,ktc:700,fc:800,dp:600,sleeper:700},
+{n:"Jonnu Smith",p:"TE",t:"PIT",a:31,ktc:1500,fc:1600,dp:1400,sleeper:1500},
+{n:"David Njoku",p:"TE",t:"CLE",a:30,ktc:2900,fc:3000,dp:2800,sleeper:2900},
+{n:"Hayden Hurst",p:"TE",t:"FA",a:32,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Mike Gesicki",p:"TE",t:"CIN",a:30,ktc:1300,fc:1400,dp:1200,sleeper:1300},
+{n:"Tyler Conklin",p:"TE",t:"NYJ",a:30,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Zach Ertz",p:"TE",t:"WAS",a:35,ktc:300,fc:400,dp:200,sleeper:300},
+{n:"Dallas Goedert",p:"TE",t:"PHI",a:31,ktc:1300,fc:1400,dp:1200,sleeper:1300},
+{n:"Mason Taylor",p:"TE",t:"NYJ",a:22,ktc:3500,fc:3450,dp:3600,sleeper:3500},
+{n:"Harold Fannin Jr",p:"TE",t:"CLE",a:21,ktc:3700,fc:3650,dp:3800,sleeper:3700},
+{n:"Logan Thomas",p:"TE",t:"FA",a:34,ktc:200,fc:300,dp:100,sleeper:200},
+{n:"Taysom Hill",p:"TE",t:"NO",a:35,ktc:1100,fc:1200,dp:1000,sleeper:1100},
+{n:"Noah Gray",p:"TE",t:"KC",a:27,ktc:800,fc:850,dp:750,sleeper:800},
 // --- Newly added: depth QBs & 2025 holdovers not yet listed ---
-{n:"Justin Fields",p:"QB",t:"NYJ",a:27,ktc:3120,fc:3218,dp:3022,sleeper:3120},
-{n:"Hendon Hooker",p:"QB",t:"DET",a:28,ktc:1330,fc:1425,dp:1235,sleeper:1330},
+{n:"Justin Fields",p:"QB",t:"NYJ",a:27,ktc:3200,fc:3300,dp:3100,sleeper:3200},
+{n:"Hendon Hooker",p:"QB",t:"DET",a:28,ktc:1400,fc:1500,dp:1300,sleeper:1400},
 {n:"Spencer Rattler",p:"QB",t:"NO",a:25,ktc:1900,fc:2000,dp:1800,sleeper:1900},
-{n:"Gardner Minshew",p:"QB",t:"KC",a:29,ktc:540,fc:630,dp:450,sleeper:540},
+{n:"Gardner Minshew",p:"QB",t:"KC",a:30,ktc:600,fc:700,dp:500,sleeper:600},
 {n:"Tyler Shough",p:"QB",t:"NO",a:26,ktc:4800,fc:4750,dp:4900,sleeper:4800},
-{n:"Jalen Milroe",p:"QB",t:"SEA",a:23,ktc:3914,fc:3862,dp:4017,sleeper:3914},
+{n:"Jalen Milroe",p:"QB",t:"SEA",a:23,ktc:3800,fc:3750,dp:3900,sleeper:3800},
 {n:"Dillon Gabriel",p:"QB",t:"CLE",a:25,ktc:1600,fc:1550,dp:1700,sleeper:1600},
-{n:"Quinn Ewers",p:"QB",t:"MIA",a:23,ktc:2472,fc:2420,dp:2575,sleeper:2472},
+{n:"Quinn Ewers",p:"QB",t:"MIA",a:23,ktc:2400,fc:2350,dp:2500,sleeper:2400},
 {n:"Will Howard",p:"QB",t:"PIT",a:24,ktc:2200,fc:2150,dp:2300,sleeper:2200},
 // --- Newly added: depth RBs & rotational pieces ---
-{n:"Brian Robinson Jr",p:"RB",t:"WAS",a:27,ktc:3100,fc:3200,dp:3000,sleeper:3100},
+{n:"Brian Robinson Jr",p:"RB",t:"WAS",a:26,ktc:3100,fc:3200,dp:3000,sleeper:3100},
 {n:"Zamir White",p:"RB",t:"LV",a:26,ktc:1300,fc:1400,dp:1200,sleeper:1300},
 {n:"Jerome Ford",p:"RB",t:"CLE",a:26,ktc:1900,fc:2000,dp:1800,sleeper:1900},
-{n:"Jordan Mason",p:"RB",t:"MIN",a:26,ktc:2948,fc:3054,dp:2843,sleeper:2948},
+{n:"Jordan Mason",p:"RB",t:"MIN",a:27,ktc:2800,fc:2900,dp:2700,sleeper:2800},
 {n:"Emanuel Wilson",p:"RB",t:"GB",a:26,ktc:1600,fc:1700,dp:1500,sleeper:1600},
-{n:"Jaleel McLaughlin",p:"RB",t:"DEN",a:25,ktc:1300,fc:1400,dp:1200,sleeper:1300},
-{n:"Ty Chandler",p:"RB",t:"MIN",a:27,ktc:1072,fc:1170,dp:975,sleeper:1072},
-{n:"Samaje Perine",p:"RB",t:"KC",a:30,ktc:540,fc:630,dp:450,sleeper:540},
-{n:"Jarquez Hunter",p:"RB",t:"LAR",a:23,ktc:2987,fc:2936,dp:3090,sleeper:2987},
-{n:"Kyle Monangai",p:"RB",t:"CHI",a:23,ktc:2472,fc:2420,dp:2575,sleeper:2472},
-{n:"Devin Neal",p:"RB",t:"NO",a:22,ktc:2369,fc:2318,dp:2472,sleeper:2369},
+{n:"Jaleel McLaughlin",p:"RB",t:"DEN",a:26,ktc:1300,fc:1400,dp:1200,sleeper:1300},
+{n:"Ty Chandler",p:"RB",t:"MIN",a:27,ktc:1100,fc:1200,dp:1000,sleeper:1100},
+{n:"Samaje Perine",p:"RB",t:"KC",a:30,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Jarquez Hunter",p:"RB",t:"LAR",a:23,ktc:2900,fc:2850,dp:3000,sleeper:2900},
+{n:"Kyle Monangai",p:"RB",t:"CHI",a:23,ktc:2400,fc:2350,dp:2500,sleeper:2400},
+{n:"Devin Neal",p:"RB",t:"NO",a:23,ktc:2300,fc:2250,dp:2400,sleeper:2300},
 // --- Newly added: depth WRs ---
-{n:"Jaylin Hyatt",p:"WR",t:"NYG",a:24,ktc:1500,fc:1600,dp:1400,sleeper:1500},
-{n:"Jaylen Waddle",p:"WR",t:"MIA",a:27,ktc:6338,fc:6435,dp:6240,sleeper:6338},
-{n:"Jermaine Burton",p:"WR",t:"CIN",a:24,ktc:2160,fc:2106,dp:2268,sleeper:2160},
-{n:"Brenden Rice",p:"WR",t:"LAC",a:24,ktc:1500,fc:1450,dp:1600,sleeper:1500},
+{n:"Jaylin Hyatt",p:"WR",t:"NYG",a:25,ktc:1500,fc:1600,dp:1400,sleeper:1500},
+{n:"Jaylen Waddle",p:"WR",t:"MIA",a:27,ktc:6500,fc:6600,dp:6400,sleeper:6500},
+{n:"Jermaine Burton",p:"WR",t:"CIN",a:25,ktc:2000,fc:1950,dp:2100,sleeper:2000},
+{n:"Brenden Rice",p:"WR",t:"LAC",a:25,ktc:1500,fc:1450,dp:1600,sleeper:1500},
 {n:"Malik Washington",p:"WR",t:"MIA",a:25,ktc:2100,fc:2050,dp:2200,sleeper:2100},
-{n:"Mike Williams",p:"WR",t:"PIT",a:32,ktc:630,fc:720,dp:540,sleeper:630},
-{n:"Hollywood Brown",p:"WR",t:"KC",a:28,ktc:1710,fc:1805,dp:1615,sleeper:1710},
-{n:"Jalen Tolbert",p:"WR",t:"DAL",a:27,ktc:1462,fc:1560,dp:1365,sleeper:1462},
-{n:"Calvin Austin III",p:"WR",t:"PIT",a:27,ktc:1560,fc:1658,dp:1462,sleeper:1560},
+{n:"Mike Williams",p:"WR",t:"PIT",a:31,ktc:700,fc:800,dp:600,sleeper:700},
+{n:"Hollywood Brown",p:"WR",t:"KC",a:28,ktc:1800,fc:1900,dp:1700,sleeper:1800},
+{n:"Jalen Tolbert",p:"WR",t:"DAL",a:27,ktc:1500,fc:1600,dp:1400,sleeper:1500},
+{n:"Calvin Austin III",p:"WR",t:"PIT",a:27,ktc:1600,fc:1700,dp:1500,sleeper:1600},
 {n:"DeMario Douglas",p:"WR",t:"NE",a:25,ktc:2000,fc:2100,dp:1900,sleeper:2000},
 {n:"Joshua Palmer",p:"WR",t:"BUF",a:26,ktc:1600,fc:1700,dp:1500,sleeper:1600},
 {n:"Dyami Brown",p:"WR",t:"JAX",a:26,ktc:1500,fc:1600,dp:1400,sleeper:1500},
-{n:"Kalif Raymond",p:"WR",t:"DET",a:32,ktc:450,fc:540,dp:360,sleeper:450},
+{n:"Kalif Raymond",p:"WR",t:"DET",a:31,ktc:500,fc:600,dp:400,sleeper:500},
 {n:"Alec Pierce",p:"WR",t:"IND",a:26,ktc:2100,fc:2200,dp:2000,sleeper:2100},
-{n:"Kyle Williams",p:"WR",t:"NE",a:23,ktc:4429,fc:4378,dp:4532,sleeper:4429},
-{n:"Elic Ayomanor",p:"WR",t:"TEN",a:22,ktc:5006,fc:4951,dp:5117,sleeper:5006},
-{n:"Kayshon Boutte",p:"WR",t:"NE",a:23,ktc:1955,fc:2070,dp:1840,sleeper:1955},
-{n:"Devaughn Vele",p:"WR",t:"DEN",a:28,ktc:1330,fc:1425,dp:1235,sleeper:1330},
+{n:"Kyle Williams",p:"WR",t:"NE",a:23,ktc:4300,fc:4250,dp:4400,sleeper:4300},
+{n:"Elic Ayomanor",p:"WR",t:"TEN",a:23,ktc:4500,fc:4450,dp:4600,sleeper:4500},
+{n:"Kayshon Boutte",p:"WR",t:"NE",a:25,ktc:1700,fc:1800,dp:1600,sleeper:1700},
+{n:"Devaughn Vele",p:"WR",t:"DEN",a:28,ktc:1400,fc:1500,dp:1300,sleeper:1400},
 // --- Newly added: depth TEs & 2025 rookies ---
-{n:"Connor Heyward",p:"TE",t:"PIT",a:27,ktc:585,fc:682,dp:488,sleeper:585},
-{n:"Dawson Knox",p:"TE",t:"BUF",a:29,ktc:990,fc:1080,dp:900,sleeper:990},
-{n:"Daniel Bellinger",p:"TE",t:"NYG",a:25,ktc:700,fc:800,dp:600,sleeper:700},
-{n:"Elijah Arroyo",p:"TE",t:"SEA",a:23,ktc:3080,fc:3025,dp:3190,sleeper:3080},
-{n:"Terrance Ferguson",p:"TE",t:"LAR",a:23,ktc:2970,fc:2915,dp:3080,sleeper:2970},
+{n:"Connor Heyward",p:"TE",t:"PIT",a:27,ktc:600,fc:700,dp:500,sleeper:600},
+{n:"Dawson Knox",p:"TE",t:"BUF",a:30,ktc:1100,fc:1200,dp:1000,sleeper:1100},
+{n:"Daniel Bellinger",p:"TE",t:"NYG",a:26,ktc:700,fc:800,dp:600,sleeper:700},
+{n:"Elijah Arroyo",p:"TE",t:"SEA",a:24,ktc:2800,fc:2750,dp:2900,sleeper:2800},
+{n:"Terrance Ferguson",p:"TE",t:"LAR",a:24,ktc:2700,fc:2650,dp:2800,sleeper:2700},
 // --- 2026 Rookie Class (FantasyPros Dynasty rookie rankings) ---
-{n:"Jeremiyah Love",p:"RB",t:"ARI",a:21,ktc:7500,fc:7400,dp:7600,sleeper:7500,draft:2026},
-{n:"Carnell Tate",p:"WR",t:"TEN",a:22,ktc:5800,fc:5700,dp:5600,sleeper:5700,draft:2026},
-{n:"Jordyn Tyson",p:"WR",t:"NO",a:22,ktc:6300,fc:6200,dp:6400,sleeper:6300,draft:2026},
-{n:"Makai Lemon",p:"WR",t:"PHI",a:22,ktc:5400,fc:5300,dp:5500,sleeper:5400,draft:2026},
-{n:"Jadarian Price",p:"RB",t:"SEA",a:23,ktc:5800,fc:5700,dp:5900,sleeper:5800,draft:2026},
-{n:"KC Concepcion",p:"WR",t:"CLE",a:22,ktc:5000,fc:4900,dp:5100,sleeper:5000,draft:2026},
-{n:"Omar Cooper Jr.",p:"WR",t:"NYJ",a:23,ktc:4700,fc:4600,dp:4800,sleeper:4700,draft:2026},
-{n:"Kenyon Sadiq",p:"TE",t:"NYJ",a:22,ktc:4500,fc:4400,dp:4600,sleeper:4500,draft:2026},
-{n:"Eli Stowers",p:"TE",t:"PHI",a:24,ktc:5665,fc:5459,dp:5768,sleeper:5562,draft:2026},
-{n:"Fernando Mendoza",p:"QB",t:"LV",a:23,ktc:5356,fc:5150,dp:5459,sleeper:5253,draft:2026},
-{n:"Denzel Boston",p:"WR",t:"CLE",a:23,ktc:4944,fc:4738,dp:5047,sleeper:4841,draft:2026},
-{n:"Jonah Coleman",p:"RB",t:"DEN",a:23,ktc:4635,fc:4429,dp:4738,sleeper:4532,draft:2026},
-{n:"Antonio Williams",p:"WR",t:"WAS",a:22,ktc:4326,fc:4120,dp:4429,sleeper:4223,draft:2026},
-{n:"Chris Bell",p:"WR",t:"MIA",a:22,ktc:4120,fc:3914,dp:4223,sleeper:4017,draft:2026},
-{n:"Germie Bernard",p:"WR",t:"PIT",a:23,ktc:3914,fc:3708,dp:4017,sleeper:3811,draft:2026},
-{n:"Nicholas Singleton",p:"RB",t:"TEN",a:23,ktc:3708,fc:3502,dp:3811,sleeper:3605,draft:2026},
-{n:"Ty Simpson",p:"QB",t:"LAR",a:24,ktc:3502,fc:3296,dp:3605,sleeper:3399,draft:2026},
-{n:"Chris Brazzell II",p:"WR",t:"CAR",a:23,ktc:3296,fc:3090,dp:3399,sleeper:3193,draft:2026},
-{n:"Zachariah Branch",p:"WR",t:"ATL",a:23,ktc:3193,fc:2987,dp:3296,sleeper:3090,draft:2026},
-{n:"Emmett Johnson",p:"RB",t:"KC",a:23,ktc:3090,fc:2884,dp:3193,sleeper:2987,draft:2026},
-{n:"Kaytron Allen",p:"RB",t:"WAS",a:24,ktc:2987,fc:2781,dp:3090,sleeper:2884,draft:2026},
-{n:"Ted Hurst",p:"WR",t:"TB",a:22,ktc:2884,fc:2678,dp:2987,sleeper:2781,draft:2026},
-{n:"Elijah Sarratt",p:"WR",t:"BAL",a:23,ktc:2781,fc:2575,dp:2884,sleeper:2678,draft:2026},
-{n:"Malachi Fields",p:"WR",t:"NYG",a:23,ktc:2678,fc:2472,dp:2781,sleeper:2575,draft:2026},
-{n:"Mike Washington Jr.",p:"RB",t:"LV",a:23,ktc:2575,fc:2369,dp:2678,sleeper:2472,draft:2026},
-{n:"De'Zhaun Stribling",p:"WR",t:"SF",a:24,ktc:2472,fc:2266,dp:2575,sleeper:2369,draft:2026},
-{n:"Max Klare",p:"TE",t:"LAR",a:23,ktc:2369,fc:2163,dp:2472,sleeper:2266,draft:2026},
-{n:"Ja'Kobi Lane",p:"WR",t:"BAL",a:23,ktc:2266,fc:2060,dp:2369,sleeper:2163,draft:2026},
-{n:"Skyler Bell",p:"WR",t:"BUF",a:24,ktc:2163,fc:1957,dp:2266,sleeper:2060,draft:2026},
-{n:"Demond Claiborne",p:"RB",t:"MIN",a:23,ktc:2060,fc:1854,dp:2163,sleeper:1957,draft:2026},
-{n:"Carson Beck",p:"QB",t:"ARI",a:24,ktc:1957,fc:1751,dp:2060,sleeper:1854,draft:2026},
-{n:"Oscar Delp",p:"TE",t:"NO",a:23,ktc:1854,fc:1648,dp:1957,sleeper:1751,draft:2026},
-{n:"Adam Randall",p:"RB",t:"BAL",a:22,ktc:1751,fc:1545,dp:1854,sleeper:1648,draft:2026},
-{n:"Kaelon Black",p:"RB",t:"SF",a:25,ktc:1600,fc:1400,dp:1700,sleeper:1500,draft:2026},
-{n:"Drew Allar",p:"QB",t:"PIT",a:23,ktc:1545,fc:1339,dp:1648,sleeper:1442,draft:2026},
-{n:"Seth McGowan",p:"RB",t:"IND",a:25,ktc:1400,fc:1200,dp:1500,sleeper:1300,draft:2026},
-{n:"Bryce Lance",p:"WR",t:"NO",a:24,ktc:1365,fc:1159,dp:1468,sleeper:1262,draft:2026},
-{n:"Justin Joly",p:"TE",t:"DEN",a:23,ktc:1288,fc:1082,dp:1390,sleeper:1184,draft:2026},
-{n:"Eli Raridon",p:"TE",t:"NE",a:23,ktc:1210,fc:1004,dp:1313,sleeper:1107,draft:2026},
-{n:"Kevin Coleman Jr.",p:"WR",t:"MIA",a:23,ktc:1133,fc:927,dp:1236,sleeper:1030,draft:2026},
-{n:"Cade Klubnik",p:"QB",t:"NYJ",a:23,ktc:1030,fc:824,dp:1133,sleeper:927,draft:2026},
-{n:"Cole Payton",p:"QB",t:"PHI",a:24,ktc:978,fc:772,dp:1082,sleeper:876,draft:2026},
-{n:"Eli Heidenreich",p:"RB",t:"PIT",a:23,ktc:927,fc:721,dp:1030,sleeper:824,draft:2026},
-{n:"Garrett Nussmeier",p:"QB",t:"KC",a:25,ktc:850,fc:650,dp:950,sleeper:750,draft:2026},
-{n:"Brenen Thompson",p:"WR",t:"LAC",a:23,ktc:824,fc:618,dp:927,sleeper:721,draft:2026},
-{n:"Deion Burks",p:"WR",t:"IND",a:24,ktc:772,fc:566,dp:876,sleeper:670,draft:2026},
-{n:"Caleb Douglas",p:"WR",t:"MIA",a:23,ktc:721,fc:515,dp:824,sleeper:618,draft:2026},
-// --- Audit additions: missing veterans & rookies ---
-{n:"Nico Collins",p:"WR",t:"HOU",a:27,ktc:6900,fc:6600,dp:6800,sleeper:6700},
-{n:"Chris Olave",p:"WR",t:"NO",a:25,ktc:6800,fc:6600,dp:6700,sleeper:6700},
-{n:"Chase Brown",p:"RB",t:"CIN",a:26,ktc:6500,fc:6300,dp:6600,sleeper:6400},
-{n:"Rashid Shaheed",p:"WR",t:"NO",a:27,ktc:4200,fc:4000,dp:4300,sleeper:4100},
-{n:"Deshaun Watson",p:"QB",t:"CLE",a:30,ktc:1350,fc:1350,dp:1260,sleeper:1350},
-{n:"Alexander Mattison",p:"RB",t:"MIA",a:27,ktc:1462,fc:1462,dp:1365,sleeper:1462},
-{n:"Kendrick Bourne",p:"WR",t:"NE",a:30,ktc:1170,fc:1080,dp:1170,sleeper:1080},
-{n:"Bo Melton",p:"WR",t:"GB",a:26,ktc:1200,fc:1100,dp:1200,sleeper:1100}
+{n:"Jeremiyah Love",p:"RB",t:"ARI",a:20,ktc:9000,fc:8800,dp:9100,sleeper:8900,draft:2026},
+{n:"Carnell Tate",p:"WR",t:"TEN",a:21,ktc:8500,fc:8300,dp:8600,sleeper:8400,draft:2026},
+{n:"Jordyn Tyson",p:"WR",t:"NO",a:21,ktc:7800,fc:7600,dp:7900,sleeper:7700,draft:2026},
+{n:"Makai Lemon",p:"WR",t:"PHI",a:21,ktc:7400,fc:7200,dp:7500,sleeper:7300,draft:2026},
+{n:"Jadarian Price",p:"RB",t:"SEA",a:22,ktc:7000,fc:6800,dp:7100,sleeper:6900,draft:2026},
+{n:"KC Concepcion",p:"WR",t:"CLE",a:21,ktc:6500,fc:6300,dp:6600,sleeper:6400,draft:2026},
+{n:"Omar Cooper Jr.",p:"WR",t:"NYJ",a:22,ktc:6200,fc:6000,dp:6300,sleeper:6100,draft:2026},
+{n:"Kenyon Sadiq",p:"TE",t:"NYJ",a:21,ktc:6000,fc:5800,dp:6100,sleeper:5900,draft:2026},
+{n:"Eli Stowers",p:"TE",t:"PHI",a:23,ktc:5500,fc:5300,dp:5600,sleeper:5400,draft:2026},
+{n:"Fernando Mendoza",p:"QB",t:"LV",a:22,ktc:5200,fc:5000,dp:5300,sleeper:5100,draft:2026},
+{n:"Denzel Boston",p:"WR",t:"CLE",a:22,ktc:4800,fc:4600,dp:4900,sleeper:4700,draft:2026},
+{n:"Jonah Coleman",p:"RB",t:"DEN",a:22,ktc:4500,fc:4300,dp:4600,sleeper:4400,draft:2026},
+{n:"Antonio Williams",p:"WR",t:"WAS",a:21,ktc:4200,fc:4000,dp:4300,sleeper:4100,draft:2026},
+{n:"Chris Bell",p:"WR",t:"MIA",a:21,ktc:4000,fc:3800,dp:4100,sleeper:3900,draft:2026},
+{n:"Germie Bernard",p:"WR",t:"PIT",a:22,ktc:3800,fc:3600,dp:3900,sleeper:3700,draft:2026},
+{n:"Nicholas Singleton",p:"RB",t:"TEN",a:22,ktc:3600,fc:3400,dp:3700,sleeper:3500,draft:2026},
+{n:"Ty Simpson",p:"QB",t:"LAR",a:23,ktc:3400,fc:3200,dp:3500,sleeper:3300,draft:2026},
+{n:"Chris Brazzell II",p:"WR",t:"CAR",a:22,ktc:3200,fc:3000,dp:3300,sleeper:3100,draft:2026},
+{n:"Zachariah Branch",p:"WR",t:"ATL",a:22,ktc:3100,fc:2900,dp:3200,sleeper:3000,draft:2026},
+{n:"Emmett Johnson",p:"RB",t:"KC",a:22,ktc:3000,fc:2800,dp:3100,sleeper:2900,draft:2026},
+{n:"Kaytron Allen",p:"RB",t:"WAS",a:23,ktc:2900,fc:2700,dp:3000,sleeper:2800,draft:2026},
+{n:"Ted Hurst",p:"WR",t:"TB",a:21,ktc:2800,fc:2600,dp:2900,sleeper:2700,draft:2026},
+{n:"Elijah Sarratt",p:"WR",t:"BAL",a:22,ktc:2700,fc:2500,dp:2800,sleeper:2600,draft:2026},
+{n:"Malachi Fields",p:"WR",t:"NYG",a:22,ktc:2600,fc:2400,dp:2700,sleeper:2500,draft:2026},
+{n:"Mike Washington Jr.",p:"RB",t:"LV",a:22,ktc:2500,fc:2300,dp:2600,sleeper:2400,draft:2026},
+{n:"De'Zhaun Stribling",p:"WR",t:"SF",a:23,ktc:2400,fc:2200,dp:2500,sleeper:2300,draft:2026},
+{n:"Max Klare",p:"TE",t:"LAR",a:22,ktc:2300,fc:2100,dp:2400,sleeper:2200,draft:2026},
+{n:"Ja'Kobi Lane",p:"WR",t:"BAL",a:22,ktc:2200,fc:2000,dp:2300,sleeper:2100,draft:2026},
+{n:"Skyler Bell",p:"WR",t:"BUF",a:23,ktc:2100,fc:1900,dp:2200,sleeper:2000,draft:2026},
+{n:"Demond Claiborne",p:"RB",t:"MIN",a:22,ktc:2000,fc:1800,dp:2100,sleeper:1900,draft:2026},
+{n:"Carson Beck",p:"QB",t:"ARI",a:23,ktc:1900,fc:1700,dp:2000,sleeper:1800,draft:2026},
+{n:"Oscar Delp",p:"TE",t:"NO",a:22,ktc:1800,fc:1600,dp:1900,sleeper:1700,draft:2026},
+{n:"Adam Randall",p:"RB",t:"BAL",a:21,ktc:1700,fc:1500,dp:1800,sleeper:1600,draft:2026},
+{n:"Kaelon Black",p:"RB",t:"SF",a:24,ktc:1600,fc:1400,dp:1700,sleeper:1500,draft:2026},
+{n:"Drew Allar",p:"QB",t:"PIT",a:22,ktc:1500,fc:1300,dp:1600,sleeper:1400,draft:2026},
+{n:"Seth McGowan",p:"RB",t:"IND",a:24,ktc:1400,fc:1200,dp:1500,sleeper:1300,draft:2026},
+{n:"Bryce Lance",p:"WR",t:"NO",a:23,ktc:1325,fc:1125,dp:1425,sleeper:1225,draft:2026},
+{n:"Justin Joly",p:"TE",t:"DEN",a:22,ktc:1250,fc:1050,dp:1350,sleeper:1150,draft:2026},
+{n:"Eli Raridon",p:"TE",t:"NE",a:22,ktc:1175,fc:975,dp:1275,sleeper:1075,draft:2026},
+{n:"Kevin Coleman Jr.",p:"WR",t:"MIA",a:22,ktc:1100,fc:900,dp:1200,sleeper:1000,draft:2026},
+{n:"Cade Klubnik",p:"QB",t:"NYJ",a:22,ktc:1000,fc:800,dp:1100,sleeper:900,draft:2026},
+{n:"Cole Payton",p:"QB",t:"PHI",a:23,ktc:950,fc:750,dp:1050,sleeper:850,draft:2026},
+{n:"Eli Heidenreich",p:"RB",t:"PIT",a:22,ktc:900,fc:700,dp:1000,sleeper:800,draft:2026},
+{n:"Garrett Nussmeier",p:"QB",t:"KC",a:24,ktc:850,fc:650,dp:950,sleeper:750,draft:2026},
+{n:"Brenen Thompson",p:"WR",t:"LAC",a:22,ktc:800,fc:600,dp:900,sleeper:700,draft:2026},
+{n:"Deion Burks",p:"WR",t:"IND",a:23,ktc:750,fc:550,dp:850,sleeper:650,draft:2026},
+{n:"Caleb Douglas",p:"WR",t:"MIA",a:22,ktc:700,fc:500,dp:800,sleeper:600,draft:2026}
 
 ];
 
@@ -2254,108 +1606,34 @@ function adjustedConsensus(player){
   return applyFormat(player, rawConsensus(player));
 }
 
-// Picks — KTC-aligned consensus values (10-team SF PPR baseline, post-2026 NFL Draft May 2026).
-// Anchored to KeepTradeCut + DynastyCalc + Justin Boone post-draft charts. SF inflates 1st/2nd
-// rounds vs 1QB; 10-team baseline (vs 12-team) compresses "late" slot to picks 9-10.
-// 2027 1sts price slightly above 2026 1sts in early/mid — post-draft, the unknown class earns
-// a premium; the validated 2026 class is now players, not picks. Late slot is roughly even.
-// Internal slot keys: top3 = Picks 1-3 (bottom of standings), mid = Picks 4-8, late = Picks 9-10.
-const PICK_VALUES = {
-  1: {
-    2026: { top3: 8800, mid: 6200, late: 4400 },
-    2027: { top3: 7800, mid: 5500, late: 3900 },
-    2028: { top3: 6000, mid: 4200, late: 3000 },
-    2029: { top3: 4500, mid: 3200, late: 2300 }
-  },
-  2: {
-    2026: { top3: 3000, mid: 2600, late: 2200 },
-    2027: { top3: 2800, mid: 2200, late: 1850 },
-    2028: { top3: 2200, mid: 1700, late: 1400 },
-    2029: { top3: 1700, mid: 1300, late: 1050 }
-  },
-  3: {
-    2026: { top3: 1900, mid: 1600, late: 1400 },
-    2027: { top3: 1500, mid: 1250, late: 1050 },
-    2028: { top3: 1100, mid:  900, late:  750 },
-    2029: { top3:  800, mid:  650, late:  550 }
-  },
-  4: {
-    2026: { top3: 1200, mid: 1000, late:  850 },
-    2027: { top3:  900, mid:  750, late:  650 },
-    2028: { top3:  600, mid:  500, late:  420 },
-    2029: { top3:  450, mid:  380, late:  320 }
-  }
-};
-
+// Picks
+function basePickValue(round, slot){
+  if(round===1){ return slot==="top3"?5800: slot==="late"?2800: 4200; }
+  if(round===2){ return slot==="top3"?2400: slot==="late"?1100: 1800; }
+  if(round===3){ return 800; }
+  if(round===4){ return 350; }
+  if(round===5){ return 150; }
+  return 50;
+}
 function pickValue(pick){
-  const round = pick.round;
-  const year  = pick.year;
-  const slot  = pick.slot in {top3:1, mid:1, late:1} ? pick.slot : "mid";
-  let v;
-  if(PICK_VALUES[round] && PICK_VALUES[round][year]){
-    v = PICK_VALUES[round][year][slot];
-  } else if(PICK_VALUES[round]){
-    // out-of-table year — extrapolate from the nearest endpoint
-    const yrs = Object.keys(PICK_VALUES[round]).map(Number).sort((a,b)=>a-b);
-    const lo = yrs[0], hi = yrs[yrs.length-1];
-    if(year < lo){
-      v = PICK_VALUES[round][lo][slot] * Math.pow(1.20, lo - year);
-    } else {
-      v = PICK_VALUES[round][hi][slot] * Math.pow(0.85, year - hi);
-    }
-  } else {
-    // round 5+ fallback
-    v = round === 5 ? 130 : 50;
-  }
-  // Team count
+  let v = basePickValue(pick.round, pick.slot);
+  // year decay: assume current dynasty year = 2026
+  const yrs = pick.year - 2026;
+  if(yrs===1) v *= 0.85;
+  else if(yrs===2) v *= 0.72;
+  else if(yrs>=3) v *= 0.62;
+  // format
   const tc = parseInt(PROFILE.teams,10);
   if(tc === 14) v *= 1.15;
-  if(tc === 8)  v *= 0.90;
-  // Superflex premium applies only to 1st/2nd round picks
-  if(PROFILE.format === "superflex" && (round === 1 || round === 2)) v *= 1.10;
+  if(tc === 8) v *= 0.90;
+  if(PROFILE.format === "superflex") v *= 1.10;
   return Math.round(v);
-}
-
-// Mode-aware multipliers — these reshape the trade math, not just the verdict text.
-// Applied AFTER consensus/format adjustments so mode shifts which side actually wins.
-function modeAdjust(asset, val){
-  const mode = PROFILE.mode || "contender";
-  if(mode === "rebuilder"){
-    if(asset.type === "pick") return Math.round(val * 1.10);
-    if(asset.a <= 22) return Math.round(val * 1.15);
-    if(asset.a >= 30) return Math.round(val * 0.85);
-    if((asset.p === "RB" || asset.p === "WR") && asset.a >= 27 && asset.a <= 29){
-      return Math.round(val * 0.92);
-    }
-    return val;
-  }
-  if(mode === "winnow"){
-    if(asset.type === "pick"){
-      if(asset.year >= 2027) return Math.round(val * 0.75);
-      return Math.round(val * 0.92);
-    }
-    if(asset.a >= 25 && asset.a <= 29) val = Math.round(val * 1.18);
-    if(asset.a <= 22) val = Math.round(val * 0.80);
-    if(asset.a >= 26 && asset.a <= 30 && val >= 7500) val = Math.round(val * 1.15);
-    return val;
-  }
-  // contender (default)
-  if(asset.type === "pick"){
-    if(asset.year >= 2027) return Math.round(val * 0.88);
-    return val;
-  }
-  if(asset.a >= 25 && asset.a <= 29) val = Math.round(val * 1.12);
-  if(asset.a <= 22 && val < 4000) val = Math.round(val * 0.90);
-  if((asset.p === "WR" || asset.p === "RB") && val >= 7500) val = Math.round(val * 1.08);
-  return val;
 }
 
 // Asset helpers
 function assetValue(asset){
-  let v;
-  if(asset.type === "pick") v = pickValue(asset);
-  else v = adjustedConsensus(asset);
-  return modeAdjust(asset, v);
+  if(asset.type === "pick") return pickValue(asset);
+  return adjustedConsensus(asset);
 }
 function assetSpread(asset){
   if(asset.type === "pick") return 100;
@@ -2401,13 +1679,6 @@ function showToast(msg, kind){
   clearTimeout(showToast._t);
   showToast._t = setTimeout(()=>{ t.className = "toast"; }, 2400);
 }
-function hideToast(){
-  const t = $("#toast");
-  if(!t) return;
-  t.className = "toast";
-  t.textContent = "";
-  clearTimeout(showToast._t);
-}
 
 // =================================================================
 // TICKER
@@ -2433,7 +1704,7 @@ function renderTicker(){
 function profileBar(){
   const fmtMap = { standard:"Standard", superflex:"Superflex" };
   const scoreMap = { standard:"Non-PPR", half:"Half PPR", ppr:"Full PPR" };
-  const modeMap = { contender:"Contender", winnow:"Win-Now", rebuilder:"Rebuilder" };
+  const modeMap = { contender:"Contender", rebuilder:"Rebuilder" };
   const tepMap = { "0":"No TEP", "0.5":"0.5 TEP", "1":"1.0 TEP" };
   const bar = $("#profile-bar");
   bar.innerHTML = `
@@ -2464,7 +1735,7 @@ function setupSearch(side){
       <div class="row" data-name="${p.n}">
         <div class="av" style="background:${avatarColor(p.n)}">${p.n.split(/\s+/).map(s=>s[0]).slice(0,2).join("")}</div>
         <div class="meta">
-          <div class="nm">${p.n}${fcArrow(p.n, p.fc)}</div>
+          <div class="nm">${p.n}</div>
           <div class="sub">${posTag(p.p)} ${p.t} • Age ${p.a}${p.draft===2026?' • <span style="color:var(--gold)">ROOKIE</span>':''}</div>
         </div>
         <div class="vl">${num(v)}</div>
@@ -2539,7 +1810,7 @@ function renderAssets(side){
     el.innerHTML = list.map((a, i) => {
       const v = assetValue(a);
       if(a.type === "pick"){
-        const slotMap = { top3:"Bottom (1–3)", mid:"Mid (4–8)", late:"Late (9–10)" };
+        const slotMap = { top3:"Top-3 Origin", mid:"Mid Pick", late:"Late Origin" };
         const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
         return `
           <div class="asset pick">
@@ -2556,7 +1827,7 @@ function renderAssets(side){
         <div class="asset">
           ${avatarHTML(a)}
           <div class="info">
-            <div class="nm">${a.n}${fcArrow(a.n, a.fc)}</div>
+            <div class="nm">${a.n}</div>
             <div class="sub">${posTag(a.p)}${a.t} • Age ${a.a}</div>
           </div>
           <div class="vl"><span class="num">${num(v)}</span><span class="src">CONSENSUS</span></div>
@@ -2711,26 +1982,15 @@ function renderTiers(){
   }
   for(const k of Object.keys(byPos)) byPos[k].sort((a,b)=>b.v-a.v);
 
-  // Tier bands in adjusted-value space (post-format/scoring/team multipliers applied by adjustedConsensus).
-  // Recalibrated for the new KTC/FantasyCalc consensus scale — top WR ~12,600 adj (raw KTC ~11,500),
-  // top RB ~10,100 adj (Jeanty/Bijan), top TE ~9,150 adj (Bowers).
-  // QB thresholds split by format: SF inflates QB values ×1.40; 1QB deflates ×0.70.
-  // RB/WR/TE thresholds are format-neutral (format only shifts QB values).
-  //
-  // Key anchors (PPR, 12-team defaults):
-  //   QB SF  — Daniels 13,083 → QB1 | Mahomes 11,267 → QB1 | Purdy 9,790 → QB1 | McCarthy 9,510 → QB2 | Penix 8,673 → QB2
-  //   QB 1QB — Daniels 6,542 → QB1 | Mahomes 5,634 → QB1 | Purdy 4,895 → QB1 | McCarthy 4,755 → QB2 | Penix 4,337 → QB2
-  //   RB     — Jeanty 10,092 → RB1 | Bijan 10,083 → RB1 | Achane 8,283 → RB1 | Bucky 6,311 → RB1 | Kyren 5,675 → RB2 | McCaffrey 4,460 → RB2
-  //   WR     — Chase 12,604 → WR1 | Jefferson 11,564 → WR1 | Lamb 11,014 → WR1 | ARSB 10,244 → WR1 | McMillan 9,034 → WR1 | Garrett Wilson 8,814 → WR2
-  //   TE     — Bowers 9,159 → TE1 | McBride 7,593 → TE1 | LaPorta 7,108 → TE1 | Loveland 5,570 → TE1 | Kincaid 4,405 → TE2
+  // Define tier bands per position (consensus-value cutoffs; reflects current market)
   const fmtSF = PROFILE.format === "superflex";
   const tierDefs = {
     QB: fmtSF
-      ? [["QB1",9500,99999],["QB2",7000,9499],["QB3",4500,6999],["Streamers",0,4499]]
-      : [["QB1",4800,99999],["QB2",3000,4799],["QB3",1500,2999],["Streamers",0,1499]],
-    RB: [["RB1",6000,99999],["RB2",4000,5999],["RB3",2500,3999],["Depth",0,2499]],
-    WR: [["WR1",9000,99999],["WR2",6500,8999],["WR3",3500,6499],["Depth",0,3499]],
-    TE: [["TE1",5500,99999],["TE2",3000,5499],["TE3",1500,2999],["Streamers",0,1499]]
+      ? [["QB1",8500,99999],["QB2",6000,8499],["QB3",3500,5999],["QBSTREAM",0,3499]]
+      : [["QB1",6500,99999],["QB2",4500,6499],["QB3",2500,4499],["QBSTREAM",0,2499]],
+    RB: [["RB1",8000,99999],["RB2",5500,7999],["RB3",3500,5499],["RB4+",0,3499]],
+    WR: [["WR1",8000,99999],["WR2",5500,7999],["WR3",3500,5499],["WR4+",0,3499]],
+    TE: [["TE1",5500,99999],["TE2",3000,5499],["TE3",1500,2999],["TE4+",0,1499]]
   };
   function colHTML(pos, defs){
     const ctx = pos === "QB" ? (fmtSF ? "Superflex" : "1QB") : "all formats";
@@ -2791,6 +2051,7 @@ function renderFeatured(){
       <div class="head">YOU GET</div>
       ${get.map(rowHTML).join("") || '<div class="featured-asset"><span class="nm" style="color:var(--ink-3);font-style:italic">— missing player —</span></div>'}
     </div>
+    <div class="featured-vs">VS</div>
     <div class="featured-side them">
       <div class="head">YOU GIVE</div>
       ${give.map(rowHTML).join("") || '<div class="featured-asset"><span class="nm" style="color:var(--ink-3);font-style:italic">— missing —</span></div>'}
@@ -2819,252 +2080,8 @@ function rerenderAll(){
   if(state.myRoster) renderRoster();
   renderPickChart();
   renderMovers();
-  renderMarketAlerts();
   renderTiers();
   renderFeatured();
-}
-
-// =================================================================
-// FEATURE 6 — NATURAL LANGUAGE TRADE PARSER
-// =================================================================
-(function setupNLParser(){
-  const input  = document.getElementById("nl-trade-input");
-  const status = document.getElementById("qp-status");
-  if(!input) return;
-
-  // Ordinal word → round number
-  const ORD_MAP = {
-    "first":1, "1st":1, "second":2, "2nd":2,
-    "third":3, "3rd":3, "fourth":4, "4th":4
-  };
-
-  function parsePick(token){
-    // Patterns: "2027 first", "early 2026 1st", "late 2027 2nd", "2028 2nd round"
-    const t = token.toLowerCase().trim();
-    const yearM = t.match(/20(2[5-9]|3\d)/);
-    if(!yearM) return null;
-    const year = parseInt(yearM[0], 10);
-
-    let round = null;
-    for(const [word, r] of Object.entries(ORD_MAP)){
-      if(t.includes(word)){ round = r; break; }
-    }
-    if(!round) return null;
-
-    let slot = "mid";
-    if(/\b(bottom|early|top|top3|top-3)\b/.test(t)) slot = "top3";
-    else if(/\b(late|back|end)\b/.test(t)) slot = "late";
-    return { type:"pick", year, round, slot };
-  }
-
-  function fuzzyMatchPlayer(token){
-    const t = token.toLowerCase().trim();
-    if(t.length < 2) return null;
-    // 1. exact substring on full name
-    let m = PLAYERS.find(p => p.n.toLowerCase().includes(t));
-    if(m) return m;
-    // 2. last name only
-    const tokens = t.split(/\s+/);
-    const lastName = tokens[tokens.length - 1];
-    if(lastName.length >= 3){
-      m = PLAYERS.find(p => {
-        const parts = p.n.toLowerCase().split(/\s+/);
-        return parts[parts.length-1] === lastName;
-      });
-      if(m) return m;
-    }
-    // 3. first name only
-    const firstName = tokens[0];
-    if(firstName.length >= 3){
-      m = PLAYERS.find(p => p.n.toLowerCase().split(/\s+/)[0] === firstName);
-      if(m) return m;
-    }
-    return null;
-  }
-
-  function parseTokens(str){
-    const parts = str.split(/[,+]|\band\b/i).map(s => s.trim()).filter(Boolean);
-    const parsed = [];
-    const unknown = [];
-    for(const part of parts){
-      const pick = parsePick(part);
-      if(pick){
-        const ord = pick.round===1?"1st":pick.round===2?"2nd":pick.round===3?"3rd":pick.round+"th";
-        const slotLabel = pick.slot==="top3"?"(bottom)":pick.slot==="late"?"(late)":"";
-        parsed.push({ asset: pick, label: `${pick.year} ${ord} ${slotLabel}`.trim() });
-      } else {
-        const player = fuzzyMatchPlayer(part);
-        if(player){
-          parsed.push({ asset: {...player, type:"player"}, label: player.n });
-        } else {
-          if(part.length >= 2) unknown.push(part);
-        }
-      }
-    }
-    return { parsed, unknown };
-  }
-
-  function setStatus(msg, cls){
-    status.textContent = msg;
-    status.className = "qp-status " + cls;
-  }
-
-  function runParse(raw){
-    const text = raw.trim();
-    if(!text){ status.textContent = ""; status.className = "qp-status"; return; }
-
-    // Split on " for " (case-insensitive)
-    const forMatch = text.match(/^(.+?)\s+for\s+(.+)$/i);
-    if(!forMatch){
-      setStatus('⚠ Couldn\'t find "for" separator. Try: [give assets] for [get assets]', "warn");
-      return;
-    }
-    const giveSide = forMatch[1];
-    const getSide  = forMatch[2];
-
-    const { parsed: parsedGive, unknown: unknownGive } = parseTokens(giveSide);
-    const { parsed: parsedGet,  unknown: unknownGet  } = parseTokens(getSide);
-
-    const allUnknown = [...unknownGive, ...unknownGet];
-
-    if(!parsedGive.length && !parsedGet.length){
-      setStatus("✗ Could not recognize any players or picks. Check spelling.", "err");
-      return;
-    }
-
-    // Populate state
-    state.give = parsedGive.map(x => x.asset);
-    state.get  = parsedGet.map(x => x.asset);
-    rerenderAll();
-    refreshAnalyzeBtn();
-
-    const giveStr = parsedGive.map(x => x.label).join(" + ") || "—";
-    const getStr  = parsedGet.map(x => x.label).join(" + ") || "—";
-    let msg = `✓ Parsed: ${giveStr} → ${getStr}`;
-    if(allUnknown.length){
-      msg += `  ·  ⚠ Could not parse: ${allUnknown.join(", ")}`;
-      setStatus(msg, "warn");
-    } else {
-      setStatus(msg, "ok");
-    }
-  }
-
-  let debounce;
-  input.addEventListener("input", () => {
-    clearTimeout(debounce);
-    debounce = setTimeout(() => runParse(input.value), 420);
-  });
-  input.addEventListener("keydown", e => {
-    if(e.key === "Enter"){ clearTimeout(debounce); runParse(input.value); }
-  });
-})();
-
-// =================================================================
-// FEATURE 10 — MARKET ALERTS: SELL HIGH / BUY LOW
-// =================================================================
-function renderMarketAlerts(){
-  const grid = document.getElementById("alerts-grid");
-  if(!grid) return;
-
-  // Position peak age ranges: [peakStart, peakEnd]
-  const PEAK = { QB:[26,32], RB:[23,26], WR:[24,28], TE:[25,29] };
-
-  // Bucket players by position with adjusted values
-  const byPos = {};
-  for(const p of PLAYERS){
-    if(!PEAK[p.p]) continue;
-    const v = adjustedConsensus(p);
-    if(!byPos[p.p]) byPos[p.p] = [];
-    byPos[p.p].push({ p, v });
-  }
-
-  const sellCandidates = [];
-  const buyCandidates  = [];
-
-  for(const [pos, arr] of Object.entries(byPos)){
-    if(!arr.length) continue;
-    arr.sort((a,b) => b.v - a.v);
-    const n = arr.length;
-    const [peakStart, peakEnd] = PEAK[pos];
-    const top40cutoff = arr[Math.floor(n * 0.40)]?.v ?? 0;  // top 40% threshold
-    const top25cutoff = arr[Math.floor(n * 0.25)]?.v ?? 0;  // elite tier ceiling
-    const top70cutoff = arr[Math.floor(n * 0.70)]?.v ?? 0;  // floor for "still a real asset"
-
-    for(const { p, v } of arr){
-      const age = p.a;
-      // Rookies/prospects already have upside priced in — exclude from buy window.
-      const isRookie = !!p.draft;
-
-      // Sell High: value in top 40%, age is post-peak (>= peakEnd+1)
-      if(v >= top40cutoff && age >= peakEnd + 1){
-        const reason = age >= peakEnd + 3 ? "AGE CLIFF" : "POST-PEAK";
-        sellCandidates.push({ p, v, reason });
-      }
-
-      // Buy Window: real young veterans (age 23–27, not rookies) whose current
-      // value sits below where their position/age combo "should" land — i.e. they
-      // ranked as starters once but the market has them in the middle band now.
-      if(!isRookie && age >= 23 && age <= 27 && v < top25cutoff && v >= top70cutoff){
-        const trend = TRENDS[p.n] || 0;
-        let reason;
-        if(trend <= -4 && trend >= -12)        reason = "RECENT DIP";
-        else if(age >= 25 && age <= 27)        reason = "PROVEN VET";
-        else                                    reason = "PRIME WINDOW";
-        buyCandidates.push({ p, v, reason, trend });
-      }
-    }
-  }
-
-  // Dedupe buy candidates by player name
-  const seenBuy = new Set();
-  const uniqueBuy = buyCandidates.filter(x => {
-    if(seenBuy.has(x.p.n)) return false;
-    seenBuy.add(x.p.n);
-    return true;
-  });
-
-  // Sort: sell by value desc (highest = most to lose).
-  // Buy: prioritize RECENT DIP (real signal), then by value desc (better assets first).
-  sellCandidates.sort((a,b) => b.v - a.v);
-  uniqueBuy.sort((a,b) => {
-    const aDip = a.reason === "RECENT DIP" ? 1 : 0;
-    const bDip = b.reason === "RECENT DIP" ? 1 : 0;
-    if(aDip !== bDip) return bDip - aDip;
-    return b.v - a.v;
-  });
-
-  const topSell = sellCandidates.slice(0, 6);
-  const topBuy  = uniqueBuy.slice(0, 6);
-
-  function alertCard(entry, cls){
-    const { p, v, reason } = entry;
-    return `<div class="alert-card ${cls}">
-      <div class="nm">${p.n}</div>
-      <div class="meta">${p.p} · ${p.t} · Age ${p.a}</div>
-      <div class="row">
-        <span class="val">${num(v)}</span>
-        <span class="reason">${reason}</span>
-      </div>
-    </div>`;
-  }
-
-  const sellHTML = topSell.length
-    ? topSell.map(e => alertCard(e, "sell")).join("")
-    : `<div style="color:var(--ink-3);font-size:12px;padding:4px">No strong sell-high candidates at current values.</div>`;
-  const buyHTML = topBuy.length
-    ? topBuy.map(e => alertCard(e, "buy")).join("")
-    : `<div style="color:var(--ink-3);font-size:12px;padding:4px">No strong buy-low candidates at current values.</div>`;
-
-  grid.innerHTML = `
-    <div>
-      <div class="alert-bucket-label sell">🔴 SELL HIGH · Market hasn't caught up to age yet</div>
-      <div class="alerts-strip">${sellHTML}</div>
-    </div>
-    <div>
-      <div class="alert-bucket-label buy">🟢 BUY WINDOW · Prime-age vets the market is sleeping on</div>
-      <div class="alerts-strip">${buyHTML}</div>
-    </div>
-  `;
 }
 
 // =================================================================
@@ -3107,11 +2124,12 @@ function openProfile(){
   setGroupVal("profile-modal","scoring",PROFILE.scoring);
   setGroupVal("profile-modal","tep",PROFILE.tep);
   setGroupVal("profile-modal","format",PROFILE.format);
-  setGroupVal("profile-modal","mode", PROFILE.mode);
+  // mode may have been migrated from old "winnow" -> "contender"
+  const modeVal = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
+  setGroupVal("profile-modal","mode", modeVal);
   openModal("#profile-modal");
 }
 $("#btn-profile").onclick = openProfile;
-$("#btn-howitworks").onclick = () => openModal("#howitworks-modal");
 $("#btn-save-profile").onclick = () => {
   PROFILE = {
     teams: parseInt(getGroupVal("profile-modal","teams"),10),
@@ -3132,23 +2150,14 @@ $("#btn-save-profile").onclick = () => {
 // PICK MODAL
 // =================================================================
 let pickSide = "get";
-function updatePickValuePreview(){
-  const el = document.getElementById("pick-value-preview");
-  if(!el) return;
-  const year  = parseInt(getGroupVal("pick-modal","pyear"),10);
-  const round = parseInt(getGroupVal("pick-modal","pround"),10);
-  const slot  = getGroupVal("pick-modal","pslot");
-  el.textContent = num(pickValue({ type:"pick", year, round, slot }));
-}
 $$(".add-pick-btn").forEach(b => b.onclick = () => {
   pickSide = b.dataset.side;
   setGroupVal("pick-modal","pyear","2026");
   setGroupVal("pick-modal","pround","1");
   setGroupVal("pick-modal","pslot","mid");
-  updatePickValuePreview();
   openModal("#pick-modal");
 });
-["pyear","pround","pslot"].forEach(g => bindOptGroup("pick-modal", g, updatePickValuePreview));
+["pyear","pround","pslot"].forEach(g => bindOptGroup("pick-modal", g));
 $("#btn-add-pick").onclick = () => {
   const pick = {
     type: "pick",
@@ -3173,43 +2182,18 @@ bindOptGroup("sleeper-modal","season");
 
 let sleeperUserId = null;
 let sleeperPlayersCache = null;
-let sleeperLeaguesCache = {}; // league_id -> full league object
 
 async function fetchSleeperPlayers(){
   if(sleeperPlayersCache) return sleeperPlayersCache;
-  const r = await fetch("https://api.sleeper.app/v1/players/nfl");
-  if(!r.ok) throw new Error(`Sleeper player DB fetch failed (HTTP ${r.status})`);
-  sleeperPlayersCache = await r.json();
-  return sleeperPlayersCache;
-}
-
-// Map Sleeper league settings → app PROFILE shape.
-function detectProfileFromLeague(league){
-  const out = {};
-  // Team count
-  const tc = parseInt((league.settings && league.settings.num_teams) || league.total_rosters || 12, 10);
-  if([8,10,12,14].includes(tc)) out.teams = tc;
-  else if(tc <= 9) out.teams = 8;
-  else if(tc === 11) out.teams = 10;
-  else if(tc === 13) out.teams = 12;
-  else out.teams = 14;
-  // Format: superflex if any roster slot is SUPER_FLEX or QB count > 1
-  const positions = league.roster_positions || [];
-  const qbSlots = positions.filter(p => p === "QB").length;
-  const hasSF   = positions.includes("SUPER_FLEX");
-  out.format = (hasSF || qbSlots > 1) ? "superflex" : "standard";
-  // Scoring: rec value
-  const ss  = league.scoring_settings || {};
-  const rec = Number(ss.rec || 0);
-  if(rec >= 0.9)      out.scoring = "ppr";
-  else if(rec >= 0.4) out.scoring = "half";
-  else                out.scoring = "standard";
-  // TE Premium: bonus_rec_te is the *extra* per-rec for TEs
-  const teBonus = Number(ss.bonus_rec_te || 0);
-  if(teBonus >= 0.9)      out.tep = "1";
-  else if(teBonus >= 0.4) out.tep = "0.5";
-  else                    out.tep = "0";
-  return out;
+  try{
+    const r = await fetch("https://api.sleeper.app/v1/players/nfl");
+    if(!r.ok) throw new Error("players fetch failed");
+    sleeperPlayersCache = await r.json();
+    return sleeperPlayersCache;
+  } catch(e){
+    showToast("Couldn't load Sleeper player db", "err");
+    return null;
+  }
 }
 
 $("#btn-fetch-sleeper").onclick = async () => {
@@ -3221,25 +2205,23 @@ $("#btn-fetch-sleeper").onclick = async () => {
   btn.disabled = true;
   try{
     const userR = await fetch(`https://api.sleeper.app/v1/user/${encodeURIComponent(username)}`);
-    if(!userR.ok) throw new Error(userR.status === 404 ? `User "${username}" not found` : `User lookup failed (HTTP ${userR.status})`);
+    if(!userR.ok) throw new Error("User not found");
     const user = await userR.json();
     if(!user || !user.user_id){
       throw new Error(`Sleeper returned no user_id for "${username}"`);
     }
     sleeperUserId = String(user.user_id);
     const lgR = await fetch(`https://api.sleeper.app/v1/user/${sleeperUserId}/leagues/nfl/${season}`);
-    if(!lgR.ok) throw new Error(`Leagues fetch failed (HTTP ${lgR.status})`);
+    if(!lgR.ok) throw new Error("Leagues fetch failed");
     const leagues = await lgR.json();
-    sleeperLeaguesCache = {};
-    leagues.forEach(l => { sleeperLeaguesCache[l.league_id] = l; });
     if(!leagues.length){
-      $("#sleeper-leagues").innerHTML = `<div class="empty-state" style="margin-top:10px">No ${season} leagues found for that user. Try the other season toggle.</div>`;
+      $("#sleeper-leagues").innerHTML = `<div class="empty-state" style="margin-top:10px">No ${season} dynasty leagues found for that user. Try the other season toggle.</div>`;
     } else {
       $("#sleeper-leagues").innerHTML = `
         <label style="display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:14px 0 8px;font-weight:700">Pick a League</label>
         <div class="league-list">
         ${leagues.map(l => `
-          <div class="league-row" data-id="${l.league_id}">
+          <div class="league-row" data-id="${l.league_id}" data-name="${l.name.replace(/"/g,'&quot;')}">
             <div>
               <div class="lg-name">${l.name}</div>
               <div class="lg-meta">${l.total_rosters} teams • ${l.season} • ${l.settings && l.settings.type === 2 ? "Dynasty" : "Redraft"}</div>
@@ -3248,10 +2230,9 @@ $("#btn-fetch-sleeper").onclick = async () => {
           </div>`).join("")}
         </div>
       `;
-      $$(".league-row").forEach(r => r.onclick = () => loadSleeperRoster(r.dataset.id));
+      $$(".league-row").forEach(r => r.onclick = () => loadSleeperRoster(r.dataset.id, r.dataset.name));
     }
   } catch(e){
-    console.error("[Sleeper] fetch leagues failed", e);
     showToast(e.message || "Sleeper fetch failed", "err");
   } finally {
     btn.innerHTML = "Fetch Leagues";
@@ -3259,189 +2240,81 @@ $("#btn-fetch-sleeper").onclick = async () => {
   }
 };
 
-async function loadSleeperRoster(leagueId){
-  const league = sleeperLeaguesCache[leagueId];
-  if(!league){ showToast("League info missing — re-fetch leagues", "err"); return; }
-  const leagueName = league.name;
+async function loadSleeperRoster(leagueId, leagueName){
   const btn = $("#btn-fetch-sleeper");
-  const leaguesEl = $("#sleeper-leagues");
-  const prevLeaguesHTML = leaguesEl.innerHTML;
-  // Clear any stale toast from a prior attempt — prevents "Roster load failed"
-  // from a previous click lingering into a new successful load.
-  hideToast();
   btn.innerHTML = '<span class="spinner"></span> Loading roster…';
   btn.disabled = true;
-  leaguesEl.innerHTML = `<div class="empty-state" style="margin-top:14px;display:flex;align-items:center;gap:10px;justify-content:center"><span class="spinner"></span> Loading roster from ${leagueName}…</div>`;
-
-  // Step 1: rosters
-  let rosters;
   try{
-    const r = await fetch(`https://api.sleeper.app/v1/league/${leagueId}/rosters`);
-    if(!r.ok) throw new Error(`Rosters fetch failed (HTTP ${r.status})`);
-    rosters = await r.json();
-    if(!Array.isArray(rosters) || rosters.length === 0){
-      throw new Error("Sleeper returned no rosters for this league");
-    }
-  } catch(e){
-    console.error("[Sleeper] rosters fetch error", e);
-    showToast(`Roster load failed: ${e.message || e}`, "err");
-    leaguesEl.innerHTML = prevLeaguesHTML;
-    btn.innerHTML = "Fetch Leagues"; btn.disabled = false;
-    return;
-  }
-
-  // Step 2: match owner — try direct, then co_owners, then users API by display_name
-  const wantId = String(sleeperUserId);
-  let mine = rosters.find(r => {
-    if(String(r.owner_id) === wantId) return true;
-    if(Array.isArray(r.co_owners) && r.co_owners.map(String).includes(wantId)) return true;
-    return false;
-  });
-  if(!mine){
-    try{
-      const uR = await fetch(`https://api.sleeper.app/v1/league/${leagueId}/users`);
-      if(uR.ok){
-        const users = await uR.json();
-        const me = users.find(u => String(u.user_id) === wantId);
-        if(me){
-          // Re-attempt owner match via the user record we found
-          mine = rosters.find(r => String(r.owner_id) === String(me.user_id));
-        }
-        if(!mine){
-          const names = users.slice(0,10).map(u => u.display_name).filter(Boolean).join(", ");
-          console.warn("[Sleeper] no roster owned by user", {wantId, users});
-          showToast(`No roster owned by user_id ${wantId} in this league (members: ${names}…)`, "err");
-          leaguesEl.innerHTML = prevLeaguesHTML;
-          btn.innerHTML = "Fetch Leagues"; btn.disabled = false;
-          return;
-        }
-      }
-    } catch(e){
-      console.warn("[Sleeper] users fallback failed", e);
-    }
-  }
-  if(!mine){
-    const ownerIds = rosters.map(r => r.owner_id).filter(Boolean).join(", ");
-    showToast(`Found ${rosters.length} rosters, none matched user_id ${wantId}.`, "err");
-    console.warn("[Sleeper] roster match failed", {wantId, ownerIds});
-    leaguesEl.innerHTML = prevLeaguesHTML;
-    btn.innerHTML = "Fetch Leagues"; btn.disabled = false;
-    return;
-  }
-
-  // Step 3: player DB (cached after first call). Big payload — show spinner.
-  let players;
-  try{
-    leaguesEl.innerHTML = `<div class="empty-state" style="margin-top:14px;display:flex;align-items:center;gap:10px;justify-content:center"><span class="spinner"></span> Fetching player database (~5MB, first load only)…</div>`;
-    players = await fetchSleeperPlayers();
-  } catch(e){
-    console.error("[Sleeper] player db fetch error", e);
-    showToast(`Roster load failed: ${e.message || e}`, "err");
-    leaguesEl.innerHTML = prevLeaguesHTML;
-    btn.innerHTML = "Fetch Leagues"; btn.disabled = false;
-    return;
-  }
-
-  // Step 4: traded picks (best-effort)
-  let tradedPicks = [];
-  try{
-    const r = await fetch(`https://api.sleeper.app/v1/league/${leagueId}/traded_picks`);
-    if(r.ok) tradedPicks = await r.json();
-  } catch(e){
-    console.warn("[Sleeper] traded_picks fetch failed (non-fatal)", e);
-  }
-
-  // Step 5: map player IDs → names → app PLAYERS (last-name fuzzy fallback)
-  const ids = mine.players || [];
-  const myPlayers = [];
-  let unmatched = 0;
-  for(const id of ids){
-    const sp = players && players[id];
-    if(!sp) continue;
-    const fullName = sp.full_name || ((sp.first_name||"")+" "+(sp.last_name||"")).trim();
-    if(!fullName) continue;
-    const norm = slug(fullName);
-    let match = PLAYERS.find(p => slug(p.n) === norm);
-    if(!match && sp.last_name && sp.position){
-      // fuzzy: same position + last name match
-      const lastSlug = slug(sp.last_name);
-      match = PLAYERS.find(p => p.p === sp.position && slug(p.n.split(/\s+/).slice(-1)[0]) === lastSlug);
-    }
-    if(match){
-      myPlayers.push({...match, type:"player"});
-    } else if(["QB","RB","WR","TE"].includes(sp.position)){
-      myPlayers.push({
-        n: fullName,
-        p: sp.position,
-        t: sp.team || "FA",
-        a: sp.age || 26,
-        ktc: 1200, fc:1200, dp:1200, sleeper:1200,
-        type:"player",
-        stub:true
-      });
-      unmatched++;
-    }
-  }
-
-  const myPicks = (Array.isArray(tradedPicks) ? tradedPicks : [])
-    .filter(p => String(p.owner_id) === String(mine.roster_id))
-    .map(p => {
-      const base = { type:"pick", year: Number(p.season), round: Number(p.round), slot: "mid" };
-      return { ...base, value: pickValue(base) };
+    const [rostersR, tradedPicksR, players] = await Promise.all([
+      fetch(`https://api.sleeper.app/v1/league/${leagueId}/rosters`).then(r=>r.ok?r.json():Promise.reject("rosters")),
+      fetch(`https://api.sleeper.app/v1/league/${leagueId}/traded_picks`).then(r=>r.ok?r.json():[]).catch(()=>[]),
+      fetchSleeperPlayers()
+    ]);
+    // Robust owner match — coerce both sides to string and also check co_owners
+    const wantId = String(sleeperUserId);
+    const mine = rostersR.find(r => {
+      if(String(r.owner_id) === wantId) return true;
+      if(Array.isArray(r.co_owners) && r.co_owners.map(String).includes(wantId)) return true;
+      return false;
     });
-
-  state.myRoster = { leagueName, leagueId, players: myPlayers, picks: myPicks };
-  try{ localStorage.setItem(ROSTER_KEY, JSON.stringify(state.myRoster)); } catch(e){}
-
-  // Auto-detect league format from Sleeper settings and apply to PROFILE
-  try{
-    const detected = detectProfileFromLeague(league);
-    PROFILE = { ...PROFILE, ...detected };
-    saveProfile(PROFILE);
-    profileBar();
-  } catch(e){
-    console.warn("[Sleeper] profile auto-detect failed (non-fatal)", e);
-  }
-
-  // Make imported roster available to YOU GIVE / YOU GET search via the global PLAYERS list
-  // (stub players that aren't in the static DB are added so search can find them).
-  if(unmatched > 0){
-    for(const mp of myPlayers){
-      if(mp.stub && !PLAYERS.some(p => slug(p.n) === slug(mp.n))){
-        PLAYERS.push({ n:mp.n, p:mp.p, t:mp.t, a:mp.a, ktc:mp.ktc, fc:mp.fc, dp:mp.dp, sleeper:mp.sleeper });
+    if(!mine){
+      const ownerIds = rostersR.map(r => r.owner_id).join(", ");
+      console.warn("[Sleeper] roster match failed", {wantId, rosters:rostersR.map(r=>({owner:r.owner_id,co:r.co_owners}))});
+      showToast(`Found ${rostersR.length} rosters, none matched user_id ${wantId}. Owners: ${ownerIds.slice(0,80)}${ownerIds.length>80?"…":""}`, "err");
+      return;
+    }
+    const ids = mine.players || [];
+    const myPlayers = [];
+    for(const id of ids){
+      const sp = players && players[id];
+      if(!sp) continue;
+      const fullName = sp.full_name || ((sp.first_name||"")+" "+(sp.last_name||"")).trim();
+      const norm = slug(fullName);
+      const match = PLAYERS.find(p => slug(p.n) === norm);
+      if(match){
+        myPlayers.push({...match, type:"player"});
+      } else if(["QB","RB","WR","TE"].includes(sp.position)){
+        // unknown player — synthesize stub with low value
+        myPlayers.push({
+          n: fullName,
+          p: sp.position,
+          t: sp.team || "FA",
+          a: sp.age || 26,
+          ktc: 1200, fc:1200, dp:1200, sleeper:1200,
+          type:"player",
+          stub:true
+        });
       }
     }
+    const myPicks = (Array.isArray(tradedPicksR) ? tradedPicksR : [])
+      .filter(p => String(p.owner_id) === String(mine.roster_id))
+      .map(p => {
+        const base = { type:"pick", year: Number(p.season), round: Number(p.round), slot: "mid" };
+        return { ...base, value: pickValue(base) };
+      });
+    state.myRoster = { leagueName, leagueId, players: myPlayers, picks: myPicks };
+    localStorage.setItem(ROSTER_KEY, JSON.stringify(state.myRoster));
+    renderRoster();
+    closeModal("#sleeper-modal");
+    const pickMsg = myPicks.length ? ` + ${myPicks.length} picks` : "";
+    showToast(`Imported ${myPlayers.length} players${pickMsg} from ${leagueName}`, "ok");
+  } catch(e){
+    showToast("Roster load failed", "err");
+  } finally {
+    btn.innerHTML = "Fetch Leagues";
+    btn.disabled = false;
   }
-
-  analyzeTeamNeeds();
-  rerenderAll();
-  renderRoster();
-  closeModal("#sleeper-modal");
-
-  const pickMsg = myPicks.length ? ` + ${myPicks.length} picks` : "";
-  const stubMsg = unmatched ? ` (${unmatched} not in DB)` : "";
-  showToast(`✓ Roster loaded — ${myPlayers.length} players${pickMsg}${stubMsg}`, "ok");
-
-  btn.innerHTML = "Fetch Leagues";
-  btn.disabled = false;
 }
-
-// Which trade side a tapped roster card is added to. Defaults to "give"
-// — the user toggles this via the YOU GIVE / YOU GET buttons in the
-// roster header. Generic for any user; not tied to a specific account.
-let rosterAddSide = "give";
 
 function renderRoster(){
   const r = state.myRoster;
   const wrap = $("#my-roster");
   if(!r){ wrap.classList.remove("show"); return; }
   wrap.classList.add("show");
-  const sideLabel = rosterAddSide === "give" ? "You Give" : "You Get";
-  $("#my-roster-title").innerHTML = `My Roster <span style="color:var(--ink-3);font-weight:500;letter-spacing:0;text-transform:none;margin-left:6px;font-size:11px">${r.leagueName} · tap an asset to add to "${sideLabel}"</span>`;
+  $("#my-roster-title").innerHTML = `My Roster <span style="color:var(--ink-3);font-weight:500;letter-spacing:0;text-transform:none;margin-left:6px;font-size:11px">${r.leagueName} · click an asset to add to "You Give"</span>`;
   const all = [...(r.players||[]), ...(r.picks||[])];
   const sorted = all.sort((a,b)=>assetValue(b)-assetValue(a));
-  const grid = $("#roster-grid");
-  grid.innerHTML = sorted.map((a,i) => {
+  $("#roster-grid").innerHTML = sorted.map((a,i) => {
     if(a.type === "pick"){
       return `
     <div class="r-card" data-i="${i}">
@@ -3457,39 +2330,21 @@ function renderRoster(){
       <div class="vl">${num(assetValue(a))}</div>
     </div>`;
   }).join("");
-  grid.onclick = (ev) => {
-    const card = ev.target.closest(".r-card");
-    if(!card || !grid.contains(card)) return;
-    const i = parseInt(card.dataset.i,10);
-    const a = sorted[i];
-    if(!a) return;
-    addAsset(rosterAddSide, {...a});
-    const label = a.type === "pick" ? `${a.year} R${a.round}` : a.n;
-    const sideLabel = rosterAddSide === "give" ? "You Give" : "You Get";
-    showToast(`Added ${label} to "${sideLabel}"`, "ok");
-  };
-}
-
-// Side toggle inside the roster header — lets any user pick whether a
-// tapped roster card populates YOU GIVE or YOU GET.
-(function bindRosterSideToggle(){
-  const tog = $("#roster-side-toggle");
-  if(!tog) return;
-  tog.addEventListener("click", (ev) => {
-    const btn = ev.target.closest("[data-side]");
-    if(!btn || !tog.contains(btn)) return;
-    rosterAddSide = btn.dataset.side === "get" ? "get" : "give";
-    $$(".opt", tog).forEach(b => b.classList.toggle("sel", b === btn));
-    if(state.myRoster) renderRoster(); // refresh hint text
+  $$(".r-card","#roster-grid").forEach(card => {
+    card.onclick = () => {
+      const i = parseInt(card.dataset.i,10);
+      const a = sorted[i];
+      addAsset("give", {...a});
+      const label = a.type === "pick" ? `${a.year} R${a.round}` : a.n;
+      showToast(`Added ${label} to "You Give"`, "ok");
+    };
   });
-})();
+}
 
 $("#btn-roster-clear").onclick = () => {
   state.myRoster = null;
-  window.teamNeeds = [];
   localStorage.removeItem(ROSTER_KEY);
   renderRoster();
-  renderTeamNeedsBar();
 };
 
 // restore roster
@@ -3497,111 +2352,6 @@ try{
   const saved = JSON.parse(localStorage.getItem(ROSTER_KEY) || "null");
   if(saved){ state.myRoster = saved; }
 }catch(e){}
-window.teamNeeds = [];
-
-// =================================================================
-// FEATURE 7 — TEAM NEEDS ANALYSIS
-// =================================================================
-function analyzeTeamNeeds(){
-  const roster = state.myRoster;
-  if(!roster || !roster.players || !roster.players.length){
-    window.teamNeeds = [];
-    renderTeamNeedsBar();
-    return;
-  }
-
-  const positions = ["QB","RB","WR","TE"];
-  const posData = {};
-  for(const pos of positions){
-    const players = roster.players.filter(p => p.p === pos);
-    if(!players.length){
-      posData[pos] = { count: 0, avgValue: 0, total: 0 };
-      continue;
-    }
-    const vals = players.map(p => adjustedConsensus(p));
-    const total = vals.reduce((s,v)=>s+v, 0);
-    posData[pos] = {
-      count: players.length,
-      avgValue: total / players.length,
-      total,
-      players
-    };
-  }
-
-  // Normalize avg values within positions to find relative weaknesses
-  // Weak = low avg value relative to own position's typical range
-  // Score each position by: 0 (no players) is weakest; else avgValue
-  const scores = positions.map(pos => ({ pos, score: posData[pos].avgValue, count: posData[pos].count }));
-  // Positions with 0 players get score 0 (most needed), then sort ascending
-  scores.sort((a,b) => a.score - b.score);
-
-  // Two weakest by avg value
-  const weakest = scores.slice(0, 2).map(x => x.pos);
-  window.teamNeeds = weakest;
-
-  // Build descriptive labels
-  function needLabel(pos, pd){
-    if(pd.count === 0) return `${pos} STARTER`;
-    if(pd.count === 1) return `${pos} DEPTH`;
-    if(pd.avgValue < 3000) return `${pos} UPGRADE`;
-    return `${pos}2`;
-  }
-  window.teamNeedsLabels = {};
-  for(const pos of weakest){
-    window.teamNeedsLabels[pos] = needLabel(pos, posData[pos]);
-  }
-  // Also store all 4 for pill filtering
-  window.teamNeedsAll = scores.map(s => ({
-    pos: s.pos,
-    label: needLabel(s.pos, posData[s.pos]),
-    score: s.score
-  }));
-
-  renderTeamNeedsBar();
-}
-
-function renderTeamNeedsBar(){
-  const bar  = document.getElementById("team-needs-bar");
-  const pills = document.getElementById("tn-pills");
-  if(!bar || !pills) return;
-
-  if(!window.teamNeeds || !window.teamNeeds.length){
-    bar.classList.remove("show");
-    pills.innerHTML = "";
-    return;
-  }
-
-  bar.classList.add("show");
-  // Show top 3 needs as pills
-  const topNeeds = (window.teamNeedsAll || []).slice(0, 3);
-  pills.innerHTML = topNeeds.map(({ pos, label }) => {
-    return `<button class="tn-pill pos-${pos}" data-pos="${pos}" title="Filter search to ${pos}">${label}</button>`;
-  }).join("");
-
-  // Pill click: filter player search to that position
-  pills.querySelectorAll(".tn-pill").forEach(pill => {
-    pill.onclick = () => {
-      const pos = pill.dataset.pos;
-      const isActive = pill.classList.contains("active");
-      // toggle off if already active
-      pills.querySelectorAll(".tn-pill").forEach(p => p.classList.remove("active"));
-      if(!isActive){
-        pill.classList.add("active");
-        // Pre-fill search inputs with position filter
-        const giveInput = document.getElementById("search-give");
-        const getInput  = document.getElementById("search-get");
-        if(giveInput){ giveInput.value = pos; giveInput.dispatchEvent(new Event("input")); }
-        if(getInput){  getInput.value  = pos; getInput.dispatchEvent(new Event("input")); }
-      } else {
-        // Clear search filter
-        const giveInput = document.getElementById("search-give");
-        const getInput  = document.getElementById("search-get");
-        if(giveInput){ giveInput.value = ""; giveInput.dispatchEvent(new Event("input")); }
-        if(getInput){  getInput.value  = ""; getInput.dispatchEvent(new Event("input")); }
-      }
-    };
-  });
-}
 
 // =================================================================
 // ANALYZE
@@ -3629,39 +2379,39 @@ function gradeFor(diffPct){
   return {l:"F", c:"F", tier:"LOPSIDED"};
 }
 
-// Plain-English label shown to the user in place of the raw letter grade.
-const GRADE_LABELS = {
-  "S":"ELITE", "A+":"EXCELLENT", "A":"GREAT", "A-":"SOLID",
-  "B+":"GOOD", "B":"FAIR", "B-":"SLIGHT EDGE",
-  "C+":"CLOSE", "C":"EVEN", "D":"WEAK", "F":"POOR"
-};
-function gradeLabel(g){ return GRADE_LABELS[g.l] || g.l; }
-
 function analyze(){
-  const totGet  = state.get.reduce((s,a)=>s+assetValue(a),0);
-  const totGive = state.give.reduce((s,a)=>s+assetValue(a),0);
+  let totGet  = state.get.reduce((s,a)=>s+assetValue(a),0);
+  let totGive = state.give.reduce((s,a)=>s+assetValue(a),0);
+
+  // === CONSOLIDATION ADJUSTMENT ===
+  // Mirrors KTC's "Value Adjustment": the side with fewer total assets (stud side)
+  // gets a premium because roster consolidation has real value in dynasty.
+  const giveCount = state.give.length;
+  const getCount  = state.get.length;
+  const pieceDiff = Math.abs(getCount - giveCount);
+  let consolidationAdj = null;
+
+  if(pieceDiff >= 2){
+    const allPlayers = [...state.get, ...state.give].filter(a => a.type !== "pick");
+    if(allPlayers.length > 0){
+      const topKTC = Math.max(...allPlayers.map(a => a.ktc || 0));
+      if(topKTC > 0){
+        const studFactor  = topKTC / 10000;
+        const bonusPct    = Math.min(0.08 * pieceDiff, 0.20);
+        const bonus       = Math.round(topKTC * bonusPct * studFactor);
+        const fewerSide   = getCount < giveCount ? "get" : "give";
+        if(fewerSide === "get")  totGet  += bonus;
+        else                     totGive += bonus;
+        consolidationAdj = { bonus, side: fewerSide };
+      }
+    }
+  }
+
   const avg = (totGet + totGive) / 2 || 1;
   const youDiff = (totGet - totGive) / avg;          // your side
   const oppDiff = (totGive - totGet) / avg;          // their side
 
-  // Roster-need grade modifier — only activates when Sleeper team is loaded (window.teamNeeds populated)
-  let needAdjustment = 0;
-  let needWeighted = false;
-  const _needs = window.teamNeeds;
-  if (_needs && _needs.length) {
-    const top2 = _needs.slice(0, 2);
-    for (const a of state.get) {
-      if (a.type !== "pick" && top2.includes(a.p)) needAdjustment += 0.04;
-    }
-    for (const a of state.give) {
-      if (a.type !== "pick" && top2.includes(a.p)) needAdjustment -= 0.04;
-    }
-    // Cap total swing at ±0.08 (max 2 players × 0.04)
-    needAdjustment = Math.max(-0.08, Math.min(0.08, needAdjustment));
-    needWeighted = needAdjustment !== 0;
-  }
-
-  const yourGrade = gradeFor(youDiff + needAdjustment);
+  const yourGrade = gradeFor(youDiff);
   const oppGrade  = gradeFor(oppDiff);
 
   // spreads (contested?)
@@ -3696,7 +2446,7 @@ function analyze(){
   return {
     totGet, totGive, avg, youDiff, oppDiff,
     yourGrade, oppGrade, market, observations, note, verdict, maxSpread, avgSpread,
-    needWeighted
+    consolidationAdj
   };
 }
 
@@ -3737,7 +2487,8 @@ function buildObservations(totGet, totGive){
 
 function contextNote(totGet, totGive){
   const diff = totGet - totGive;
-  const mode = PROFILE.mode;
+  // Migrate legacy "winnow" -> "contender"
+  const mode = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
   const player = state.get.find(a => a.type !== "pick" && a.a >= 27);
   const youngPick = state.give.find(a => a.type === "pick" && a.year >= 2027);
   if(mode === "rebuilder" && player){
@@ -3745,20 +2496,6 @@ function contextNote(totGet, totGive){
   }
   if(mode === "rebuilder" && youngPick){
     return `As a <b>Rebuilder</b>, the future ${youngPick.year} ${youngPick.round===1?"1st":youngPick.round+"th"} you're sending is a key building block. Make sure the acquisition justifies it.`;
-  }
-  if(mode === "winnow"){
-    const incomingFuturePick = state.get.some(a=>a.type==="pick" && a.year >= 2027);
-    const incomingRookiePick = state.get.some(a=>a.type==="pick" && a.round === 1 && a.year <= 2026);
-    if(incomingFuturePick){
-      return `As a <b>Win-Now</b> team, future picks are dead weight — they don't help you THIS year. Only acceptable if you're flipping them again before the deadline.`;
-    }
-    if(incomingRookiePick){
-      return `As a <b>Win-Now</b> team, even current rookie picks are a gamble — you need plug-and-play production now, not a developmental swing.`;
-    }
-    if(diff < 0){
-      return `As a <b>Win-Now</b> team, paying a premium for proven, immediate-impact starters is correct. Your window is now — equity is meaningless if you don't cash it in.`;
-    }
-    return `As a <b>Win-Now</b> team, you're acquiring immediate production at fair-or-better value. Exactly the move.`;
   }
   if(mode === "contender"){
     if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
@@ -3783,13 +2520,12 @@ function verdictText(totGet, totGive, you, opp, market){
     lines.push(`You give up <b>${num(-diff)}</b> consensus points (${(((totGive/totGet)-1)*100).toFixed(1)}% premium paid).`);
   }
   lines.push(market.text + ".");
-  const youLbl = gradeLabel(you);
   if(you.l[0] === "A" || you.l === "S"){
-    lines.push(`Your side grades <b>${youLbl}</b> — accept it.`);
+    lines.push(`Your side grades <b>${you.l}</b> — accept it.`);
   } else if(you.l[0] === "B"){
-    lines.push(`Your side grades <b>${youLbl}</b> — fair, but consider whether the fit improves on the margin.`);
+    lines.push(`Your side grades <b>${you.l}</b> — fair, but consider whether the fit improves on the margin.`);
   } else {
-    lines.push(`Your side grades <b>${youLbl}</b> — pass unless the roster fit is unusually clean.`);
+    lines.push(`Your side grades <b>${you.l}</b> — counter or pass unless the roster fit is unusually clean.`);
   }
   return lines.join(" ");
 }
@@ -3798,7 +2534,7 @@ function side2html(side){
   return state[side].map(a => {
     if(a.type === "pick"){
       const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
-      return `<div class="asset pick">${avatarHTML(a)}<div class="info"><div class="nm">${a.year} ${ord}</div><div class="sub">${posTag("PICK")}${a.slot==="top3"?"Bottom":a.slot==="late"?"Late":"Mid"}</div></div><div class="vl"><span class="num">${num(assetValue(a))}</span></div></div>`;
+      return `<div class="asset pick">${avatarHTML(a)}<div class="info"><div class="nm">${a.year} ${ord}</div><div class="sub">${posTag("PICK")}${a.slot==="top3"?"Top-3":a.slot==="late"?"Late":"Mid"}</div></div><div class="vl"><span class="num">${num(assetValue(a))}</span></div></div>`;
     }
     return `<div class="asset">${avatarHTML(a)}<div class="info"><div class="nm">${a.n}</div><div class="sub">${posTag(a.p)}${a.t} • Age ${a.a}</div></div><div class="vl"><span class="num">${num(assetValue(a))}</span></div></div>`;
   }).join("");
@@ -3827,22 +2563,21 @@ function renderVerdict(v){
       <div class="v2-grade-row">
         <div class="v2-grade-card ${v.yourGrade.c}">
           <div class="lbl">YOUR SIDE</div>
-          <div class="grade-letter">${gradeLabel(v.yourGrade)}</div>
+          <div class="grade-letter">${v.yourGrade.l}</div>
           <div class="tier">${v.yourGrade.tier}</div>
         </div>
         <div class="v2-grade-card ${v.oppGrade.c}">
           <div class="lbl">THEIR SIDE</div>
-          <div class="grade-letter">${gradeLabel(v.oppGrade)}</div>
+          <div class="grade-letter">${v.oppGrade.l}</div>
           <div class="tier">${v.oppGrade.tier}</div>
         </div>
       </div>
-      ${v.needWeighted ? `<div style="text-align:center;margin-top:8px;font-size:12px;color:var(--ink-3);letter-spacing:0.03em">⚡ Roster fit included</div>` : ""}
       <div class="v2-legend">
-        <b>ELITE / EXCELLENT</b> = win it <span class="sep">·</span>
-        <b>GREAT / SOLID</b> = strong value <span class="sep">·</span>
-        <b>GOOD / FAIR / SLIGHT EDGE</b> = fair deal <span class="sep">·</span>
-        <b>CLOSE / EVEN</b> = weak return <span class="sep">·</span>
-        <b>WEAK / POOR</b> = lopsided
+        <b>S</b> = Elite <span class="sep">·</span>
+        <b>A</b> = Strong <span class="sep">·</span>
+        <b>B</b> = Fair <span class="sep">·</span>
+        <b>C</b> = Weak <span class="sep">·</span>
+        <b>D/F</b> = Lopsided
       </div>
     </div>
   `;
@@ -3853,7 +2588,7 @@ function renderVerdict(v){
       const v = assetValue(a);
       if(a.type === "pick"){
         const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
-        const slotLabel = a.slot==="top3"?"Bottom (1–3)":a.slot==="late"?"Late (9–10)":"Mid (4–8)";
+        const slotLabel = a.slot==="top3"?"Top-3 Origin":a.slot==="late"?"Late Origin":"Mid Origin";
         return `<tr>
           <td class="nm">${a.year} ${ord} Round Pick</td>
           <td>PICK</td>
@@ -3877,7 +2612,7 @@ function renderVerdict(v){
   const dLabel = diff > 0 ? `+${num(diff)} TO YOU` : diff < 0 ? `${num(diff)} (PREMIUM PAID)` : "EVEN";
   const breakdownHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">📊 VALUE BREAKDOWN <span class="sub">points each side is worth · averaged across 4 consensus sources</span></div>
+      <div class="v2-section-head">VALUE BREAKDOWN <span class="sub">consensus across 4 sources</span></div>
       <div class="v2-section-body" style="padding:0">
         <table class="v2-table">
           <thead><tr><th>ASSET</th><th>POS</th><th>TM</th><th>AGE</th><th>NOTE</th><th style="text-align:right">VALUE</th></tr></thead>
@@ -3885,9 +2620,11 @@ function renderVerdict(v){
             <tr class="v2-side-label you"><td colspan="6">YOU GET</td></tr>
             ${rowsForSide("get") || `<tr><td colspan="6" style="color:var(--ink-3);font-style:italic">No assets</td></tr>`}
             <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GET</td><td class="val">${num(v.totGet)}</td></tr>
+            ${v.consolidationAdj && v.consolidationAdj.side==="get" ? `<tr class="adj-row"><td colspan="5">⚖️ Consolidation Adj <span style="font-weight:400;opacity:.75">(stud premium — fewer pieces)</span></td><td class="val pos">+${num(v.consolidationAdj.bonus)}</td></tr>` : ""}
             <tr class="v2-side-label them"><td colspan="6">YOU GIVE</td></tr>
             ${rowsForSide("give") || `<tr><td colspan="6" style="color:var(--ink-3);font-style:italic">No assets</td></tr>`}
             <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GIVE</td><td class="val">${num(v.totGive)}</td></tr>
+            ${v.consolidationAdj && v.consolidationAdj.side==="give" ? `<tr class="adj-row"><td colspan="5">⚖️ Consolidation Adj <span style="font-weight:400;opacity:.75">(stud premium — fewer pieces)</span></td><td class="val pos">+${num(v.consolidationAdj.bonus)}</td></tr>` : ""}
             <tr class="delta-row"><td colspan="5">NET DELTA</td><td class="${dCls}" style="text-align:right;font-family:'JetBrains Mono',monospace">${dLabel}</td></tr>
           </tbody>
         </table>
@@ -3943,7 +2680,7 @@ function renderVerdict(v){
 
   const ageHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">🗓 AGE &amp; DYNASTY IMPACT <span class="sub">how each side ages · what it does to your contention window</span></div>
+      <div class="v2-section-head">AGE &amp; DYNASTY IMPACT <span class="sub">window analysis</span></div>
       <div class="v2-section-body">
         <div class="v2-kv">
           <div class="v2-kv-cell"><div class="k">YOU GET — AVG AGE</div><div class="v">${avgAgeGet ? avgAgeGet.toFixed(1) : "—"}</div><div class="sub">${youGetPlayers.length} player${youGetPlayers.length===1?"":"s"}</div></div>
@@ -3995,7 +2732,7 @@ function renderVerdict(v){
 
   const posHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">🏈 POSITION BREAKDOWN <span class="sub">which positions you gain · which you give up</span></div>
+      <div class="v2-section-head">POSITION BREAKDOWN <span class="sub">what's moving</span></div>
       <div class="v2-section-body">
         <div class="v2-pos-grid">
           <div class="v2-pos-col you"><div class="h">↑ YOU GET</div>${pillsHTML(posGet)}</div>
@@ -4023,7 +2760,7 @@ function renderVerdict(v){
   }).join("");
   const spreadHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">📈 MARKET CONSENSUS <span class="sub">how tightly the 4 sources agree · WIDE = buy-low signal</span></div>
+      <div class="v2-section-head">MARKET CONSENSUS <span class="sub">cross-source agreement · WIDE = buy-low signal</span></div>
       <div class="v2-section-body" style="padding:0 6px">
         ${spreadRows || `<div style="padding:14px;color:var(--ink-3);font-style:italic;font-size:12px">No players in trade — picks-only deals don't have a source spread.</div>`}
       </div>
@@ -4031,31 +2768,18 @@ function renderVerdict(v){
   `;
 
   // === Section F — CONTEXT VERDICT ===
-  const mode = PROFILE.mode;
-  const modeLabel = mode === "rebuilder" ? "REBUILDER" : mode === "winnow" ? "WIN-NOW" : "CONTENDER";
+  const mode = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
+  const modeLabel = mode === "rebuilder" ? "REBUILDER" : "CONTENDER";
   let ctxVerdict;
-  if(mode === "winnow"){
-    const incomingFuturePick = state.get.some(a=>a.type==="pick" && a.year >= 2027);
-    if(incomingFuturePick){
-      ctxVerdict = `As Win-Now, accepting <b>future picks</b> is the wrong direction — they don't score points THIS year. Only run this back if you're flipping them again before the deadline.`;
-    } else if(diff >= 200){
-      ctxVerdict = `As Win-Now, this is a <b>full green light</b>. You're getting more immediate production than you're giving up — cash in your equity, that's what it's for.`;
-    } else if(diff > -200){
-      ctxVerdict = `As Win-Now, the value is roughly even — but the only question that matters is <b>does this win you games NOW?</b> If yes, accept. Equity left on the table at season's end is wasted equity.`;
-    } else if(diff > -2500){
-      ctxVerdict = `As Win-Now, paying a real premium for proven, immediate-impact production is <b>exactly the move</b>. Your window is open. Don't grade this purely on raw value.`;
-    } else {
-      ctxVerdict = `As Win-Now, even in win-now mode there's a price ceiling. This much overpay only works if the incoming piece is genuinely needle-moving. <b>Pass</b> unless that's clearly the case.`;
-    }
-  } else if(mode === "contender"){
+  if(mode === "contender"){
     if(diff >= 200){
       ctxVerdict = `As a Contender, this is a <b>green light</b>. You're getting more current production than you're giving up — exactly the shape you need to push for a title window.`;
     } else if(diff > -200){
       ctxVerdict = `As a Contender, the value is roughly even. The deciding question: does the incoming production fit a <b>starting lineup hole</b>? If yes, accept. If just depth, pass.`;
     } else if(diff > -1500){
-      ctxVerdict = `As a Contender, paying a small premium is sometimes correct for the right plug-and-play piece. Accept only if it's a clear lineup upgrade — <b>otherwise pass</b>.`;
+      ctxVerdict = `As a Contender, paying a small premium is sometimes correct for the right plug-and-play piece. <b>Counter</b> if the fit is marginal — accept if it's a clear lineup upgrade.`;
     } else {
-      ctxVerdict = `As a Contender, you're paying a steep premium. Even contending teams shouldn't burn this much equity unless this is a needle-moving acquisition. <b>Pass.</b>`;
+      ctxVerdict = `As a Contender, you're paying a steep premium. Even contending teams shouldn't burn this much equity unless this is a needle-moving acquisition. <b>Counter or pass.</b>`;
     }
   } else {
     if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
@@ -4065,15 +2789,14 @@ function renderVerdict(v){
     } else if(diff > -200){
       ctxVerdict = `As a Rebuilder, even-value trades only matter if you're getting <b>younger</b>. If the age picture above doesn't favor you, this is a pass.`;
     } else {
-      ctxVerdict = `As a Rebuilder, paying a premium for <b>now</b> assets is exactly what you shouldn't be doing. <b>Pass</b> — your shape needs future picks and younger players, not the other way around.`;
+      ctxVerdict = `As a Rebuilder, paying a premium for <b>now</b> assets is exactly what you shouldn't be doing. <b>Counter</b> by replacing aging pieces with future picks or younger players.`;
     }
   }
-  const ctxClass = mode === "rebuilder" ? "rebuild" : mode === "winnow" ? "winnow" : "";
   const ctxHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">🎯 CONTEXT VERDICT <span class="sub">your trade graded against your team mode</span></div>
+      <div class="v2-section-head">CONTEXT VERDICT <span class="sub">graded against your team mode</span></div>
       <div class="v2-section-body">
-        <div class="v2-context-card ${ctxClass}">
+        <div class="v2-context-card ${mode === "rebuilder" ? "rebuild" : ""}">
           <span class="mode-badge">${modeLabel}</span>${ctxVerdict}
         </div>
       </div>
@@ -4088,57 +2811,7 @@ function renderVerdict(v){
     </div>
   `;
 
-  // === Section G — ROSTER FIT (Feature 7) ===
-  let rosterFitHTML = "";
-  {
-    const needs = window.teamNeeds || [];
-    const hasRoster = !!(state.myRoster && state.myRoster.players && state.myRoster.players.length);
-    if(!hasRoster){
-      rosterFitHTML = `
-        <div class="v2-section">
-          <div class="v2-section-head">🧩 ROSTER FIT <span class="sub">does this trade fill or vacate a need on your team</span></div>
-          <div class="v2-section-body">
-            <div class="v2-connect-prompt">📡 Connect Sleeper to see how this trade fits your roster needs.</div>
-          </div>
-        </div>
-      `;
-    } else {
-      const allTradeAssets = [
-        ...state.get.map(a => ({ ...a, side: "get" })),
-        ...state.give.map(a => ({ ...a, side: "give" }))
-      ].filter(a => a.type !== "pick");
-
-      const fitRows = allTradeAssets.map(a => {
-        const inNeed = needs.includes(a.p);
-        const isGetting = a.side === "get";
-        let tagHTML = `<span class="v2-rf-neutral">—</span>`;
-        if(inNeed && isGetting)  tagHTML = `<span class="v2-rf-tag-fills">✓ FILLS NEED</span>`;
-        if(inNeed && !isGetting) tagHTML = `<span class="v2-rf-tag-loses">⚠ LOSING A NEED</span>`;
-        const sideLabel = isGetting ? "GET" : "GIVE";
-        return `<div class="v2-roster-fit-row">
-          <span class="v2-rf-name">${a.n} <span style="color:var(--ink-3);font-size:10px;font-weight:500">(${sideLabel})</span></span>
-          <span style="color:var(--ink-3);font-size:11px;margin-right:6px">${a.p}</span>
-          ${tagHTML}
-        </div>`;
-      }).join("");
-
-      const needsStr = needs.length
-        ? needs.map(p => `<span style="font-weight:700;color:var(--blue)">${p}</span>`).join(", ")
-        : `<span style="color:var(--ink-3)">All positions covered</span>`;
-
-      rosterFitHTML = `
-        <div class="v2-section">
-          <div class="v2-section-head">🧩 ROSTER FIT <span class="sub">does this trade fill or vacate a need on your team</span></div>
-          <div class="v2-section-body">
-            <div style="font-size:11px;color:var(--ink-3);margin-bottom:10px">Your biggest needs: ${needsStr}</div>
-            ${fitRows || `<div style="color:var(--ink-3);font-size:12px;font-style:italic">No players in this trade to evaluate.</div>`}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + rosterFitHTML + spreadHTML + marketBand + ctxHTML;
+  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + spreadHTML + marketBand + ctxHTML;
 
   // attach last analysis for share
   window.__lastAnalysis = v;
@@ -4147,10 +2820,9 @@ function renderVerdict(v){
 // =================================================================
 // SHARE CARD (canvas)
 // =================================================================
-$("#btn-share").onclick = async () => {
-  openModal("#share-modal");
-  await LOGO_READY;
+$("#btn-share").onclick = () => {
   drawShareCard();
+  openModal("#share-modal");
 };
 
 function drawShareCard(){
@@ -4242,39 +2914,6 @@ function drawShareCard(){
   ctx.textAlign = "center";
   ctx.fillText("POWERED BY TRADEIQ • dynasty fantasy football trade analyzer", W/2, H-30);
   ctx.textAlign = "left";
-
-  // logo watermark — guaranteed on every share card
-  if(LOGO_IMG && LOGO_IMG.complete && LOGO_IMG.naturalWidth){
-    const wmSize = 110;
-    const wmX = W - wmSize - 60;
-    const wmY = H - wmSize - 80;
-    ctx.save();
-    ctx.globalAlpha = 0.8;
-    ctx.beginPath();
-    ctx.arc(wmX + wmSize/2, wmY + wmSize/2, wmSize/2, 0, Math.PI*2);
-    ctx.closePath();
-    ctx.clip();
-    ctx.drawImage(LOGO_IMG, wmX, wmY, wmSize, wmSize);
-    ctx.restore();
-    ctx.save();
-    ctx.globalAlpha = 0.85;
-    ctx.strokeStyle = "#00d26a";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.arc(wmX + wmSize/2, wmY + wmSize/2, wmSize/2, 0, Math.PI*2);
-    ctx.stroke();
-    ctx.restore();
-  } else {
-    // text fallback if image somehow not ready
-    ctx.save();
-    ctx.globalAlpha = 0.8;
-    ctx.fillStyle = "#00d26a";
-    ctx.font = "900 36px Inter, sans-serif";
-    ctx.textAlign = "right";
-    ctx.fillText("TradeIQ", W - 60, H - 90);
-    ctx.restore();
-    ctx.textAlign = "left";
-  }
 }
 
 function drawGradeBox(ctx, x, y, w, h, label, grade, total){
@@ -4291,15 +2930,8 @@ function drawGradeBox(ctx, x, y, w, h, label, grade, total){
 
   const colorMap = {S:"#00d26a",Aplus:"#00d26a",A:"#3ee68f",Aminus:"#3ee68f",Bplus:"#ffd700",B:"#ffd700",Bminus:"#ffd700",Cplus:"#ff9f43",C:"#ff9f43",D:"#ff4757",F:"#ff4757"};
   ctx.fillStyle = colorMap[grade.c] || "#e8eef9";
-  const labelText = (typeof gradeLabel === "function") ? gradeLabel(grade) : grade.l;
-  // size label so it fits in the box width regardless of word length
-  let labelSize = 70;
-  ctx.font = `900 ${labelSize}px Inter, sans-serif`;
-  while(ctx.measureText(labelText).width > w - 40 && labelSize > 28){
-    labelSize -= 4;
-    ctx.font = `900 ${labelSize}px Inter, sans-serif`;
-  }
-  ctx.fillText(labelText, x+w/2, y+140);
+  ctx.font = "900 110px JetBrains Mono, monospace";
+  ctx.fillText(grade.l, x+w/2, y+150);
 
   // tier label
   if(grade.tier){
@@ -4330,7 +2962,7 @@ function drawAssetList(ctx, list, x, y, w, accent){
     if(a.type === "pick"){
       const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
       nm = `${a.year} ${ord} Pick`;
-      sub = a.slot==="top3"?"Bottom (1–3)":a.slot==="late"?"Late (9–10)":"Mid (4–8)";
+      sub = a.slot==="top3"?"Top-3 Origin":a.slot==="late"?"Late Origin":"Mid Origin";
     } else {
       nm = a.n;
       sub = `${a.p} • ${a.t} • Age ${a.a}`;
@@ -4381,31 +3013,7 @@ function stripTags(s){ return s.replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim
 // preload logo for canvas
 const LOGO_IMG = new Image();
 LOGO_IMG.crossOrigin = "anonymous";
-const LOGO_READY = new Promise((res) => {
-  LOGO_IMG.onload = () => res(true);
-  LOGO_IMG.onerror = () => res(false);
-});
 LOGO_IMG.src = LOGO_URL;
-
-// splash boot screen
-(function initSplash(){
-  const splash = document.getElementById("splash");
-  const splashLogo = document.getElementById("splash-logo");
-  if(!splash || !splashLogo) return;
-  splashLogo.src = LOGO_URL;
-  const minDuration = 1500;
-  const start = performance.now();
-  const finish = () => {
-    const elapsed = performance.now() - start;
-    const wait = Math.max(0, minDuration - elapsed);
-    setTimeout(() => {
-      splash.classList.add("fade-out");
-      setTimeout(() => splash.remove(), 500);
-    }, wait);
-  };
-  if(document.readyState === "complete") finish();
-  else window.addEventListener("load", finish, { once: true });
-})();
 
 $("#btn-download-share").onclick = () => {
   const c = $("#share-canvas");
@@ -4424,33 +3032,6 @@ $("#btn-clear").onclick = () => {
   rerenderAll();
 };
 
-
-// =================================================================
-// FANTASYCALC LIVE VALUE TRENDING ARROWS
-// =================================================================
-window.fcLiveValues = {};
-(async function fetchFCValues(){
-  try {
-    const res = await fetch('https://api.fantasycalc.com/values/current?isDynasty=true&numQbs=2&ppr=1&includePicksEtc=true');
-    if(!res.ok) return;
-    const data = await res.json();
-    data.forEach(item => {
-      if(item.player && item.player.name){
-        window.fcLiveValues[item.player.name.trim().toLowerCase()] = item.value;
-      }
-    });
-  } catch(e) { /* gracefully degrade — no arrows shown if fetch fails */ }
-})();
-
-function fcArrow(name, fcStoredVal){
-  if(!fcStoredVal || !name) return '';
-  const live = window.fcLiveValues[name.trim().toLowerCase()];
-  if(live == null) return '';
-  if(live > fcStoredVal * 1.03) return '<span style="font-size:11px;color:#22c55e;margin-left:3px;vertical-align:middle">&#9650;</span>';
-  if(live < fcStoredVal * 0.97) return '<span style="font-size:11px;color:#ef4444;margin-left:3px;vertical-align:middle">&#9660;</span>';
-  return '';
-}
-
 // =================================================================
 // BOOT
 // =================================================================
@@ -4459,150 +3040,18 @@ function boot(){
   setupSearch("give");
   profileBar();
   rerenderAll();
-  // Re-run team needs analysis if roster was restored from localStorage
-  if(state.myRoster) analyzeTeamNeeds();
   // first-run profile prompt
   if(!localStorage.getItem(PROFILE_KEY)){
     setTimeout(openProfile, 350);
   }
+  // Also show setup banner for first-time visitors (or if banner wasn't dismissed)
+  const bannerDismissed = localStorage.getItem('tradeiq.banner.v1');
+  if(!bannerDismissed){
+    const banner = document.getElementById('setup-banner');
+    if(banner){ banner.style.display='flex'; }
+  }
 }
 boot();
 </script>
-
-<script>
-/* ── Pick Calculator ───────────────────────────────────────────── */
-(function(){
-  var sideA = [], sideB = [];
-
-  function ordLabel(r){ return r===1?"1st":r===2?"2nd":r===3?"3rd":r+"th"; }
-  function tierLabel(t){ return t==="top3"?"Early":t==="late"?"Late":"Mid"; }
-
-  // Use the app's existing pickValue() which respects PROFILE settings
-  function calcPickVal(year, round, slot){
-    return pickValue({ type:"pick", year:parseInt(year), round:parseInt(round), slot:slot });
-  }
-
-  function num(v){ return v.toLocaleString(); }
-
-  function sideTotal(arr){
-    return arr.reduce(function(s,p){ return s + calcPickVal(p.year, p.round, p.slot); }, 0);
-  }
-
-  function refreshTotals(){
-    var ta = sideTotal(sideA), tb = sideTotal(sideB);
-    document.getElementById('pc-total-a').textContent = num(ta) + " pts";
-    document.getElementById('pc-total-b').textContent = num(tb) + " pts";
-  }
-
-  function renderChips(side, arr, containerId){
-    var container = document.getElementById(containerId);
-    container.innerHTML = "";
-    arr.forEach(function(p, i){
-      var val = calcPickVal(p.year, p.round, p.slot);
-      var chip = document.createElement('div');
-      chip.className = 'pc-chip';
-      chip.innerHTML =
-        '<span>' + p.year + ' ' + ordLabel(p.round) + ' · ' + tierLabel(p.slot) + '</span>' +
-        '<span class="chip-val">' + num(val) + '</span>' +
-        '<button class="chip-rm" aria-label="Remove" data-side="' + side + '" data-idx="' + i + '">×</button>';
-      container.appendChild(chip);
-    });
-    refreshTotals();
-  }
-
-  function addPick(side){
-    var ys = "pc-year-" + side, rs = "pc-round-" + side, ts = "pc-tier-" + side;
-    var year  = document.getElementById(ys).value;
-    var round = document.getElementById(rs).value;
-    var slot  = document.getElementById(ts).value;
-    var arr   = side === "a" ? sideA : sideB;
-    arr.push({ year:parseInt(year), round:parseInt(round), slot:slot });
-    renderChips(side, arr, "pc-chips-" + side);
-    // hide result when picks change
-    document.getElementById('pc-result').setAttribute('hidden','');
-  }
-
-  function removePick(side, idx){
-    var arr = side === "a" ? sideA : sideB;
-    arr.splice(idx, 1);
-    renderChips(side, arr, "pc-chips-" + side);
-    document.getElementById('pc-result').setAttribute('hidden','');
-  }
-
-  function compare(){
-    var ta = sideTotal(sideA), tb = sideTotal(sideB);
-    var maxV = Math.max(ta, tb);
-    if(maxV === 0){ alert("Add at least one pick to each side."); return; }
-    var diff = ta - tb;
-    var pct  = maxV > 0 ? Math.abs(diff) / maxV * 100 : 0;
-
-    // verdict label
-    var verdictLabel, verdictClass;
-    if(pct < 5){
-      verdictLabel = "EVEN TRADE";
-      verdictClass = "even";
-    } else if(diff > 0){
-      // Side A wins
-      verdictClass = "side-a";
-      if(pct < 15)       verdictLabel = "SLIGHT EDGE — SIDE A";
-      else if(pct < 30)  verdictLabel = "CLEAR WIN — SIDE A";
-      else               verdictLabel = "LOPSIDED — SIDE A";
-    } else {
-      // Side B wins
-      verdictClass = "side-b";
-      if(pct < 15)       verdictLabel = "SLIGHT EDGE — SIDE B";
-      else if(pct < 30)  verdictLabel = "CLEAR WIN — SIDE B";
-      else               verdictLabel = "LOPSIDED — SIDE B";
-    }
-
-    var deltaStr = Math.abs(diff) > 0 ? (diff > 0 ? "+" : "−") + num(Math.abs(diff)) + " pts" : "±0";
-
-    var verdictEl = document.getElementById('pc-result-verdict');
-    verdictEl.className = "pc-result-verdict " + verdictClass;
-    verdictEl.textContent = verdictLabel;
-
-    var aClass = diff > 0 ? "winner" : "";
-    var bClass = diff < 0 ? "winner-b" : "";
-    document.getElementById('pc-result-breakdown').innerHTML =
-      '<div class="pc-rb-side">' +
-        '<div class="pc-rb-side-label">Side A</div>' +
-        '<div class="pc-rb-side-val ' + aClass + '">' + num(ta) + '</div>' +
-      '</div>' +
-      '<div class="pc-rb-diff">' +
-        '<div class="pc-rb-diff-num">' + deltaStr + '</div>' +
-        '<div class="pc-rb-diff-lbl">difference</div>' +
-      '</div>' +
-      '<div class="pc-rb-side">' +
-        '<div class="pc-rb-side-label">Side B</div>' +
-        '<div class="pc-rb-side-val ' + bClass + '">' + num(tb) + '</div>' +
-      '</div>';
-
-    document.getElementById('pc-result').removeAttribute('hidden');
-  }
-
-  function clearAll(){
-    sideA = []; sideB = [];
-    renderChips("a", sideA, "pc-chips-a");
-    renderChips("b", sideB, "pc-chips-b");
-    document.getElementById('pc-result').setAttribute('hidden','');
-  }
-
-  // delegate chip remove clicks
-  document.addEventListener('click', function(e){
-    var btn = e.target.closest('.chip-rm');
-    if(!btn) return;
-    var side = btn.getAttribute('data-side');
-    var idx  = parseInt(btn.getAttribute('data-idx'));
-    removePick(side, idx);
-  });
-
-  document.getElementById('pc-add-a').addEventListener('click', function(){ addPick("a"); });
-  document.getElementById('pc-add-b').addEventListener('click', function(){ addPick("b"); });
-  document.getElementById('pc-compare-btn').addEventListener('click', compare);
-  document.getElementById('pc-clear-btn').addEventListener('click', clearAll);
-
-})();
-</script>
-
 </body>
 </html>
