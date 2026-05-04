@@ -1150,8 +1150,8 @@ const PLAYERS = [
 {n:"Shedeur Sanders",p:"QB",t:"CLE",a:24,ktc:5400,fc:5300,rating:43,dp:5500,sleeper:5400,draft:2025},
 
 // RBs
-{n:"Bijan Robinson",p:"RB",t:"ATL",a:24,ktc:9100,fc:8600,rating:97,dp:8500,sleeper:8500},
-{n:"Jahmyr Gibbs",p:"RB",t:"DET",a:24,ktc:9100,fc:8350,rating:97,dp:8450,sleeper:8400},
+{n:"Bijan Robinson",p:"RB",t:"ATL",a:24,ktc:9100,fc:8600,rating:99,dp:8500,sleeper:8500},
+{n:"Jahmyr Gibbs",p:"RB",t:"DET",a:24,ktc:9100,fc:8350,rating:99,dp:8450,sleeper:8400},
 {n:"Saquon Barkley",p:"RB",t:"PHI",a:29,ktc:7400,fc:7500,rating:76,dp:7100,sleeper:7400},
 {n:"Breece Hall",p:"RB",t:"NYJ",a:25,ktc:8200,fc:8150,rating:78,dp:8100,sleeper:8200},
 {n:"De'Von Achane",p:"RB",t:"MIA",a:25,ktc:8100,fc:8050,rating:90,dp:8000,sleeper:8100},
@@ -1601,7 +1601,7 @@ function applyFormat(player, base){
   if(tc === 14 && player.p === "RB"){ v *= 1.06; } // depth/handcuff matters
   if(tc === 8 && player.p === "RB"){ v *= 0.80; }
 
-  return Math.min(97, Math.round(v*10)/10);
+  return Math.min(100, Math.round(v*10)/10);
 }
 function adjustedConsensus(player){
   const base = (typeof player.rating === "number") ? player.rating
