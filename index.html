@@ -40,7 +40,7 @@ img{display:block;max-width:100%}
 /* Ticker */
 .ticker{
   position:sticky;top:0;z-index:30;
-  background:linear-gradient(180deg,#0d1322 0%,#080c18 100%);
+  background:#0d1117;
   border-bottom:1px solid var(--line);
   overflow:hidden;
   height:32px;display:flex;align-items:center;
@@ -1253,8 +1253,8 @@ const PLAYERS = [
 {n:"Isaiah Likely",p:"TE",t:"BAL",a:26,ktc:3300,fc:3400,rating:69,dp:3200,sleeper:3300},
 {n:"Brenton Strange",p:"TE",t:"JAX",a:25,ktc:3700,fc:3650,rating:68,dp:3800,sleeper:3700},
 {n:"Kyle Pitts",p:"TE",t:"ATL",a:25,ktc:3200,fc:3300,rating:60,dp:3100,sleeper:3200},
-{n:"Colston Loveland",p:"TE",t:"CHI",a:22,ktc:5400,fc:5350,rating:86,dp:5500,sleeper:5400,draft:2025},
-{n:"Tyler Warren",p:"TE",t:"IND",a:23,ktc:5800,fc:5750,rating:84,dp:5900,sleeper:5800,draft:2025},
+{n:"Colston Loveland",p:"TE",t:"CHI",a:22,ktc:5400,fc:5350,rating:89,dp:5500,sleeper:5400,draft:2025},
+{n:"Tyler Warren",p:"TE",t:"IND",a:23,ktc:5800,fc:5750,rating:91,dp:5900,sleeper:5800,draft:2025},
 
 // QBs — additions
 {n:"Kirk Cousins",p:"QB",t:"ATL",a:38,ktc:600,fc:700,rating:33,dp:500,sleeper:600},
@@ -1579,12 +1579,8 @@ function applyFormat(player, base){
   if(PROFILE.format === "superflex" && player.p === "QB") v *= 1.40;
   if(PROFILE.format === "standard" && player.p === "QB") v *= 0.70;
 
-  // TEP
-  const tep = parseFloat(PROFILE.tep);
-  if(player.p === "TE"){
-    if(tep === 1) v *= 1.35;
-    else if(tep === 0.5) v *= 1.18;
-  }
+  // TEP — NOT applied to display rating; only in assetValue() for trade calc
+  // (TEP shifts TE value relative to other positions in trade context)
 
   // Scoring (PPR/half/standard)
   if(player.p === "WR"){
@@ -1635,9 +1631,14 @@ function pickValue(pick){
 // Asset helpers
 function assetValue(asset){
   if(asset.type === "pick") return pickValue(asset);
-  if(typeof asset.rating !== "number")
-    asset.rating = Math.round(1000 * Math.pow(Math.max(asset.ktc||500,1) / MAX_KTC, DYNASTY_EXP))/10;
-  return adjustedConsensus(asset);
+  const _base = adjustedConsensus(asset);
+  // TEP shifts TE trade value relative to other positions (display rating unchanged)
+  if(asset.p === "TE"){
+    const _tep = parseFloat(PROFILE.tep);
+    if(_tep === 1)   return Math.round(_base * 1.35);
+    if(_tep === 0.5) return Math.round(_base * 1.18);
+  }
+  return _base;
 }
 function assetSpread(asset){
   if(asset.type === "pick") return 100;
@@ -2143,8 +2144,8 @@ $("#btn-save-profile").onclick = () => {
     mode: getGroupVal("profile-modal","mode"),
   };
   saveProfile(PROFILE);
-  localStorage.setItem("tradeiq.banner.v1","1");
-  const _sb=document.getElementById("setup-banner");if(_sb)_sb.style.display="none";
+  // Banner auto-hides on reload once PROFILE_KEY is set
+  const _sb3=document.getElementById("setup-banner");if(_sb3)_sb3.style.display="none";
   profileBar();
   rerenderAll();
   closeModal("#profile-modal");
@@ -3050,11 +3051,10 @@ function boot(){
   if(!localStorage.getItem(PROFILE_KEY)){
     setTimeout(openProfile, 350);
   }
-  // Also show setup banner for first-time visitors (or if banner wasn't dismissed)
-  const bannerDismissed = localStorage.getItem('tradeiq.banner.v1');
-  if(!bannerDismissed){
-    const banner = document.getElementById('setup-banner');
-    if(banner){ banner.style.display='flex'; }
+  // Configure banner: show only when league is not yet configured (tied to PROFILE_KEY)
+  if(!localStorage.getItem(PROFILE_KEY)){
+    const _banner = document.getElementById("setup-banner");
+    if(_banner) _banner.style.display = "flex";
   }
 }
 boot();
