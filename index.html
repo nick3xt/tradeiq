@@ -40,8 +40,8 @@ img{display:block;max-width:100%}
 /* Ticker */
 .ticker{
   position:sticky;top:0;z-index:30;
-  background:linear-gradient(180deg,#0d1322 0%,#080c18 100%);
-  border-bottom:1px solid var(--line);
+  background:#0d2b1a;
+  border-bottom:2px solid #1a5c35;
   overflow:hidden;
   height:32px;display:flex;align-items:center;
 }
@@ -384,6 +384,10 @@ img{display:block;max-width:100%}
 .v2-hero.you h1{color:var(--green)}
 .v2-hero.them h1{color:var(--red)}
 .v2-hero.even h1{color:var(--blue)}
+.surplus-line{margin:6px auto 4px;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:700;letter-spacing:.04em;display:inline-block}
+.surplus-line.win{background:rgba(30,180,80,.15);color:#3edb80;border:1px solid rgba(30,180,80,.3)}
+.surplus-line.loss{background:rgba(220,60,60,.13);color:#f07070;border:1px solid rgba(220,60,60,.25)}
+.surplus-line.even{background:rgba(180,180,180,.1);color:var(--ink-2);border:1px solid rgba(180,180,180,.2)}
 .v2-hero .delta{margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--ink-2);font-weight:600;letter-spacing:.02em}
 .v2-hero .delta b{color:var(--gold)}
 .v2-grade-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
@@ -815,7 +819,7 @@ img{display:block;max-width:100%}
 
 <!-- TICKER -->
 <div class="ticker" id="ticker">
-  <div class="label">LIVE • TOP 25</div>
+  <div class="label">LIVE • TOP 40</div>
   <div class="track" id="ticker-track"></div>
 </div>
 
@@ -1604,6 +1608,32 @@ function adjustedConsensus(player){
   return applyFormat(player, rawConsensus(player));
 }
 
+// =================================================================
+// 0-100 RATING SYSTEM
+// =================================================================
+function pickRatingBase(round, slot){
+  if(round===1){ return slot==="top3"?82: slot==="late"?70: 76; }
+  if(round===2){ return slot==="top3"?62: slot==="late"?52: 58; }
+  if(round===3){ return 42; }
+  if(round===4){ return 28; }
+  if(round===5){ return 16; }
+  return 8;
+}
+function pickRating(pick){
+  let r = pickRatingBase(pick.round, pick.slot);
+  const yrs = pick.year - 2026;
+  if(yrs===1) r = Math.max(1, r-4);
+  else if(yrs===2) r = Math.max(1, r-8);
+  else if(yrs>=3) r = Math.max(1, r-12);
+  return r;
+}
+function playerRating(player){
+  return Math.min(99, Math.max(1, Math.round(adjustedConsensus(player)/97)));
+}
+function assetRating(asset){
+  return asset.type==="pick" ? pickRating(asset) : playerRating(asset);
+}
+
 // Picks
 function basePickValue(round, slot){
   if(round===1){ return slot==="top3"?5800: slot==="late"?2800: 4200; }
@@ -1683,14 +1713,14 @@ function showToast(msg, kind){
 // =================================================================
 function renderTicker(){
   const top = [...PLAYERS]
-    .map(p => ({...p, _v: adjustedConsensus(p), _s: spread(p)}))
+    .map(p => ({...p, _v: playerRating(p), _s: spread(p)}))
     .sort((a,b)=>b._v-a._v)
-    .slice(0,25);
+    .slice(0,40);
   const items = top.map((p,i) => {
     const seed = (p.n.length + i) % 5;
     const trend = seed % 2 === 0 ? "+" : "-";
     const dpct = (1 + (i%4)*0.4 + (seed*0.2)).toFixed(1);
-    return `<span class="item">${posTag(p.p)}<span class="name">${p.n}</span><span class="val">${num(p._v)}</span><span class="delta ${trend==='+'?'up':'down'}">${trend}${dpct}%</span></span>`;
+    return `<span class="item">${posTag(p.p)}<span class="name">${p.n}</span><span class="val">${p._v}</span><span class="delta ${trend==='+'?'up':'down'}">${trend}${dpct}%</span></span>`;
   }).join("");
   // duplicate for seamless loop
   $("#ticker-track").innerHTML = items + items;
@@ -1940,7 +1970,7 @@ function renderMovers(){
   const entries = Object.entries(TRENDS).map(([name, t]) => {
     const p = PLAYERS.find(x => x.n === name);
     if(!p) return null;
-    return { p, trend: t, val: adjustedConsensus(p) };
+    return { p, trend: t, val: playerRating(p) };
   }).filter(Boolean);
   const risers = entries.filter(e => e.trend > 0).sort((a,b)=>b.trend-a.trend).slice(0,5);
   const fallers = entries.filter(e => e.trend < 0).sort((a,b)=>a.trend-b.trend).slice(0,5);
@@ -1950,7 +1980,7 @@ function renderMovers(){
       <div class="nm">${e.p.n}</div>
       <div class="meta">${e.p.p} · ${e.p.t} · Age ${e.p.a}</div>
       <div class="row">
-        <span class="val">${num(e.val)}</span>
+        <span class="val">${e.val}</span>
         <span class="trend ${dir}">${sign}${Math.abs(e.trend).toFixed(1)}%</span>
       </div>
     </div>`;
@@ -1973,29 +2003,29 @@ function renderMovers(){
 function renderTiers(){
   const grid = document.getElementById("tiers-grid");
   if(!grid) return;
-  // bucket players by position with current adjusted values
+  // bucket players by position with 0-100 ratings
   const byPos = { QB:[], RB:[], WR:[], TE:[] };
   for(const p of PLAYERS){
-    if(byPos[p.p]) byPos[p.p].push({ n:p.n, v:adjustedConsensus(p) });
+    if(byPos[p.p]) byPos[p.p].push({ n:p.n, v:playerRating(p) });
   }
   for(const k of Object.keys(byPos)) byPos[k].sort((a,b)=>b.v-a.v);
 
-  // Define tier bands per position (consensus-value cutoffs; reflects current market)
+  // Tier bands using 0-100 rating scale
   const fmtSF = PROFILE.format === "superflex";
   const tierDefs = {
     QB: fmtSF
-      ? [["QB1",8500,99999],["QB2",6000,8499],["QB3",3500,5999],["QBSTREAM",0,3499]]
-      : [["QB1",6500,99999],["QB2",4500,6499],["QB3",2500,4499],["QBSTREAM",0,2499]],
-    RB: [["RB1",8000,99999],["RB2",5500,7999],["RB3",3500,5499],["RB4+",0,3499]],
-    WR: [["WR1",8000,99999],["WR2",5500,7999],["WR3",3500,5499],["WR4+",0,3499]],
-    TE: [["TE1",5500,99999],["TE2",3000,5499],["TE3",1500,2999],["TE4+",0,1499]]
+      ? [["QB1",85,99],["QB2",65,84],["QB3",45,64],["QBSTREAM",0,44]]
+      : [["QB1",72,99],["QB2",52,71],["QB3",32,51],["QBSTREAM",0,31]],
+    RB: [["RB1",80,99],["RB2",60,79],["RB3",40,59],["RB4+",0,39]],
+    WR: [["WR1",80,99],["WR2",60,79],["WR3",40,59],["WR4+",0,39]],
+    TE: [["TE1",62,99],["TE2",42,61],["TE3",25,41],["TE4+",0,24]]
   };
   function colHTML(pos, defs){
     const ctx = pos === "QB" ? (fmtSF ? "Superflex" : "1QB") : "all formats";
     const rows = defs.map(([lbl, lo, hi]) => {
       const inTier = byPos[pos].filter(x => x.v >= lo && x.v <= hi);
       const top = inTier.slice(0,3).map(x=>x.n).join(" · ");
-      const range = hi >= 99999 ? `${num(lo)}+` : `${num(lo)}–${num(hi)}`;
+      const range = hi >= 99 ? `${lo}–99` : `${lo}–${hi}`;
       return `<div class="tier-row">
         <div>
           <div class="lbl">${lbl}</div>
@@ -2038,11 +2068,11 @@ function renderFeatured(){
   const get  = FEATURED_TRADE.get.map(resolve).filter(Boolean);
   const give = FEATURED_TRADE.give.map(resolve).filter(Boolean);
   function rowHTML(a){
-    const v = assetValue(a);
+    const rtg = assetRating(a);
     const label = a.type === "pick"
       ? `${a.year} ${a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th"} Round Pick`
       : `${a.n} (${a.p}, ${a.t})`;
-    return `<div class="featured-asset"><span class="nm">${label}</span><span class="vl">${num(v)}</span></div>`;
+    return `<div class="featured-asset"><span class="nm">${label}</span><span class="vl">${rtg}</span></div>`;
   }
   card.innerHTML = `
     <div class="featured-side you">
@@ -2363,27 +2393,28 @@ $("#btn-analyze").onclick = () => {
 };
 
 function gradeFor(diffPct){
-  // diffPct = (your_get - your_give)/avg
-  // Returns { l: letter, c: cssClass, tier: tier label }
-  if(diffPct >= 0.18) return {l:"S",  c:"S",      tier:"ELITE VALUE WON"};
-  if(diffPct >= 0.10) return {l:"A+", c:"Aplus",  tier:"ELITE VALUE WON"};
-  if(diffPct >= 0.05) return {l:"A",  c:"A",      tier:"STRONG VALUE"};
-  if(diffPct >= 0.02) return {l:"A-", c:"Aminus", tier:"STRONG VALUE"};
-  if(diffPct >= -0.02) return {l:"B+", c:"Bplus",  tier:"FAIR DEAL"};
-  if(diffPct >= -0.05) return {l:"B",  c:"B",      tier:"FAIR DEAL"};
-  if(diffPct >= -0.10) return {l:"B-", c:"Bminus", tier:"FAIR DEAL"};
-  if(diffPct >= -0.18) return {l:"C+", c:"Cplus",  tier:"WEAK RETURN"};
-  if(diffPct >= -0.28) return {l:"C",  c:"C",      tier:"WEAK RETURN"};
-  if(diffPct >= -0.40) return {l:"D",  c:"D",      tier:"LOPSIDED"};
-  return {l:"F", c:"F", tier:"LOPSIDED"};
+  // diffPct = (rating_get - rating_give) / avg  (0-100 scale)
+  // Positive = surplus (you won), negative = deficit (you lost)
+  // Winning side always gets A or A+; losing side gets B-F based on deficit %
+  if(diffPct >= 0.05)  return {l:"A+", c:"Aplus",  tier:"STRONG SURPLUS"};
+  if(diffPct >= -0.05) return {l:"A",  c:"A",       tier:"FAIR VALUE"};
+  if(diffPct >= -0.10) return {l:"B",  c:"B",       tier:"SLIGHT LOSS"};
+  if(diffPct >= -0.18) return {l:"C",  c:"C",       tier:"LOSING TRADE"};
+  if(diffPct >= -0.28) return {l:"D",  c:"D",       tier:"LOPSIDED"};
+  return {l:"F", c:"F", tier:"VERY LOPSIDED"};
 }
 
 function analyze(){
   const totGet  = state.get.reduce((s,a)=>s+assetValue(a),0);
   const totGive = state.give.reduce((s,a)=>s+assetValue(a),0);
   const avg = (totGet + totGive) / 2 || 1;
-  const youDiff = (totGet - totGive) / avg;          // your side
-  const oppDiff = (totGive - totGet) / avg;          // their side
+
+  // Grade on 0-100 rating scale (assetRating returns 0-99 per asset)
+  const ratingGet  = state.get.reduce((s,a)=>s+assetRating(a),0);
+  const ratingGive = state.give.reduce((s,a)=>s+assetRating(a),0);
+  const ratingAvg  = (ratingGet + ratingGive) / 2 || 1;
+  const youDiff = (ratingGet - ratingGive) / ratingAvg;   // your side
+  const oppDiff = (ratingGive - ratingGet) / ratingAvg;   // their side
 
   const yourGrade = gradeFor(youDiff);
   const oppGrade  = gradeFor(oppDiff);
@@ -2415,10 +2446,10 @@ function analyze(){
   const note = contextNote(totGet, totGive);
 
   // verdict text
-  const verdict = verdictText(totGet, totGive, yourGrade, oppGrade, market);
+  const verdict = verdictText(ratingGet, ratingGive, yourGrade, oppGrade, market);
 
   return {
-    totGet, totGive, avg, youDiff, oppDiff,
+    totGet, totGive, ratingGet, ratingGive, avg, youDiff, oppDiff,
     yourGrade, oppGrade, market, observations, note, verdict, maxSpread, avgSpread
   };
 }
@@ -2482,15 +2513,15 @@ function contextNote(totGet, totGive){
   return `Profile context: <b>${mode}</b> · ${PROFILE.format} · ${PROFILE.scoring}.`;
 }
 
-function verdictText(totGet, totGive, you, opp, market){
-  const diff = totGet - totGive;
+function verdictText(ratingGet, ratingGive, you, opp, market){
+  const diff = ratingGet - ratingGive;
   const lines = [];
-  if(Math.abs(diff) < 200){
-    lines.push(`This trade is <b>essentially even</b> on consensus value (${num(totGet)} vs ${num(totGive)}).`);
+  if(Math.abs(diff) < 2){
+    lines.push(`This trade is <b>essentially even</b> on rating points (${ratingGet.toFixed(1)} vs ${ratingGive.toFixed(1)}).`);
   } else if(diff > 0){
-    lines.push(`You come out ahead by <b>${num(diff)}</b> consensus points (+${(((totGet/totGive)-1)*100).toFixed(1)}%).`);
+    lines.push(`You come out ahead by <b>${diff.toFixed(1)}</b> rating points (+${(((ratingGet/ratingGive)-1)*100).toFixed(1)}%).`);
   } else {
-    lines.push(`You give up <b>${num(-diff)}</b> consensus points (${(((totGive/totGet)-1)*100).toFixed(1)}% premium paid).`);
+    lines.push(`You give up <b>${(-diff).toFixed(1)}</b> rating points (${(((ratingGive/ratingGet)-1)*100).toFixed(1)}% premium paid).`);
   }
   lines.push(market.text + ".");
   if(you.l[0] === "A" || you.l === "S"){
@@ -2515,24 +2546,33 @@ function side2html(side){
 
 function renderVerdict(v){
   const body = $("#verdict-body");
-  const diff = v.totGet - v.totGive;
+  const rDiff = v.ratingGet - v.ratingGive;
   let heroClass, heroTitle;
-  if(Math.abs(diff) < 200){
-    heroClass = "even"; heroTitle = "FAIRLY EVEN TRADE";
-  } else if(diff > 0){
+  if(Math.abs(rDiff) < 2){
+    heroClass = "even"; heroTitle = "ESSENTIALLY EVEN TRADE";
+  } else if(rDiff > 0){
     heroClass = "you"; heroTitle = "YOU WIN THIS TRADE";
   } else {
     heroClass = "them"; heroTitle = "THEY WIN THIS TRADE";
   }
-  const deltaSign = diff > 0 ? "+" : (diff < 0 ? "−" : "±");
-  const deltaAbs = Math.abs(diff);
-  const pctDiff = v.totGive ? Math.abs(((v.totGet/Math.max(1,v.totGive))-1)*100) : 0;
+  const rDiffAbs = Math.abs(rDiff).toFixed(1);
+  const pctDiff = v.ratingGive ? Math.abs(((v.ratingGet/Math.max(1,v.ratingGive))-1)*100) : 0;
+  // Surplus line
+  let surplusLine;
+  if(Math.abs(rDiff) <= 2){
+    surplusLine = `<div class="surplus-line even">Essentially even trade ⚖️</div>`;
+  } else if(rDiff > 0){
+    surplusLine = `<div class="surplus-line win">You gained +${rDiffAbs} rating points of surplus 🟢</div>`;
+  } else {
+    surplusLine = `<div class="surplus-line loss">You gave away ${rDiffAbs} rating points 🔴</div>`;
+  }
 
   // === Section A — HERO ===
   const heroHTML = `
     <div class="v2-hero ${heroClass}">
       <h1>${heroTitle}</h1>
-      <div class="delta">Value gap: <b>${deltaSign}${num(deltaAbs)}</b> consensus pts ${deltaAbs>0?`(${pctDiff.toFixed(1)}% ${diff>0?"in your favor":"premium paid"})`:""}</div>
+      <div class="delta">Rating gap: <b>${rDiff>=0?"+":""}${rDiff.toFixed(1)}</b> pts ${Math.abs(rDiff)>0?`(${pctDiff.toFixed(1)}% ${rDiff>0?"in your favor":"premium paid"})`:""}</div>
+      ${surplusLine}
       <div class="v2-grade-row">
         <div class="v2-grade-card ${v.yourGrade.c}">
           <div class="lbl">YOUR SIDE</div>
@@ -2546,10 +2586,10 @@ function renderVerdict(v){
         </div>
       </div>
       <div class="v2-legend">
-        <b>S</b> = Elite <span class="sep">·</span>
-        <b>A</b> = Strong <span class="sep">·</span>
-        <b>B</b> = Fair <span class="sep">·</span>
-        <b>C</b> = Weak <span class="sep">·</span>
+        <b>A+</b> = Surplus <span class="sep">·</span>
+        <b>A</b> = Fair Value <span class="sep">·</span>
+        <b>B</b> = Slight Loss <span class="sep">·</span>
+        <b>C</b> = Losing <span class="sep">·</span>
         <b>D/F</b> = Lopsided
       </div>
     </div>
@@ -2558,7 +2598,7 @@ function renderVerdict(v){
   // === Section B — VALUE BREAKDOWN TABLE ===
   function rowsForSide(side){
     return state[side].map(a => {
-      const v = assetValue(a);
+      const rtg = assetRating(a);
       if(a.type === "pick"){
         const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
         const slotLabel = a.slot==="top3"?"Top-3 Origin":a.slot==="late"?"Late Origin":"Mid Origin";
@@ -2568,7 +2608,7 @@ function renderVerdict(v){
           <td>—</td>
           <td>—</td>
           <td>${slotLabel}</td>
-          <td class="val">${num(v)}</td>
+          <td class="val">${rtg}</td>
         </tr>`;
       }
       return `<tr>
@@ -2577,25 +2617,27 @@ function renderVerdict(v){
         <td>${a.t}</td>
         <td>${a.a}</td>
         <td>—</td>
-        <td class="val">${num(v)}</td>
+        <td class="val">${rtg}</td>
       </tr>`;
     }).join("");
   }
-  const dCls = diff > 200 ? "pos" : diff < -200 ? "neg" : "even";
-  const dLabel = diff > 0 ? `+${num(diff)} TO YOU` : diff < 0 ? `${num(diff)} (PREMIUM PAID)` : "EVEN";
+  const rDeltaAbs = Math.abs(v.ratingGet - v.ratingGive);
+  const dCls = v.ratingGet > v.ratingGive + 2 ? "pos" : v.ratingGet < v.ratingGive - 2 ? "neg" : "even";
+  const dSign = v.ratingGet > v.ratingGive ? "+" : v.ratingGet < v.ratingGive ? "−" : "±";
+  const dLabel = v.ratingGet !== v.ratingGive ? `${dSign}${rDeltaAbs.toFixed(1)} pts TO ${v.ratingGet > v.ratingGive ? "YOU" : "THEM"}` : "EVEN";
   const breakdownHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">VALUE BREAKDOWN <span class="sub">consensus across 4 sources</span></div>
+      <div class="v2-section-head">RATING BREAKDOWN <span class="sub">0–100 scale per asset</span></div>
       <div class="v2-section-body" style="padding:0">
         <table class="v2-table">
-          <thead><tr><th>ASSET</th><th>POS</th><th>TM</th><th>AGE</th><th>NOTE</th><th style="text-align:right">VALUE</th></tr></thead>
+          <thead><tr><th>ASSET</th><th>POS</th><th>TM</th><th>AGE</th><th>NOTE</th><th style="text-align:right">RTG</th></tr></thead>
           <tbody>
             <tr class="v2-side-label you"><td colspan="6">YOU GET</td></tr>
             ${rowsForSide("get") || `<tr><td colspan="6" style="color:var(--ink-3);font-style:italic">No assets</td></tr>`}
-            <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GET</td><td class="val">${num(v.totGet)}</td></tr>
+            <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GET</td><td class="val">${v.ratingGet.toFixed(1)}</td></tr>
             <tr class="v2-side-label them"><td colspan="6">YOU GIVE</td></tr>
             ${rowsForSide("give") || `<tr><td colspan="6" style="color:var(--ink-3);font-style:italic">No assets</td></tr>`}
-            <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GIVE</td><td class="val">${num(v.totGive)}</td></tr>
+            <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GIVE</td><td class="val">${v.ratingGive.toFixed(1)}</td></tr>
             <tr class="delta-row"><td colspan="5">NET DELTA</td><td class="${dCls}" style="text-align:right;font-family:'JetBrains Mono',monospace">${dLabel}</td></tr>
           </tbody>
         </table>
