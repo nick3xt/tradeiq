@@ -810,7 +810,6 @@ img{display:block;max-width:100%}
   .asset .num { font-size: 17px; }
   .side-total .val { font-size: 19px; }
   .tiers-grid { grid-template-columns: 1fr; }
-  #btn-import { display: none; }   /* hide on very narrow, still accessible via ⚙ League */
 }
 
 </style>
@@ -2781,6 +2780,7 @@ function renderVerdict(v){
   `;
 
   // === Section F — CONTEXT VERDICT ===
+  const diff = v.totGet - v.totGive;
   const mode = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
   const modeLabel = mode === "rebuilder" ? "REBUILDER" : "CONTENDER";
   let ctxVerdict;
