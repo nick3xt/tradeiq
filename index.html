@@ -37,14 +37,16 @@ input,select{font-family:inherit;color:inherit;background:transparent;border:non
 img{display:block;max-width:100%}
 .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
 
-/* Ticker */
+/* Ticker — NOT sticky; sits as a normal block above the header so it can never bleed over the
+   live panel below. Header is the only sticky strip at the top. */
 .ticker{
-  position:sticky;top:0;z-index:20;
+  position:relative;z-index:1;
   background:linear-gradient(180deg,#0d1322 0%,#080c18 100%);
   border-bottom:1px solid var(--line);
   overflow:hidden;
-  height:32px;display:flex;align-items:center;
+  height:34px;display:flex;align-items:center;
   isolation:isolate;
+  contain:layout paint;
 }
 .ticker .label{
   position:relative;z-index:2;
@@ -1118,22 +1120,21 @@ body{padding-bottom:56px}
   </div>
 </header>
 
-<!-- TICKER -->
+<!-- TICKER (LIVE • TOP 40) — non-sticky, sits above the header. -->
 <div class="ticker" id="ticker">
-  <div class="label">LIVE • TOP 25</div>
+  <div class="label">LIVE • TOP 40</div>
   <div class="track" id="ticker-track"></div>
 </div>
 
-<!-- LEAGUE CONTROLS -->
+<!-- LEAGUE CONTROLS — single settings surface, adjacent to the Sleeper import button. -->
 <div class="league-controls">
   <div class="header-row">
     <div class="spacer"></div>
     <button class="btn ghost" id="btn-import"><span>⬇</span> Import from Sleeper</button>
-    <button class="btn settings" id="btn-profile">⚙ Set League Format</button>
+    <button class="btn settings" id="btn-profile">⚙ Set Team Mode</button>
     <button class="btn ghost" id="btn-howitworks">How We Grade</button>
     <button class="btn ghost" id="btn-clear">Reset</button>
   </div>
-  <div class="profile-bar" id="profile-bar"></div>
 </div>
 
 <!-- MAIN -->
@@ -1334,9 +1335,13 @@ body{padding-bottom:56px}
       <div class="field">
         <label>Team Mode</label>
         <div class="opts" data-group="mode">
-          <button class="opt" data-val="rebuilder">Rebuilder</button>
+          <button class="opt" data-val="rebuilder">Rebuilding</button>
           <button class="opt sel" data-val="contender">Contender</button>
-          <button class="opt" data-val="winnow">Win-Now</button>
+          <button class="opt" data-val="winnow">Win Now</button>
+        </div>
+        <div style="font-size:11px;color:var(--ink-3);margin-top:8px;line-height:1.5">
+          <b>Rebuilding</b> rewards picks &amp; youth · <b>Contender</b> is balanced ·
+          <b>Win Now</b> rewards proven veterans, penalizes giving up studs.
         </div>
       </div>
     </div>
@@ -2214,7 +2219,7 @@ function renderTicker(){
   const top = [...PLAYERS]
     .map(p => ({...p, _v: adjustedConsensus(p), _s: spread(p)}))
     .sort((a,b)=>b._v-a._v)
-    .slice(0,25);
+    .slice(0,40);
   const items = top.map((p,i) => {
     const seed = (p.n.length + i) % 5;
     const trend = seed % 2 === 0 ? "+" : "-";
@@ -2228,23 +2233,9 @@ function renderTicker(){
 // =================================================================
 // PROFILE BAR
 // =================================================================
-function profileBar(){
-  const fmtMap = { standard:"Standard", superflex:"Superflex" };
-  const scoreMap = { standard:"Non-PPR", half:"Half PPR", ppr:"Full PPR" };
-  const modeMap = { contender:"Contender", winnow:"Win-Now", rebuilder:"Rebuilder" };
-  const tepMap = { "0":"No TEP", "0.5":"0.5 TEP", "1":"1.0 TEP" };
-  const bar = $("#profile-bar");
-  bar.innerHTML = `
-    <div class="chip live">League Active</div>
-    <div class="chip">Teams: <b>${PROFILE.teams}</b></div>
-    <div class="chip">Format: <b>${fmtMap[PROFILE.format]}</b></div>
-    <div class="chip">Scoring: <b>${scoreMap[PROFILE.scoring]}</b></div>
-    <div class="chip">${tepMap[PROFILE.tep]}</div>
-    <div class="chip">Mode: <b>${modeMap[PROFILE.mode] || "Contender"}</b></div>
-    <button class="edit" id="edit-profile">Edit</button>
-  `;
-  $("#edit-profile").onclick = openProfile;
-}
+// profile-bar element was removed — league settings live in the modal only.
+// Keeping this as a no-op so existing call sites don't crash.
+function profileBar(){ /* no-op */ }
 
 // =================================================================
 // SEARCH
@@ -3435,8 +3426,13 @@ function analyze(){
     needWeighted = needAdjustment !== 0;
   }
 
-  const yourGrade = gradeFor(youDiff + needAdjustment);
-  const oppGrade  = gradeFor(oppDiff);
+  // Mode-based grade modifier — small swing on the percentage delta to reflect
+  // what each roster phase actually values. Capped at ±0.06.
+  const modeAdjustment = modeGradeAdjustment();
+  const modeWeighted = modeAdjustment !== 0;
+
+  const yourGrade = gradeFor(youDiff + needAdjustment + modeAdjustment);
+  const oppGrade  = gradeFor(oppDiff - modeAdjustment);
 
   // spreads (contested?)
   const allAssets = [...state.get, ...state.give];
@@ -3470,8 +3466,41 @@ function analyze(){
   return {
     totGet, totGive, avg, youDiff, oppDiff,
     yourGrade, oppGrade, market, observations, note, verdict, maxSpread, avgSpread,
-    needWeighted
+    needWeighted, modeWeighted, modeAdjustment
   };
+}
+
+// Mode-based grade modifier. Same shape as the roster-need modifier — small swing on the
+// percentage delta. Capped at ±0.06 so it nudges grades, not flips them.
+function modeGradeAdjustment(){
+  const mode = PROFILE.mode;
+  if(mode === "contender") return 0;
+  let adj = 0;
+  if(mode === "rebuilder"){
+    // Reward incoming youth + picks; penalize sending them out. Aging vets are inverse.
+    for(const a of state.get){
+      if(a.type === "pick") adj += 0.03;
+      else if(a.a <= 23) adj += 0.03;
+      else if(a.a >= 30) adj -= 0.02;
+    }
+    for(const a of state.give){
+      if(a.type === "pick") adj -= 0.03;
+      else if(a.a <= 23) adj -= 0.03;
+      else if(a.a >= 30) adj += 0.02;
+    }
+  } else if(mode === "winnow"){
+    // Reward incoming proven veterans; penalize sending studs for picks/youth.
+    for(const a of state.get){
+      if(a.type === "pick" && a.year >= 2027) adj -= 0.04;
+      else if(a.type !== "pick" && a.a >= 25 && a.a <= 30 && assetValue(a) >= 7000) adj += 0.04;
+    }
+    for(const a of state.give){
+      if(a.type === "pick" && a.year >= 2027) adj += 0.03;
+      else if(a.type !== "pick" && assetValue(a) >= 9000) adj -= 0.05; // giving up a stud
+      else if(a.type !== "pick" && a.a >= 25 && a.a <= 30 && assetValue(a) >= 7000) adj -= 0.04;
+    }
+  }
+  return Math.max(-0.06, Math.min(0.06, adj));
 }
 
 function buildObservations(totGet, totGive){
@@ -3610,7 +3639,13 @@ function renderVerdict(v){
           <div class="tier">${v.oppGrade.tier}</div>
         </div>
       </div>
-      ${v.needWeighted ? `<div style="text-align:center;margin-top:8px;font-size:12px;color:var(--ink-3);letter-spacing:0.03em">⚡ Roster fit included</div>` : ""}
+      <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--ink-3);letter-spacing:0.03em;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.25);color:var(--ink-2);font-weight:700">
+          🎯 ${PROFILE.mode === "rebuilder" ? "REBUILDING" : PROFILE.mode === "winnow" ? "WIN NOW" : "CONTENDER"} MODE
+          ${v.modeWeighted ? ` · grade ${v.modeAdjustment > 0 ? "+" : ""}${(v.modeAdjustment * 100).toFixed(0)}%` : ""}
+        </span>
+        ${v.needWeighted ? `<span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:rgba(0,210,106,0.08);border:1px solid rgba(0,210,106,0.25);color:var(--ink-2);font-weight:700">⚡ Roster fit included</span>` : ""}
+      </div>
       <div class="v2-legend">
         <b>ELITE / EXCELLENT</b> = win it <span class="sep">·</span>
         <b>GREAT / SOLID</b> = strong value <span class="sep">·</span>
