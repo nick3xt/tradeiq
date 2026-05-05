@@ -2785,11 +2785,11 @@ function renderVerdict(v){
   const modeLabel = mode === "rebuilder" ? "REBUILDER" : "CONTENDER";
   let ctxVerdict;
   if(mode === "contender"){
-    if(diff >= 200){
+    if(rDiff >= 2){
       ctxVerdict = `As a Contender, this is a <b>green light</b>. You're getting more current production than you're giving up — exactly the shape you need to push for a title window.`;
-    } else if(diff > -200){
+    } else if(rDiff > -2){
       ctxVerdict = `As a Contender, the value is roughly even. The deciding question: does the incoming production fit a <b>starting lineup hole</b>? If yes, accept. If just depth, pass.`;
-    } else if(diff > -1500){
+    } else if(rDiff > -15){
       ctxVerdict = `As a Contender, paying a small premium is sometimes correct for the right plug-and-play piece. <b>Counter</b> if the fit is marginal — accept if it's a clear lineup upgrade.`;
     } else {
       ctxVerdict = `As a Contender, you're paying a steep premium. Even contending teams shouldn't burn this much equity unless this is a needle-moving acquisition. <b>Counter or pass.</b>`;
@@ -2797,9 +2797,9 @@ function renderVerdict(v){
   } else {
     if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
       ctxVerdict = `As a Rebuilder, banking <b>future picks</b> is the correct shape of move. Long-term capital is your most valuable asset right now.`;
-    } else if(diff >= 200){
+    } else if(rDiff >= 2){
       ctxVerdict = `As a Rebuilder, you're winning on raw value. Even better if the incoming pieces are young enough to still be on the roster when your window opens.`;
-    } else if(diff > -200){
+    } else if(rDiff > -2){
       ctxVerdict = `As a Rebuilder, even-value trades only matter if you're getting <b>younger</b>. If the age picture above doesn't favor you, this is a pass.`;
     } else {
       ctxVerdict = `As a Rebuilder, paying a premium for <b>now</b> assets is exactly what you shouldn't be doing. <b>Counter</b> by replacing aging pieces with future picks or younger players.`;
