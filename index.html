@@ -434,6 +434,61 @@ body{padding-bottom:56px}
 .v2-legend b{color:var(--ink-2);font-weight:700}
 .v2-legend .sep{color:var(--line-2);margin:0 6px}
 
+/* === Archetype banner + value-split === */
+.v2-archetype{
+  display:flex;align-items:center;gap:14px;
+  background:linear-gradient(90deg,rgba(74,158,255,.12),rgba(74,158,255,.02));
+  border:1px solid rgba(74,158,255,.35);border-radius:10px;
+  padding:12px 16px;margin-bottom:14px
+}
+.v2-archetype[data-arch="winnow"]{background:linear-gradient(90deg,rgba(255,215,0,.14),rgba(255,215,0,.02));border-color:rgba(255,215,0,.4)}
+.v2-archetype[data-arch="ceiling-grab"]{background:linear-gradient(90deg,rgba(255,159,67,.14),rgba(255,159,67,.02));border-color:rgba(255,159,67,.4)}
+.v2-archetype[data-arch="sell-high"]{background:linear-gradient(90deg,rgba(62,230,143,.14),rgba(62,230,143,.02));border-color:rgba(62,230,143,.4)}
+.v2-archetype[data-arch="position-pivot"]{background:linear-gradient(90deg,rgba(186,107,255,.14),rgba(186,107,255,.02));border-color:rgba(186,107,255,.4)}
+.v2-archetype[data-arch="even-swap"]{background:linear-gradient(90deg,rgba(74,158,255,.12),rgba(74,158,255,.02));border-color:rgba(74,158,255,.4)}
+.v2-arch-icon{font-size:30px;line-height:1;flex-shrink:0}
+.v2-arch-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.v2-arch-label{font-size:13px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.v2-arch-tag{font-size:12px;color:var(--ink-3);line-height:1.4}
+.v2-arch-lens{
+  margin-top:10px;padding:9px 12px;background:rgba(0,0,0,.25);border-left:3px solid var(--blue);border-radius:6px;
+  font-size:12px;color:var(--ink-2);line-height:1.4
+}
+.v2-arch-lens b{color:var(--ink);font-weight:700}
+
+.v2-value-split{
+  margin-top:14px;display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch
+}
+@media (max-width:560px){.v2-value-split{grid-template-columns:1fr;gap:6px}.v2-vs-arrow{display:none}}
+.v2-vs-cell{
+  background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:10px;padding:11px 14px;text-align:center
+}
+.v2-vs-cell.adj{border-color:var(--gold);background:rgba(255,215,0,.06)}
+.v2-vs-cell .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:800}
+.v2-vs-cell .v{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;color:var(--ink);margin:4px 0 2px}
+.v2-vs-cell.adj .v{color:var(--gold)}
+.v2-vs-cell .sub{font-size:10px;color:var(--ink-3);font-family:'JetBrains Mono',monospace;letter-spacing:.02em}
+.v2-vs-arrow{display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:20px;font-weight:800}
+
+/* Age multiplier pills in the breakdown table */
+.v2-mult{
+  display:inline-block;padding:2px 8px;border-radius:10px;font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:700;letter-spacing:.02em;line-height:1.4
+}
+.v2-mult.mult-boost{background:rgba(0,210,106,.18);color:#3ee68f}
+.v2-mult.mult-up{background:rgba(62,230,143,.12);color:#3ee68f}
+.v2-mult.mult-flat{background:rgba(160,170,200,.08);color:var(--ink-3)}
+.v2-mult.mult-down{background:rgba(255,159,67,.14);color:#ff9f43}
+.v2-mult.mult-heavy{background:rgba(255,71,87,.16);color:#ff7884}
+
+/* Adjusted column emphasis in the breakdown table */
+.v2-table-adj td.val.adj{color:var(--gold)}
+.v2-table-adj th:last-child{color:var(--gold)}
+.v2-table-adj tr.subtotal td.val.adj,.v2-table-adj tr.delta-row td.adj{color:var(--gold)}
+.v2-table-adj tr.delta-row td.pos.adj{color:var(--green)}
+.v2-table-adj tr.delta-row td.neg.adj{color:var(--red)}
+.v2-table-adj tr.delta-row td.even.adj{color:var(--blue)}
+
 .v2-section{
   margin-bottom:18px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden
 }
@@ -1499,36 +1554,70 @@ body{padding-bottom:56px}
       <div class="hiw-section">
         <div class="hiw-num">4</div>
         <div class="hiw-content">
-          <h3>Team Mode Impact</h3>
-          <p class="hiw-lead">Mode reshapes valuation — it changes the math, not just the verdict text.</p>
+          <h3>Age-Adjusted Value</h3>
+          <p class="hiw-lead">Raw consensus answers "what's it worth today?" Age-adjusted answers "what's it worth on a dynasty timeline?" The grade runs on the adjusted number — that's what stops lopsided-looking trades from grading lopsided.</p>
+          <table class="hiw-table">
+            <tr><th>Age</th><th>Multiplier</th><th>Read</th></tr>
+            <tr><td>≤22</td><td><span class="up">×1.22 – ×1.25</span></td><td>youth premium</td></tr>
+            <tr><td>23</td><td><span class="up">×1.15</span></td><td>rising prime</td></tr>
+            <tr><td>24</td><td><span class="up">×1.08</span></td><td>slight boost</td></tr>
+            <tr><td>25</td><td>×1.02</td><td>neutral</td></tr>
+            <tr><td>26</td><td><span class="dn">×0.95</span></td><td>slight discount</td></tr>
+            <tr><td>27</td><td><span class="dn">×0.86</span></td><td>fading window</td></tr>
+            <tr><td>28</td><td><span class="dn">×0.76</span></td><td>moderate discount</td></tr>
+            <tr><td>29</td><td><span class="dn">×0.66</span></td><td>moderate discount</td></tr>
+            <tr><td>30</td><td><span class="dn">×0.55</span></td><td>heavy discount</td></tr>
+            <tr><td>31</td><td><span class="dn">×0.45</span></td><td>heavy discount</td></tr>
+            <tr><td>32+</td><td><span class="dn">×0.35</span></td><td>burn-it-down</td></tr>
+          </table>
+          <p class="hiw-note">QBs are treated as 3 years younger for value purposes — they age slower. Picks slot in as young equivalents: <b>1st ≈ age 22</b>, <b>2nd ≈ age 24</b>, <b>3rd+ ≈ age 26</b>.</p>
+        </div>
+      </div>
+
+      <div class="hiw-section">
+        <div class="hiw-num">5</div>
+        <div class="hiw-content">
+          <h3>Trade Archetype</h3>
+          <p class="hiw-lead">Every trade has a shape. We detect it from the assets alone — no team context needed — and grade fairness within that shape.</p>
           <div class="hiw-modes">
-            <div class="hiw-mode rebuild">
-              <div class="hiw-mode-h">REBUILDER</div>
+            <div class="hiw-mode contend">
+              <div class="hiw-mode-h">🏆 WIN NOW</div>
               <ul>
-                <li>Young (≤22): <span class="up">×1.15</span></li>
-                <li>Aging vets (30+): <span class="dn">×0.85</span></li>
-                <li>All future picks: <span class="up">×1.10</span></li>
-                <li>Declining 27–29 RB/WR: <span class="dn">×0.92</span></li>
+                <li>Both sides proven vets (avg age ≥ 26.5)</li>
+                <li>No picks on either side</li>
+                <li>Tighter grading band — pure production swap</li>
               </ul>
             </div>
-            <div class="hiw-mode contend">
-              <div class="hiw-mode-h">CONTENDER</div>
+            <div class="hiw-mode rebuild">
+              <div class="hiw-mode-h">📈 SELL HIGH</div>
               <ul>
-                <li>Prime age (25–29): <span class="up">×1.12</span></li>
-                <li>Raw prospects ≤22: <span class="dn">×0.90</span></li>
-                <li>2026 picks: ×1.00</li>
-                <li>2027+ picks: <span class="dn">×0.88</span></li>
-                <li>Elite WR1/RB1: <span class="up">×1.08</span></li>
+                <li>Weighted age delta ≥ 3 yrs between sides</li>
+                <li>Older side ships production for youth/picks</li>
+                <li>Grade = did the younger side pay enough?</li>
               </ul>
             </div>
             <div class="hiw-mode winnow">
-              <div class="hiw-mode-h">WIN-NOW</div>
+              <div class="hiw-mode-h">🎲 CEILING GRAB</div>
               <ul>
-                <li>Prime age (25–29): <span class="up">×1.18</span></li>
-                <li>Rookies/raw prospects: <span class="dn">×0.80</span></li>
-                <li>2026 picks: <span class="dn">×0.92</span></li>
-                <li>2027+ picks: <span class="dn">×0.75</span></li>
-                <li>Elite proven 26–30: <span class="up">×1.15</span></li>
+                <li>One side sends ≥30% pick value (or picks + youth)</li>
+                <li>Other side returns a vet bundle (25–29)</li>
+                <li>Looser band — certainty has a risk premium</li>
+              </ul>
+            </div>
+            <div class="hiw-mode contend">
+              <div class="hiw-mode-h">🔀 POSITION PIVOT</div>
+              <ul>
+                <li>Each side concentrated ≥55% in one position</li>
+                <li>Dominant positions differ between sides</li>
+                <li>Grade = pure age-adjusted value</li>
+              </ul>
+            </div>
+            <div class="hiw-mode">
+              <div class="hiw-mode-h">⚖️ EVEN SWAP</div>
+              <ul>
+                <li>Balanced age and mix both directions</li>
+                <li>Default when nothing else fits</li>
+                <li>Grade = pure age-adjusted value</li>
               </ul>
             </div>
           </div>
@@ -1536,22 +1625,22 @@ body{padding-bottom:56px}
       </div>
 
       <div class="hiw-section">
-        <div class="hiw-num">5</div>
+        <div class="hiw-num">6</div>
         <div class="hiw-content">
           <h3>How Grades Are Calculated</h3>
-          <p class="hiw-lead">Compare side totals, compute the % gap, map to a label.</p>
+          <p class="hiw-lead">Compare age-adjusted side totals, compute the % gap, map to a label. Win-Now uses a tighter band; Ceiling Grab uses a looser one.</p>
           <table class="hiw-table hiw-grades">
             <tr><th>Label</th><th>Gap (winning side)</th></tr>
-            <tr><td><span class="g-elite">ELITE</span></td><td>30%+ advantage</td></tr>
-            <tr><td><span class="g-elite">EXCELLENT</span></td><td>20–30%</td></tr>
-            <tr><td><span class="g-strong">GREAT</span></td><td>15–20%</td></tr>
-            <tr><td><span class="g-strong">SOLID</span></td><td>10–15%</td></tr>
-            <tr><td><span class="g-fair">GOOD</span></td><td>7–10%</td></tr>
-            <tr><td><span class="g-fair">FAIR</span></td><td>4–7%</td></tr>
-            <tr><td><span class="g-fair">SLIGHT EDGE</span></td><td>2–4%</td></tr>
-            <tr><td><span class="g-close">CLOSE</span></td><td>0–2%</td></tr>
-            <tr><td><span class="g-close">EVEN</span></td><td>essentially equal</td></tr>
-            <tr><td><span class="g-bad">WEAK / POOR</span></td><td>same gaps, losing side</td></tr>
+            <tr><td><span class="g-elite">ELITE</span></td><td>18%+ advantage</td></tr>
+            <tr><td><span class="g-elite">EXCELLENT</span></td><td>10–18%</td></tr>
+            <tr><td><span class="g-strong">GREAT</span></td><td>5–10%</td></tr>
+            <tr><td><span class="g-strong">SOLID</span></td><td>2–5%</td></tr>
+            <tr><td><span class="g-fair">GOOD</span></td><td>0–2%</td></tr>
+            <tr><td><span class="g-fair">FAIR</span></td><td>−2 to −5%</td></tr>
+            <tr><td><span class="g-fair">SLIGHT EDGE</span></td><td>−5 to −10%</td></tr>
+            <tr><td><span class="g-close">CLOSE</span></td><td>−10 to −18%</td></tr>
+            <tr><td><span class="g-close">EVEN</span></td><td>−18 to −28%</td></tr>
+            <tr><td><span class="g-bad">WEAK / POOR</span></td><td>worse than −28%</td></tr>
           </table>
         </div>
       </div>
@@ -2196,16 +2285,192 @@ function modeAdjust(asset, val){
   return val;
 }
 
-// Asset helpers
+// =================================================================
+// AGE-ADJUSTED VALUE — the core of the new grading system.
+// Raw consensus value answers "what is this worth today?"
+// Age-adjusted value answers "what is this worth on a dynasty timeline?"
+// A 24yo and a 30yo at the same raw value are NOT the same asset.
+// =================================================================
+function pickEquivalentAge(pick){
+  if(pick.round === 1) return 22;
+  if(pick.round === 2) return 24;
+  return 26; // 3rd+ rounders
+}
+function effectiveAgeFor(asset){
+  if(asset.type === "pick") return pickEquivalentAge(asset);
+  // QBs age slower — value-relevant career length is ~3 yrs longer
+  const a = asset.a || 26;
+  if(asset.p === "QB") return Math.max(21, a - 3);
+  return a;
+}
+function ageMultiplier(asset){
+  const age = effectiveAgeFor(asset);
+  if(age <= 21) return 1.25;
+  if(age === 22) return 1.22;
+  if(age === 23) return 1.15;
+  if(age === 24) return 1.08;
+  if(age === 25) return 1.02;
+  if(age === 26) return 0.95;
+  if(age === 27) return 0.86;
+  if(age === 28) return 0.76;
+  if(age === 29) return 0.66;
+  if(age === 30) return 0.55;
+  if(age === 31) return 0.45;
+  return 0.35; // 32+
+}
+
+// Raw asset value — consensus blended with league-format adjustments.
+// This is the "today" number. Used as the input to age-adjustment.
+function rawAssetValue(asset){
+  if(asset.type === "pick") return pickValue(asset);
+  return adjustedConsensus(asset);
+}
+// Age-adjusted value — the number the grade is computed from.
+function ageAdjustedValue(asset){
+  return Math.round(rawAssetValue(asset) * ageMultiplier(asset));
+}
+
+// Public asset value used throughout the UI = RAW consensus value.
+// (Mode-adjust has been retired — the grade now runs on age-adjusted value
+//  and works with zero team context.)
 function assetValue(asset){
-  let v;
-  if(asset.type === "pick") v = pickValue(asset);
-  else v = adjustedConsensus(asset);
-  return modeAdjust(asset, v);
+  return rawAssetValue(asset);
 }
 function assetSpread(asset){
   if(asset.type === "pick") return 100;
   return spread(asset);
+}
+
+// =================================================================
+// TRADE ARCHETYPE — classify the SHAPE of the trade from assets alone.
+// No team context required. Each archetype gets a different fairness lens.
+// =================================================================
+function detectArchetype(getSide, giveSide){
+  const getPlayers  = getSide.filter(a => a.type !== "pick");
+  const givePlayers = giveSide.filter(a => a.type !== "pick");
+  const getPicks  = getSide.filter(a => a.type === "pick");
+  const givePicks = giveSide.filter(a => a.type === "pick");
+
+  const valueWeightedAge = (players) => {
+    if(!players.length) return null;
+    const totV = players.reduce((s,p)=>s+rawAssetValue(p),0);
+    if(!totV) return null;
+    return players.reduce((s,p)=>s + p.a * rawAssetValue(p), 0) / totV;
+  };
+  const getWAge  = valueWeightedAge(getPlayers);
+  const giveWAge = valueWeightedAge(givePlayers);
+
+  const sideTot = (side) => side.reduce((s,a)=>s+rawAssetValue(a),0);
+  const totGet  = sideTot(getSide);
+  const totGive = sideTot(giveSide);
+  const pickShare = (picks, total) => total ? picks.reduce((s,a)=>s+rawAssetValue(a),0)/total : 0;
+  const getPickShare  = pickShare(getPicks, totGet);
+  const givePickShare = pickShare(givePicks, totGive);
+
+  const dominantPos = (side) => {
+    const m = {};
+    for(const a of side){
+      if(a.type === "pick") continue;
+      m[a.p] = (m[a.p]||0) + rawAssetValue(a);
+    }
+    const entries = Object.entries(m).sort((x,y)=>y[1]-x[1]);
+    if(!entries.length) return null;
+    const total = entries.reduce((s,e)=>s+e[1],0);
+    if(!total) return null;
+    return { pos: entries[0][0], share: entries[0][1]/total };
+  };
+  const getDom  = dominantPos(getSide);
+  const giveDom = dominantPos(giveSide);
+
+  // 1. WIN-NOW — no picks anywhere AND both sides weighted-avg age >= 26.5
+  if(getPicks.length === 0 && givePicks.length === 0
+     && getWAge !== null && giveWAge !== null
+     && getWAge >= 26.5 && giveWAge >= 26.5){
+    return {
+      key: "winnow",
+      icon: "🏆",
+      label: "WIN NOW",
+      tagline: "Proven vets both ways — fairness = current production traded.",
+      lens: "Whoever moved more here-and-now production wins."
+    };
+  }
+
+  // 2. CEILING GRAB — one side ships meaningful picks + (often) youth for a vet bundle
+  const hasYouth   = (players) => players.some(p => p.a <= 24);
+  const vetWeighted = (wage) => wage !== null && wage >= 25 && wage <= 29.5;
+  const isCeilingSide = (picks, players) => {
+    if(picks.length === 0) return false;
+    const totSide = picks.reduce((s,a)=>s+rawAssetValue(a),0) + players.reduce((s,a)=>s+rawAssetValue(a),0);
+    if(!totSide) return false;
+    const share = picks.reduce((s,a)=>s+rawAssetValue(a),0)/totSide;
+    return share >= 0.30 || (share > 0 && hasYouth(players));
+  };
+  if(isCeilingSide(getPicks, getPlayers) && givePicks.length === 0 && vetWeighted(giveWAge)){
+    return {
+      key: "ceiling-grab",
+      icon: "🎲",
+      label: "CEILING GRAB",
+      tagline: "Picks + youth shipped for proven production.",
+      lens: "Did the certainty acquired justify the pick/youth cost?"
+    };
+  }
+  if(isCeilingSide(givePicks, givePlayers) && getPicks.length === 0 && vetWeighted(getWAge)){
+    return {
+      key: "ceiling-grab",
+      icon: "🎲",
+      label: "CEILING GRAB",
+      tagline: "Picks + youth shipped for proven production.",
+      lens: "Did the certainty acquired justify the pick/youth cost?"
+    };
+  }
+
+  // 3. SELL-HIGH / BUY-LOW — clear age delta between sides (≥3 yrs weighted)
+  const ageDelta = (getWAge !== null && giveWAge !== null) ? (getWAge - giveWAge) : null;
+  if(ageDelta !== null && Math.abs(ageDelta) >= 3){
+    const youngerIsYou = ageDelta < 0; // you're getting younger players
+    return {
+      key: "sell-high",
+      icon: "📈",
+      label: youngerIsYou ? "BUY LOW / SELL HIGH" : "SELL HIGH / BUY LOW",
+      tagline: youngerIsYou
+        ? "You traded older production for youth and picks."
+        : "You sold youth/picks for older production.",
+      lens: "Did the younger side pay enough for the proven asset?"
+    };
+  }
+
+  // 4. POSITION PIVOT — sides concentrate value in different positions
+  if(getDom && giveDom && getDom.pos !== giveDom.pos
+     && getDom.share >= 0.55 && giveDom.share >= 0.55){
+    return {
+      key: "position-pivot",
+      icon: "🔀",
+      label: "POSITION PIVOT",
+      tagline: `Swapping ${giveDom.pos} value for ${getDom.pos} value.`,
+      lens: "Pure age-adjusted value with a positional rebalance."
+    };
+  }
+
+  // 5. EVEN SWAP — balanced fallback
+  return {
+    key: "even-swap",
+    icon: "⚖️",
+    label: "EVEN SWAP",
+    tagline: "Balanced asset and age mix on both sides.",
+    lens: "Pure age-adjusted value check — no archetype premium either way."
+  };
+}
+
+// Per-archetype fairness thresholds. The grade is on age-adjusted diff %,
+// but each archetype tightens or loosens the bands slightly. Win-Now is
+// tightest (it's pure production), Even Swap is the baseline.
+function archetypeGradeFor(archetypeKey, diffPct){
+  let scale = 1.0;
+  if(archetypeKey === "winnow")         scale = 0.85; // tighter — production trades should be close
+  else if(archetypeKey === "ceiling-grab") scale = 1.10; // looser — risk premium is real
+  else if(archetypeKey === "sell-high")    scale = 1.00;
+  else if(archetypeKey === "position-pivot") scale = 1.00;
+  return gradeFor(diffPct / scale);
 }
 
 // =================================================================
@@ -3484,11 +3749,25 @@ const GRADE_LABELS = {
 function gradeLabel(g){ return GRADE_LABELS[g.l] || g.l; }
 
 function analyze(){
-  const totGet  = state.get.reduce((s,a)=>s+assetValue(a),0);
-  const totGive = state.give.reduce((s,a)=>s+assetValue(a),0);
-  const avg = (totGet + totGive) / 2 || 1;
-  const youDiff = (totGet - totGive) / avg;          // your side
-  const oppDiff = (totGive - totGet) / avg;          // their side
+  // Raw consensus totals — what each side is worth today.
+  const totRawGet  = state.get.reduce((s,a)=>s+rawAssetValue(a),0);
+  const totRawGive = state.give.reduce((s,a)=>s+rawAssetValue(a),0);
+  // Age-adjusted totals — what each side is worth on a dynasty timeline.
+  const totAdjGet  = state.get.reduce((s,a)=>s+ageAdjustedValue(a),0);
+  const totAdjGive = state.give.reduce((s,a)=>s+ageAdjustedValue(a),0);
+
+  // Back-compat aliases — many downstream UI bits reference totGet/totGive.
+  // Treat them as RAW values (the "headline" trade size).
+  const totGet  = totRawGet;
+  const totGive = totRawGive;
+
+  // Trade archetype — drives the grading lens and the label shown to the user.
+  const archetype = detectArchetype(state.get, state.give);
+
+  // Grade off the age-adjusted diff (NOT raw). This is the core new behavior.
+  const avgAdj = (totAdjGet + totAdjGive) / 2 || 1;
+  const youDiff = (totAdjGet - totAdjGive) / avgAdj;
+  const oppDiff = (totAdjGive - totAdjGet) / avgAdj;
 
   // Roster-need grade modifier — only activates when Sleeper team is loaded (window.teamNeeds populated)
   let needAdjustment = 0;
@@ -3507,8 +3786,8 @@ function analyze(){
     needWeighted = needAdjustment !== 0;
   }
 
-  const yourGrade = gradeFor(youDiff + needAdjustment);
-  const oppGrade  = gradeFor(oppDiff);
+  const yourGrade = archetypeGradeFor(archetype.key, youDiff + needAdjustment);
+  const oppGrade  = archetypeGradeFor(archetype.key, oppDiff);
 
   // spreads (contested?)
   const allAssets = [...state.get, ...state.give];
@@ -3540,7 +3819,10 @@ function analyze(){
   const verdict = verdictText(totGet, totGive, yourGrade, oppGrade, market);
 
   return {
-    totGet, totGive, avg, youDiff, oppDiff,
+    totGet, totGive,
+    totRawGet, totRawGive, totAdjGet, totAdjGive,
+    avg: avgAdj, youDiff, oppDiff,
+    archetype,
     yourGrade, oppGrade, market, observations, note, verdict, maxSpread, avgSpread,
     needWeighted
   };
@@ -3652,24 +3934,47 @@ function side2html(side){
 
 function renderVerdict(v){
   const body = $("#verdict-body");
-  const diff = v.totGet - v.totGive;
+  // Headline reflects the ADJUSTED diff (the number the grade is computed from).
+  const rawDiff = v.totRawGet - v.totRawGive;
+  const adjDiff = v.totAdjGet - v.totAdjGive;
   let heroClass, heroTitle;
-  if(Math.abs(diff) < 200){
+  if(Math.abs(adjDiff) < 200){
     heroClass = "even"; heroTitle = "FAIRLY EVEN TRADE";
-  } else if(diff > 0){
+  } else if(adjDiff > 0){
     heroClass = "you"; heroTitle = "YOU WIN THIS TRADE";
   } else {
     heroClass = "them"; heroTitle = "THEY WIN THIS TRADE";
   }
-  const deltaSign = diff > 0 ? "+" : (diff < 0 ? "−" : "±");
-  const deltaAbs = Math.abs(diff);
-  const pctDiff = v.totGive ? Math.abs(((v.totGet/Math.max(1,v.totGive))-1)*100) : 0;
+  const rawSign = rawDiff > 0 ? "+" : (rawDiff < 0 ? "−" : "±");
+  const adjSign = adjDiff > 0 ? "+" : (adjDiff < 0 ? "−" : "±");
+  const rawPct = v.totRawGive ? Math.abs(((v.totRawGet/Math.max(1,v.totRawGive))-1)*100) : 0;
+  const adjPct = v.totAdjGive ? Math.abs(((v.totAdjGet/Math.max(1,v.totAdjGive))-1)*100) : 0;
+  const arch = v.archetype || { icon:"⚖️", label:"EVEN SWAP", tagline:"", lens:"" };
 
   // === Section A — HERO ===
   const heroHTML = `
     <div class="v2-hero ${heroClass}">
+      <div class="v2-archetype" data-arch="${arch.key||""}">
+        <span class="v2-arch-icon">${arch.icon}</span>
+        <div class="v2-arch-text">
+          <div class="v2-arch-label">${arch.label}</div>
+          <div class="v2-arch-tag">${arch.tagline}</div>
+        </div>
+      </div>
       <h1>${heroTitle}</h1>
-      <div class="delta">Value gap: <b>${deltaSign}${num(deltaAbs)}</b> consensus pts ${deltaAbs>0?`(${pctDiff.toFixed(1)}% ${diff>0?"in your favor":"premium paid"})`:""}</div>
+      <div class="v2-value-split">
+        <div class="v2-vs-cell">
+          <div class="k">RAW VALUE</div>
+          <div class="v">${rawSign}${num(Math.abs(rawDiff))}</div>
+          <div class="sub">${num(v.totRawGet)} vs ${num(v.totRawGive)} · ${rawPct.toFixed(1)}%</div>
+        </div>
+        <div class="v2-vs-arrow">→</div>
+        <div class="v2-vs-cell adj">
+          <div class="k">AGE-ADJUSTED</div>
+          <div class="v">${adjSign}${num(Math.abs(adjDiff))}</div>
+          <div class="sub">${num(v.totAdjGet)} vs ${num(v.totAdjGive)} · ${adjPct.toFixed(1)}%</div>
+        </div>
+      </div>
       <div class="v2-grade-row">
         <div class="v2-grade-card ${v.yourGrade.c}">
           <div class="lbl">YOUR SIDE</div>
@@ -3682,6 +3987,7 @@ function renderVerdict(v){
           <div class="tier">${v.oppGrade.tier}</div>
         </div>
       </div>
+      ${arch.lens ? `<div class="v2-arch-lens"><b>Fairness lens:</b> ${arch.lens}</div>` : ""}
       ${v.needWeighted ? `<div style="text-align:center;margin-top:8px;font-size:12px;color:var(--ink-3);letter-spacing:0.03em">⚡ Roster fit included</div>` : ""}
       <div class="v2-legend">
         <b>ELITE / EXCELLENT</b> = win it <span class="sep">·</span>
@@ -3693,48 +3999,66 @@ function renderVerdict(v){
     </div>
   `;
 
-  // === Section B — VALUE BREAKDOWN TABLE ===
+  // === Section B — VALUE BREAKDOWN TABLE (raw + age-adjusted) ===
+  function multClass(m){
+    if(m >= 1.15) return "mult-boost";
+    if(m >= 1.01) return "mult-up";
+    if(m <= 0.55) return "mult-heavy";
+    if(m <= 0.85) return "mult-down";
+    return "mult-flat";
+  }
+  function multStr(m){
+    const pct = Math.round((m - 1) * 100);
+    if(pct > 0) return `+${pct}%`;
+    if(pct < 0) return `${pct}%`;
+    return "±0%";
+  }
   function rowsForSide(side){
     return state[side].map(a => {
-      const v = assetValue(a);
+      const raw = rawAssetValue(a);
+      const adj = ageAdjustedValue(a);
+      const mult = ageMultiplier(a);
       if(a.type === "pick"){
         const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
         const slotLabel = a.slot==="top3"?"Bottom (1–3)":a.slot==="late"?"Late (9–10)":"Mid (4–8)";
+        const eqAge = pickEquivalentAge(a);
         return `<tr>
-          <td class="nm">${a.year} ${ord} Round Pick</td>
+          <td class="nm">${a.year} ${ord} <span style="color:var(--ink-3);font-size:11px">${slotLabel}</span></td>
           <td>PICK</td>
-          <td>—</td>
-          <td>—</td>
-          <td>${slotLabel}</td>
-          <td class="val">${num(v)}</td>
+          <td title="Pick treated as age-equivalent">≈${eqAge}</td>
+          <td><span class="v2-mult ${multClass(mult)}">${multStr(mult)}</span></td>
+          <td class="val">${num(raw)}</td>
+          <td class="val adj">${num(adj)}</td>
         </tr>`;
       }
       return `<tr>
-        <td class="nm">${a.n}</td>
+        <td class="nm">${a.n} <span style="color:var(--ink-3);font-size:11px">${a.t}</span></td>
         <td>${a.p}</td>
-        <td>${a.t}</td>
         <td>${a.a}</td>
-        <td>—</td>
-        <td class="val">${num(v)}</td>
+        <td><span class="v2-mult ${multClass(mult)}">${multStr(mult)}</span></td>
+        <td class="val">${num(raw)}</td>
+        <td class="val adj">${num(adj)}</td>
       </tr>`;
     }).join("");
   }
-  const dCls = diff > 200 ? "pos" : diff < -200 ? "neg" : "even";
-  const dLabel = diff > 0 ? `+${num(diff)} TO YOU` : diff < 0 ? `${num(diff)} (PREMIUM PAID)` : "EVEN";
+  const rawDeltaCls = rawDiff > 200 ? "pos" : rawDiff < -200 ? "neg" : "even";
+  const adjDeltaCls = adjDiff > 200 ? "pos" : adjDiff < -200 ? "neg" : "even";
+  const rawDeltaLabel = rawDiff > 0 ? `+${num(rawDiff)}` : rawDiff < 0 ? num(rawDiff) : "EVEN";
+  const adjDeltaLabel = adjDiff > 0 ? `+${num(adjDiff)}` : adjDiff < 0 ? num(adjDiff) : "EVEN";
   const breakdownHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">📊 VALUE BREAKDOWN <span class="sub">points each side is worth · averaged across 4 consensus sources</span></div>
+      <div class="v2-section-head">📊 VALUE BREAKDOWN <span class="sub">raw consensus vs age-adjusted · the grade runs on the adjusted column</span></div>
       <div class="v2-section-body" style="padding:0">
-        <table class="v2-table">
-          <thead><tr><th>ASSET</th><th>POS</th><th>TM</th><th>AGE</th><th>NOTE</th><th style="text-align:right">VALUE</th></tr></thead>
+        <table class="v2-table v2-table-adj">
+          <thead><tr><th>ASSET</th><th>POS</th><th>AGE</th><th>AGE MULT</th><th style="text-align:right">RAW</th><th style="text-align:right">ADJUSTED</th></tr></thead>
           <tbody>
             <tr class="v2-side-label you"><td colspan="6">YOU GET</td></tr>
             ${rowsForSide("get") || `<tr><td colspan="6" style="color:var(--ink-3);font-style:italic">No assets</td></tr>`}
-            <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GET</td><td class="val">${num(v.totGet)}</td></tr>
+            <tr class="subtotal"><td colspan="4">SUBTOTAL — YOU GET</td><td class="val">${num(v.totRawGet)}</td><td class="val adj">${num(v.totAdjGet)}</td></tr>
             <tr class="v2-side-label them"><td colspan="6">YOU GIVE</td></tr>
             ${rowsForSide("give") || `<tr><td colspan="6" style="color:var(--ink-3);font-style:italic">No assets</td></tr>`}
-            <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GIVE</td><td class="val">${num(v.totGive)}</td></tr>
-            <tr class="delta-row"><td colspan="5">NET DELTA</td><td class="${dCls}" style="text-align:right;font-family:'JetBrains Mono',monospace">${dLabel}</td></tr>
+            <tr class="subtotal"><td colspan="4">SUBTOTAL — YOU GIVE</td><td class="val">${num(v.totRawGive)}</td><td class="val adj">${num(v.totAdjGive)}</td></tr>
+            <tr class="delta-row"><td colspan="4">NET DELTA</td><td class="${rawDeltaCls}" style="text-align:right;font-family:'JetBrains Mono',monospace">${rawDeltaLabel}</td><td class="${adjDeltaCls} adj" style="text-align:right;font-family:'JetBrains Mono',monospace">${adjDeltaLabel}</td></tr>
           </tbody>
         </table>
       </div>
@@ -3877,6 +4201,9 @@ function renderVerdict(v){
   `;
 
   // === Section F — CONTEXT VERDICT ===
+  // Context commentary still uses the headline diff (age-adjusted) so it
+  // stays consistent with the grade above.
+  const diff = adjDiff;
   const mode = PROFILE.mode;
   const modeLabel = mode === "rebuilder" ? "REBUILDER" : mode === "winnow" ? "WIN-NOW" : "CONTENDER";
   let ctxVerdict;
@@ -4036,16 +4363,35 @@ function drawShareCard(){
   ctx.font = "600 18px Inter, sans-serif";
   ctx.fillText("DYNASTY TRADE VERDICT • EST. 2026", 60, 145);
 
+  // Archetype banner — the SHAPE of the trade, prominently above the grade boxes
+  const arch = v.archetype || { icon:"⚖️", label:"EVEN SWAP", tagline:"" };
+  const archColor =
+    arch.key === "winnow" ? "#ffd700" :
+    arch.key === "ceiling-grab" ? "#ff9f43" :
+    arch.key === "sell-high" ? "#3ee68f" :
+    arch.key === "position-pivot" ? "#ba6bff" : "#4a9eff";
+  const archY = 175;
+  ctx.fillStyle = "rgba(255,255,255,0.04)";
+  roundRect(ctx, 60, archY, W-120, 56, 12, true);
+  ctx.fillStyle = archColor;
+  ctx.fillRect(60, archY, 5, 56);
+  ctx.fillStyle = archColor;
+  ctx.font = "800 22px Inter, sans-serif";
+  ctx.fillText(`${arch.icon} ${arch.label}`, 90, archY+25);
+  ctx.fillStyle = "#a3b1cc";
+  ctx.font = "500 13px Inter, sans-serif";
+  ctx.fillText(arch.tagline || "", 90, archY+46);
+
   // grade boxes
-  const boxY = 220;
+  const boxY = 260;
   const boxH = 280;
-  drawGradeBox(ctx, 60, boxY, (W-180)/2, boxH, "YOU GET", v.yourGrade, v.totGet);
+  drawGradeBox(ctx, 60, boxY, (W-180)/2, boxH, "YOU GET", v.yourGrade, v.totRawGet || v.totGet);
   ctx.fillStyle = "#6b7796";
   ctx.font = "900 32px Inter, sans-serif";
   ctx.textAlign = "center";
   ctx.fillText("VS", W/2, boxY + boxH/2 + 12);
   ctx.textAlign = "left";
-  drawGradeBox(ctx, W/2 + 30, boxY, (W-180)/2, boxH, "THEY GET", v.oppGrade, v.totGive);
+  drawGradeBox(ctx, W/2 + 30, boxY, (W-180)/2, boxH, "THEY GET", v.oppGrade, v.totRawGive || v.totGive);
 
   // market verdict band
   const mY = boxY + boxH + 36;
@@ -4159,7 +4505,7 @@ function drawGradeBox(ctx, x, y, w, h, label, grade, total){
   ctx.fillText(total.toLocaleString("en-US"), x+w/2, y+228);
   ctx.fillStyle = "#6b7796";
   ctx.font = "600 11px Inter, sans-serif";
-  ctx.fillText("CONSENSUS POINTS", x+w/2, y+250);
+  ctx.fillText("RAW CONSENSUS PTS", x+w/2, y+250);
   ctx.textAlign = "left";
 }
 function drawAssetList(ctx, list, x, y, w, accent){
