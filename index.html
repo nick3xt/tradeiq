@@ -486,15 +486,77 @@ img{display:block;max-width:100%}
 
 .v2-context-card{
   padding:16px 18px;background:linear-gradient(180deg,var(--panel-2),var(--bg-2));
-  border:1px solid var(--line);border-left:3px solid var(--green);border-radius:10px;
+  border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:10px;
   font-size:14px;line-height:1.6;color:var(--ink)
 }
-.v2-context-card.rebuild{border-left-color:#7ab8ff}
+.v2-context-card[data-arch="winnow"]{border-left-color:#ffd700}
+.v2-context-card[data-arch="ceiling-grab"]{border-left-color:#ff9f43}
+.v2-context-card[data-arch="sell-high"]{border-left-color:#3ee68f}
+.v2-context-card[data-arch="position-pivot"]{border-left-color:#ba6bff}
+.v2-context-card[data-arch="even-swap"]{border-left-color:#4a9eff}
 .v2-context-card .mode-badge{
   display:inline-block;padding:3px 9px;border-radius:5px;font-size:10px;font-weight:800;
-  letter-spacing:.16em;text-transform:uppercase;background:rgba(0,210,106,.12);color:#3ee68f;margin-right:8px
+  letter-spacing:.16em;text-transform:uppercase;background:rgba(74,158,255,.14);color:#7ab8ff;margin-right:8px
 }
-.v2-context-card.rebuild .mode-badge{background:rgba(74,158,255,.12);color:#7ab8ff}
+.v2-context-card[data-arch="winnow"] .mode-badge{background:rgba(255,215,0,.14);color:#ffd700}
+.v2-context-card[data-arch="ceiling-grab"] .mode-badge{background:rgba(255,159,67,.14);color:#ff9f43}
+.v2-context-card[data-arch="sell-high"] .mode-badge{background:rgba(62,230,143,.14);color:#3ee68f}
+.v2-context-card[data-arch="position-pivot"] .mode-badge{background:rgba(186,107,255,.14);color:#ba6bff}
+
+/* === Archetype banner + raw-vs-adjusted split === */
+.v2-archetype{
+  display:flex;align-items:center;gap:14px;
+  background:linear-gradient(90deg,rgba(74,158,255,.12),rgba(74,158,255,.02));
+  border:1px solid rgba(74,158,255,.35);border-radius:10px;
+  padding:12px 16px;margin-bottom:14px
+}
+.v2-archetype[data-arch="winnow"]{background:linear-gradient(90deg,rgba(255,215,0,.14),rgba(255,215,0,.02));border-color:rgba(255,215,0,.4)}
+.v2-archetype[data-arch="ceiling-grab"]{background:linear-gradient(90deg,rgba(255,159,67,.14),rgba(255,159,67,.02));border-color:rgba(255,159,67,.4)}
+.v2-archetype[data-arch="sell-high"]{background:linear-gradient(90deg,rgba(62,230,143,.14),rgba(62,230,143,.02));border-color:rgba(62,230,143,.4)}
+.v2-archetype[data-arch="position-pivot"]{background:linear-gradient(90deg,rgba(186,107,255,.14),rgba(186,107,255,.02));border-color:rgba(186,107,255,.4)}
+.v2-archetype[data-arch="even-swap"]{background:linear-gradient(90deg,rgba(74,158,255,.12),rgba(74,158,255,.02));border-color:rgba(74,158,255,.4)}
+.v2-arch-icon{font-size:30px;line-height:1;flex-shrink:0}
+.v2-arch-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.v2-arch-label{font-size:13px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.v2-arch-tag{font-size:12px;color:var(--ink-3);line-height:1.4}
+.v2-arch-lens{
+  margin-top:10px;padding:9px 12px;background:rgba(0,0,0,.25);border-left:3px solid var(--blue);border-radius:6px;
+  font-size:12px;color:var(--ink-2);line-height:1.4
+}
+.v2-arch-lens b{color:var(--ink);font-weight:700}
+
+.v2-value-split{
+  margin-top:14px;display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch
+}
+@media (max-width:560px){.v2-value-split{grid-template-columns:1fr;gap:6px}.v2-vs-arrow{display:none}}
+.v2-vs-cell{
+  background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:10px;padding:11px 14px;text-align:center
+}
+.v2-vs-cell.adj{border-color:var(--gold);background:rgba(255,215,0,.06)}
+.v2-vs-cell .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:800}
+.v2-vs-cell .v{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:800;color:var(--ink);margin:4px 0 2px}
+.v2-vs-cell.adj .v{color:var(--gold)}
+.v2-vs-cell .sub{font-size:10px;color:var(--ink-3);font-family:'JetBrains Mono',monospace;letter-spacing:.02em}
+.v2-vs-arrow{display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:20px;font-weight:800}
+
+/* Age multiplier pills in the breakdown table */
+.v2-mult{
+  display:inline-block;padding:2px 8px;border-radius:10px;font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:700;letter-spacing:.02em;line-height:1.4
+}
+.v2-mult.mult-boost{background:rgba(0,210,106,.18);color:#3ee68f}
+.v2-mult.mult-up{background:rgba(62,230,143,.12);color:#3ee68f}
+.v2-mult.mult-flat{background:rgba(160,170,200,.08);color:var(--ink-3)}
+.v2-mult.mult-down{background:rgba(255,159,67,.14);color:#ff9f43}
+.v2-mult.mult-heavy{background:rgba(255,71,87,.16);color:#ff7884}
+
+/* Adjusted column emphasis in the breakdown table */
+.v2-table-adj td.val.adj{color:var(--gold)}
+.v2-table-adj th:last-child{color:var(--gold)}
+.v2-table-adj tr.subtotal td.val.adj,.v2-table-adj tr.delta-row td.adj{color:var(--gold)}
+.v2-table-adj tr.delta-row td.pos.adj{color:var(--green)}
+.v2-table-adj tr.delta-row td.neg.adj{color:var(--red)}
+.v2-table-adj tr.delta-row td.even.adj{color:var(--blue)}
 
 /* Toast */
 .toast{
@@ -997,13 +1059,6 @@ img{display:block;max-width:100%}
         <div class="opts" data-group="format">
           <button class="opt sel" data-val="standard">Standard</button>
           <button class="opt" data-val="superflex">Superflex</button>
-        </div>
-      </div>
-      <div class="field">
-        <label>Team Mode</label>
-        <div class="opts" data-group="mode">
-          <button class="opt sel" data-val="contender">Contender</button>
-          <button class="opt" data-val="rebuilder">Rebuilder</button>
         </div>
       </div>
     </div>
@@ -1550,7 +1605,7 @@ const PLAYERS = [
 const PROFILE_KEY = "tradeiq.profile.v1";
 const ROSTER_KEY = "tradeiq.roster.v1";
 const DEFAULT_PROFILE = {
-  teams:12, scoring:"ppr", tep:"0", format:"standard", mode:"contender"
+  teams:12, scoring:"ppr", tep:"0", format:"standard"
 };
 
 function loadProfile(){
@@ -1731,7 +1786,6 @@ function renderTicker(){
 function profileBar(){
   const fmtMap = { standard:"Standard", superflex:"Superflex" };
   const scoreMap = { standard:"Non-PPR", half:"Half PPR", ppr:"Full PPR" };
-  const modeMap = { contender:"Contender", rebuilder:"Rebuilder" };
   const tepMap = { "0":"No TEP", "0.5":"0.5 TEP", "1":"1.0 TEP" };
   const bar = $("#profile-bar");
   bar.innerHTML = `
@@ -1740,7 +1794,6 @@ function profileBar(){
     <div class="chip">Format: <b>${fmtMap[PROFILE.format]}</b></div>
     <div class="chip">Scoring: <b>${scoreMap[PROFILE.scoring]}</b></div>
     <div class="chip">${tepMap[PROFILE.tep]}</div>
-    <div class="chip">Mode: <b>${modeMap[PROFILE.mode] || "Contender"}</b></div>
     <button class="edit" id="edit-profile">Edit</button>
   `;
   $("#edit-profile").onclick = openProfile;
@@ -2152,9 +2205,6 @@ function openProfile(){
   setGroupVal("profile-modal","scoring",PROFILE.scoring);
   setGroupVal("profile-modal","tep",PROFILE.tep);
   setGroupVal("profile-modal","format",PROFILE.format);
-  // mode may have been migrated from old "winnow" -> "contender"
-  const modeVal = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
-  setGroupVal("profile-modal","mode", modeVal);
   openModal("#profile-modal");
 }
 $("#btn-profile").onclick = openProfile;
@@ -2164,7 +2214,6 @@ $("#btn-save-profile").onclick = () => {
     scoring: getGroupVal("profile-modal","scoring"),
     tep: getGroupVal("profile-modal","tep"),
     format: getGroupVal("profile-modal","format"),
-    mode: getGroupVal("profile-modal","mode"),
   };
   saveProfile(PROFILE);
   profileBar();
@@ -2172,7 +2221,7 @@ $("#btn-save-profile").onclick = () => {
   closeModal("#profile-modal");
   showToast("League profile saved", "ok");
 };
-["teams","scoring","tep","format","mode"].forEach(g => bindOptGroup("profile-modal", g));
+["teams","scoring","tep","format"].forEach(g => bindOptGroup("profile-modal", g));
 
 // =================================================================
 // PICK MODAL
@@ -2391,10 +2440,159 @@ $("#btn-analyze").onclick = () => {
   openModal("#verdict-modal");
 };
 
+// =================================================================
+// AGE-ADJUSTED RATING — the core of the grading system.
+// Raw rating answers "what's this asset worth today?"
+// Age-adjusted answers "what's it worth on a dynasty timeline?"
+// A 24yo and a 30yo at the same raw rating are NOT the same asset.
+// =================================================================
+function pickEquivalentAge(pick){
+  if(pick.round === 1) return 22;
+  if(pick.round === 2) return 24;
+  return 26; // 3rd+ rounders
+}
+function effectiveAgeFor(asset){
+  if(asset.type === "pick") return pickEquivalentAge(asset);
+  const a = asset.a || 26;
+  // QBs age slower — value-relevant career length is ~3 yrs longer
+  if(asset.p === "QB") return Math.max(21, a - 3);
+  return a;
+}
+function ageMultiplier(asset){
+  const age = effectiveAgeFor(asset);
+  if(age <= 21) return 1.25;
+  if(age === 22) return 1.22;
+  if(age === 23) return 1.15;
+  if(age === 24) return 1.08;
+  if(age === 25) return 1.02;
+  if(age === 26) return 0.95;
+  if(age === 27) return 0.86;
+  if(age === 28) return 0.76;
+  if(age === 29) return 0.66;
+  if(age === 30) return 0.55;
+  if(age === 31) return 0.45;
+  return 0.35; // 32+
+}
+// Raw rating = current assetRating (0-99). Age-adjusted scales by the curve.
+function rawAssetRating(asset){
+  return assetRating(asset);
+}
+function ageAdjustedRating(asset){
+  return Math.round(rawAssetRating(asset) * ageMultiplier(asset) * 10) / 10; // 1 decimal
+}
+
+// =================================================================
+// TRADE ARCHETYPE — classify the SHAPE of the trade from assets alone.
+// No team context required. Each archetype gets a different fairness band.
+// =================================================================
+function detectArchetype(getSide, giveSide){
+  const getPlayers  = getSide.filter(a => a.type !== "pick");
+  const givePlayers = giveSide.filter(a => a.type !== "pick");
+  const getPicks    = getSide.filter(a => a.type === "pick");
+  const givePicks   = giveSide.filter(a => a.type === "pick");
+
+  const valueWeightedAge = (players) => {
+    if(!players.length) return null;
+    const totR = players.reduce((s,p)=>s+rawAssetRating(p),0);
+    if(!totR) return null;
+    return players.reduce((s,p)=>s + p.a * rawAssetRating(p), 0) / totR;
+  };
+  const getWAge  = valueWeightedAge(getPlayers);
+  const giveWAge = valueWeightedAge(givePlayers);
+
+  const sideTot = (side) => side.reduce((s,a)=>s+rawAssetRating(a),0);
+  const totGet  = sideTot(getSide);
+  const totGive = sideTot(giveSide);
+  const pickShare = (picks, total) => total ? picks.reduce((s,a)=>s+rawAssetRating(a),0)/total : 0;
+  const getPickShare  = pickShare(getPicks, totGet);
+  const givePickShare = pickShare(givePicks, totGive);
+
+  const dominantPos = (side) => {
+    const m = {};
+    for(const a of side){
+      if(a.type === "pick") continue;
+      m[a.p] = (m[a.p]||0) + rawAssetRating(a);
+    }
+    const entries = Object.entries(m).sort((x,y)=>y[1]-x[1]);
+    if(!entries.length) return null;
+    const total = entries.reduce((s,e)=>s+e[1],0);
+    if(!total) return null;
+    return { pos: entries[0][0], share: entries[0][1]/total };
+  };
+  const getDom  = dominantPos(getSide);
+  const giveDom = dominantPos(giveSide);
+
+  // 1. WIN-NOW — no picks anywhere AND both sides weighted-avg age >= 26.5
+  if(getPicks.length === 0 && givePicks.length === 0
+     && getWAge !== null && giveWAge !== null
+     && getWAge >= 26.5 && giveWAge >= 26.5){
+    return {
+      key: "winnow", icon: "🏆", label: "WIN NOW",
+      tagline: "Proven vets both ways — fairness = current production traded.",
+      lens: "Whoever moved more here-and-now production wins."
+    };
+  }
+
+  // 2. CEILING GRAB — one side ships meaningful picks + (often) youth for a vet bundle
+  const hasYouth = (players) => players.some(p => p.a <= 24);
+  const vetWeighted = (wage) => wage !== null && wage >= 25 && wage <= 29.5;
+  const isCeilingSide = (picks, players) => {
+    if(picks.length === 0) return false;
+    const totSide = picks.reduce((s,a)=>s+rawAssetRating(a),0) + players.reduce((s,a)=>s+rawAssetRating(a),0);
+    if(!totSide) return false;
+    const share = picks.reduce((s,a)=>s+rawAssetRating(a),0)/totSide;
+    return share >= 0.30 || (share > 0 && hasYouth(players));
+  };
+  if(isCeilingSide(getPicks, getPlayers) && givePicks.length === 0 && vetWeighted(giveWAge)){
+    return {
+      key: "ceiling-grab", icon: "🎲", label: "CEILING GRAB",
+      tagline: "Picks + youth shipped for proven production.",
+      lens: "Did the certainty acquired justify the pick/youth cost?"
+    };
+  }
+  if(isCeilingSide(givePicks, givePlayers) && getPicks.length === 0 && vetWeighted(getWAge)){
+    return {
+      key: "ceiling-grab", icon: "🎲", label: "CEILING GRAB",
+      tagline: "Picks + youth shipped for proven production.",
+      lens: "Did the certainty acquired justify the pick/youth cost?"
+    };
+  }
+
+  // 3. SELL-HIGH / BUY-LOW — clear age delta between sides (>=3 yrs weighted)
+  const ageDelta = (getWAge !== null && giveWAge !== null) ? (getWAge - giveWAge) : null;
+  if(ageDelta !== null && Math.abs(ageDelta) >= 3){
+    const youngerIsYou = ageDelta < 0;
+    return {
+      key: "sell-high", icon: "📈",
+      label: youngerIsYou ? "BUY LOW / SELL HIGH" : "SELL HIGH / BUY LOW",
+      tagline: youngerIsYou
+        ? "You traded older production for youth and picks."
+        : "You sold youth/picks for older production.",
+      lens: "Did the younger side pay enough for the proven asset?"
+    };
+  }
+
+  // 4. POSITION PIVOT — sides concentrate value in different positions
+  if(getDom && giveDom && getDom.pos !== giveDom.pos
+     && getDom.share >= 0.55 && giveDom.share >= 0.55){
+    return {
+      key: "position-pivot", icon: "🔀", label: "POSITION PIVOT",
+      tagline: `Swapping ${giveDom.pos} value for ${getDom.pos} value.`,
+      lens: "Pure age-adjusted value with a positional rebalance."
+    };
+  }
+
+  // 5. EVEN SWAP — balanced fallback
+  return {
+    key: "even-swap", icon: "⚖️", label: "EVEN SWAP",
+    tagline: "Balanced asset and age mix on both sides.",
+    lens: "Pure age-adjusted value check — no archetype premium either way."
+  };
+}
+
 function gradeFor(diffPct){
-  // diffPct = (rating_get - rating_give) / avg  (0-100 scale)
-  // Positive = surplus (you won), negative = deficit (you lost)
-  // Winning side always gets A or A+; losing side gets B-F based on deficit %
+  // diffPct = (adj_rating_get - adj_rating_give) / avg.
+  // Positive = surplus (you won), negative = deficit (you lost).
   if(diffPct >= 0.05)  return {l:"A+", c:"Aplus",  tier:"STRONG SURPLUS"};
   if(diffPct >= -0.05) return {l:"A",  c:"A",       tier:"FAIR VALUE"};
   if(diffPct >= -0.10) return {l:"B",  c:"B",       tier:"SLIGHT LOSS"};
@@ -2403,20 +2601,39 @@ function gradeFor(diffPct){
   return {l:"F", c:"F", tier:"VERY LOPSIDED"};
 }
 
+// Per-archetype scaling. Win-Now tightens (production trades should be close),
+// Ceiling Grab loosens (certainty deserves a risk premium). Others = baseline.
+function archetypeGradeFor(archetypeKey, diffPct){
+  let scale = 1.0;
+  if(archetypeKey === "winnow")         scale = 0.85;
+  else if(archetypeKey === "ceiling-grab") scale = 1.10;
+  return gradeFor(diffPct / scale);
+}
+
 function analyze(){
+  // Raw consensus point totals — kept for display (asset panels, age section).
   const totGet  = state.get.reduce((s,a)=>s+assetValue(a),0);
   const totGive = state.give.reduce((s,a)=>s+assetValue(a),0);
-  const avg = (totGet + totGive) / 2 || 1;
 
-  // Grade on 0-100 rating scale (assetRating returns 0-99 per asset)
-  const ratingGet  = state.get.reduce((s,a)=>s+assetRating(a),0);
-  const ratingGive = state.give.reduce((s,a)=>s+assetRating(a),0);
-  const ratingAvg  = (ratingGet + ratingGive) / 2 || 1;
-  const youDiff = (ratingGet - ratingGive) / ratingAvg;   // your side
-  const oppDiff = (ratingGive - ratingGet) / ratingAvg;   // their side
+  // RAW rating totals — what each side is worth today (0–100 scale).
+  const ratingGet  = state.get.reduce((s,a)=>s+rawAssetRating(a),0);
+  const ratingGive = state.give.reduce((s,a)=>s+rawAssetRating(a),0);
 
-  const yourGrade = gradeFor(youDiff);
-  const oppGrade  = gradeFor(oppDiff);
+  // AGE-ADJUSTED rating totals — what each side is worth on a dynasty timeline.
+  // This is the number the grade is computed from.
+  const adjGet  = state.get.reduce((s,a)=>s+ageAdjustedRating(a),0);
+  const adjGive = state.give.reduce((s,a)=>s+ageAdjustedRating(a),0);
+
+  // Trade archetype — drives the fairness lens and the prominent label.
+  const archetype = detectArchetype(state.get, state.give);
+
+  // Grade on the age-adjusted diff, scaled by archetype.
+  const adjAvg  = (adjGet + adjGive) / 2 || 1;
+  const youDiff = (adjGet - adjGive) / adjAvg;
+  const oppDiff = (adjGive - adjGet) / adjAvg;
+
+  const yourGrade = archetypeGradeFor(archetype.key, youDiff);
+  const oppGrade  = archetypeGradeFor(archetype.key, oppDiff);
 
   // spreads (contested?)
   const allAssets = [...state.get, ...state.give];
@@ -2425,8 +2642,6 @@ function analyze(){
 
   let market;
   if(maxSpread > 1500){
-    // contested
-    // who got the lower-valued side per consensus? if you GET the cheap side it might be a buy-low
     const youAvgVal = totGet / Math.max(1,state.get.length);
     const oppAvgVal = totGive / Math.max(1,state.give.length);
     if(youAvgVal < oppAvgVal && maxSpread > 2000){
@@ -2438,24 +2653,21 @@ function analyze(){
     market = { kind:"agree", text:"MARKET AGREES — sources line up tightly. Value is what it looks like." };
   }
 
-  // observations
-  const observations = buildObservations(totGet, totGive);
-
-  // contextual note
-  const note = contextNote(totGet, totGive);
-
-  // verdict text
-  const verdict = verdictText(ratingGet, ratingGive, yourGrade, oppGrade, market);
+  const observations = buildObservations();
+  const verdict = verdictText(ratingGet, ratingGive, adjGet, adjGive, yourGrade, oppGrade, market, archetype);
 
   return {
-    totGet, totGive, ratingGet, ratingGive, avg, youDiff, oppDiff,
-    yourGrade, oppGrade, market, observations, note, verdict, maxSpread, avgSpread
+    totGet, totGive,
+    ratingGet, ratingGive,
+    adjGet, adjGive,
+    avg: adjAvg, youDiff, oppDiff,
+    archetype,
+    yourGrade, oppGrade, market, observations, verdict, maxSpread, avgSpread
   };
 }
 
-function buildObservations(totGet, totGive){
+function buildObservations(){
   const obs = [];
-  // age picture
   const youGetPlayers = state.get.filter(a => a.type !== "pick");
   const youGivePlayers = state.give.filter(a => a.type !== "pick");
   const avgAgeGet = youGetPlayers.length ? youGetPlayers.reduce((s,p)=>s+p.a,0)/youGetPlayers.length : 0;
@@ -2466,10 +2678,8 @@ function buildObservations(totGet, totGive){
     else if(dAge <= -2) obs.push(`<b>Getting younger:</b> Incoming avg age ${avgAgeGet.toFixed(1)} vs outgoing ${avgAgeGive.toFixed(1)}. Future-equity move.`);
     else obs.push(`<b>Age neutral:</b> Both sides cluster around the same age band (${avgAgeGet.toFixed(1)} vs ${avgAgeGive.toFixed(1)}).`);
   }
-  // position concentration
   const posCount = (arr) => arr.filter(a => a.type !== "pick").reduce((m,p)=>{m[p.p]=(m[p.p]||0)+1; return m;}, {});
   const inPos = posCount(state.get);
-  const outPos = posCount(state.give);
   const heaviest = Object.entries(inPos).sort((a,b)=>b[1]-a[1])[0];
   if(heaviest && heaviest[1] >= 2){
     obs.push(`<b>Position stack:</b> You're loading ${heaviest[1]} ${heaviest[0]}s. Make sure your starting lineup actually needs them.`);
@@ -2478,57 +2688,43 @@ function buildObservations(totGet, totGive){
   } else if(!state.get.some(a=>a.type==="pick") && state.give.some(a=>a.type==="pick")){
     obs.push(`<b>Cashing picks:</b> Picks → players. Locks value now, gives up future flexibility.`);
   } else {
-    const teGet = (inPos.TE||0), teGive = (outPos.TE||0);
-    if(teGet > teGive && PROFILE.tep !== "0"){
-      obs.push(`<b>TEP edge:</b> You're loading TE in a ${PROFILE.tep === "1" ? "1.0" : "0.5"} TEP league — premium scoring already priced in above.`);
-    } else {
-      obs.push(`<b>Roster mix:</b> No single-position concentration. Trade is positional-balanced.`);
-    }
+    obs.push(`<b>Roster mix:</b> No single-position concentration. Trade is positional-balanced.`);
   }
   return obs;
 }
 
-function contextNote(totGet, totGive){
-  const diff = totGet - totGive;
-  // Migrate legacy "winnow" -> "contender"
-  const mode = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
-  const player = state.get.find(a => a.type !== "pick" && a.a >= 27);
-  const youngPick = state.give.find(a => a.type === "pick" && a.year >= 2027);
-  if(mode === "rebuilder" && player){
-    return `As a <b>Rebuilder</b>, taking <b>${player.n}</b> at age ${player.a} grades lower — you're paying veteran prices for a window you're not in.`;
-  }
-  if(mode === "rebuilder" && youngPick){
-    return `As a <b>Rebuilder</b>, the future ${youngPick.year} ${youngPick.round===1?"1st":youngPick.round+"th"} you're sending is a key building block. Make sure the acquisition justifies it.`;
-  }
-  if(mode === "contender"){
-    if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
-      return `As a <b>Contender</b>, accepting future picks for current production grades softer — distant picks are illiquid.`;
-    }
-    if(diff < 0){
-      return `As a <b>Contender</b>, paying a small premium for the right plug-and-play piece can still be correct. Don't grade purely on raw value.`;
-    }
-    return `As a <b>Contender</b>, you're moving toward proven production. That's the right shape of trade for your window.`;
-  }
-  return `Profile context: <b>${mode}</b> · ${PROFILE.format} · ${PROFILE.scoring}.`;
-}
-
-function verdictText(ratingGet, ratingGive, you, opp, market){
-  const diff = ratingGet - ratingGive;
+// Archetype-aware verdict text. Leads with the trade shape, quotes raw and
+// adjusted rating totals, flags when the age curve flips which side wins,
+// closes with the grade. Used by the share card.
+function verdictText(ratingGet, ratingGive, adjGet, adjGive, you, opp, market, archetype){
+  const rawDiff = ratingGet - ratingGive;
+  const adjDiff = adjGet - adjGive;
   const lines = [];
-  if(Math.abs(diff) < 2){
-    lines.push(`This trade is <b>essentially even</b> on rating points (${ratingGet.toFixed(1)} vs ${ratingGive.toFixed(1)}).`);
-  } else if(diff > 0){
-    lines.push(`You come out ahead by <b>${diff.toFixed(1)}</b> rating points (+${(((ratingGet/ratingGive)-1)*100).toFixed(1)}%).`);
+  const arch = archetype || { label:"EVEN SWAP", tagline:"" };
+  lines.push(`<b>${arch.label}</b> — ${arch.tagline}`);
+
+  if(Math.abs(adjDiff) < 2){
+    lines.push(`Age-adjusted ratings are essentially even (${adjGet.toFixed(1)} vs ${adjGive.toFixed(1)}).`);
+  } else if(adjDiff > 0){
+    const pct = (((adjGet/Math.max(0.1,adjGive))-1)*100).toFixed(1);
+    lines.push(`You come out ahead by <b>${adjDiff.toFixed(1)}</b> age-adjusted rating pts (+${pct}%).`);
   } else {
-    lines.push(`You give up <b>${(-diff).toFixed(1)}</b> rating points (${(((ratingGive/ratingGet)-1)*100).toFixed(1)}% premium paid).`);
+    const pct = (((adjGive/Math.max(0.1,adjGet))-1)*100).toFixed(1);
+    lines.push(`You give up <b>${(-adjDiff).toFixed(1)}</b> age-adjusted rating pts (${pct}% premium paid).`);
   }
-  lines.push(market.text + ".");
-  if(you.l[0] === "A" || you.l === "S"){
+  // The whole point of the new system: when raw and adjusted disagree, the
+  // age curve is doing the work — say so explicitly.
+  if(Math.sign(rawDiff) !== Math.sign(adjDiff) && Math.abs(rawDiff) > 1.5 && Math.abs(adjDiff) > 1.5){
+    lines.push(`Raw rating flips the other way (${rawDiff>0?"+":""}${rawDiff.toFixed(1)}) — the age curve reshaped this one.`);
+  }
+  lines.push(market.text);
+
+  if(you.l === "A+"){
     lines.push(`Your side grades <b>${you.l}</b> — accept it.`);
-  } else if(you.l[0] === "B"){
-    lines.push(`Your side grades <b>${you.l}</b> — fair, but consider whether the fit improves on the margin.`);
+  } else if(you.l === "A"){
+    lines.push(`Your side grades <b>${you.l}</b> — fair deal, no edge either way.`);
   } else {
-    lines.push(`Your side grades <b>${you.l}</b> — counter or pass unless the roster fit is unusually clean.`);
+    lines.push(`Your side grades <b>${you.l}</b> — pass unless the roster fit is unusually clean.`);
   }
   return lines.join(" ");
 }
@@ -2545,33 +2741,47 @@ function side2html(side){
 
 function renderVerdict(v){
   const body = $("#verdict-body");
-  const rDiff = v.ratingGet - v.ratingGive;
+  // Headline reflects the age-ADJUSTED diff — the number the grade is on.
+  const rawDiff = v.ratingGet - v.ratingGive;
+  const adjDiff = v.adjGet  - v.adjGive;
   let heroClass, heroTitle;
-  if(Math.abs(rDiff) < 2){
+  if(Math.abs(adjDiff) < 2){
     heroClass = "even"; heroTitle = "ESSENTIALLY EVEN TRADE";
-  } else if(rDiff > 0){
+  } else if(adjDiff > 0){
     heroClass = "you"; heroTitle = "YOU WIN THIS TRADE";
   } else {
     heroClass = "them"; heroTitle = "THEY WIN THIS TRADE";
   }
-  const rDiffAbs = Math.abs(rDiff).toFixed(1);
-  const pctDiff = v.ratingGive ? Math.abs(((v.ratingGet/Math.max(1,v.ratingGive))-1)*100) : 0;
-  // Surplus line
-  let surplusLine;
-  if(Math.abs(rDiff) <= 2){
-    surplusLine = `<div class="surplus-line even">Essentially even trade ⚖️</div>`;
-  } else if(rDiff > 0){
-    surplusLine = `<div class="surplus-line win">You gained +${rDiffAbs} rating points of surplus 🟢</div>`;
-  } else {
-    surplusLine = `<div class="surplus-line loss">You gave away ${rDiffAbs} rating points 🔴</div>`;
-  }
+  const rawSign = rawDiff > 0 ? "+" : (rawDiff < 0 ? "−" : "±");
+  const adjSign = adjDiff > 0 ? "+" : (adjDiff < 0 ? "−" : "±");
+  const rawPct = v.ratingGive ? Math.abs(((v.ratingGet/Math.max(0.1,v.ratingGive))-1)*100) : 0;
+  const adjPct = v.adjGive    ? Math.abs(((v.adjGet   /Math.max(0.1,v.adjGive   ))-1)*100) : 0;
+  const arch   = v.archetype || { icon:"⚖️", label:"EVEN SWAP", tagline:"", lens:"" };
 
   // === Section A — HERO ===
   const heroHTML = `
     <div class="v2-hero ${heroClass}">
+      <div class="v2-archetype" data-arch="${arch.key||""}">
+        <span class="v2-arch-icon">${arch.icon}</span>
+        <div class="v2-arch-text">
+          <div class="v2-arch-label">${arch.label}</div>
+          <div class="v2-arch-tag">${arch.tagline}</div>
+        </div>
+      </div>
       <h1>${heroTitle}</h1>
-      <div class="delta">Rating gap: <b>${rDiff>=0?"+":""}${rDiff.toFixed(1)}</b> pts ${Math.abs(rDiff)>0?`(${pctDiff.toFixed(1)}% ${rDiff>0?"in your favor":"premium paid"})`:""}</div>
-      ${surplusLine}
+      <div class="v2-value-split">
+        <div class="v2-vs-cell">
+          <div class="k">RAW RATING</div>
+          <div class="v">${rawSign}${Math.abs(rawDiff).toFixed(1)}</div>
+          <div class="sub">${v.ratingGet.toFixed(1)} vs ${v.ratingGive.toFixed(1)} · ${rawPct.toFixed(1)}%</div>
+        </div>
+        <div class="v2-vs-arrow">→</div>
+        <div class="v2-vs-cell adj">
+          <div class="k">AGE-ADJUSTED</div>
+          <div class="v">${adjSign}${Math.abs(adjDiff).toFixed(1)}</div>
+          <div class="sub">${v.adjGet.toFixed(1)} vs ${v.adjGive.toFixed(1)} · ${adjPct.toFixed(1)}%</div>
+        </div>
+      </div>
       <div class="v2-grade-row">
         <div class="v2-grade-card ${v.yourGrade.c}">
           <div class="lbl">YOUR SIDE</div>
@@ -2584,6 +2794,7 @@ function renderVerdict(v){
           <div class="tier">${v.oppGrade.tier}</div>
         </div>
       </div>
+      ${arch.lens ? `<div class="v2-arch-lens"><b>Fairness lens:</b> ${arch.lens}</div>` : ""}
       <div class="v2-legend">
         <b>A+</b> = Surplus <span class="sep">·</span>
         <b>A</b> = Fair Value <span class="sep">·</span>
@@ -2594,96 +2805,90 @@ function renderVerdict(v){
     </div>
   `;
 
-  // === Section B — VALUE BREAKDOWN TABLE ===
+  // === Section B — RATING BREAKDOWN TABLE (raw + age-adjusted) ===
+  function multClass(m){
+    if(m >= 1.15) return "mult-boost";
+    if(m >= 1.01) return "mult-up";
+    if(m <= 0.55) return "mult-heavy";
+    if(m <= 0.85) return "mult-down";
+    return "mult-flat";
+  }
+  function multStr(m){
+    const pct = Math.round((m - 1) * 100);
+    if(pct > 0) return `+${pct}%`;
+    if(pct < 0) return `${pct}%`;
+    return "±0%";
+  }
   function rowsForSide(side){
     return state[side].map(a => {
-      const rtg = assetRating(a);
+      const raw  = rawAssetRating(a);
+      const adj  = ageAdjustedRating(a);
+      const mult = ageMultiplier(a);
       if(a.type === "pick"){
         const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
-        const slotLabel = a.slot==="top3"?"Top-3 Origin":a.slot==="late"?"Late Origin":"Mid Origin";
+        const slotLabel = a.slot==="top3"?"Top-3":a.slot==="late"?"Late":"Mid";
+        const eqAge = pickEquivalentAge(a);
         return `<tr>
-          <td class="nm">${a.year} ${ord} Round Pick</td>
+          <td class="nm">${a.year} ${ord} <span style="color:var(--ink-3);font-size:11px">${slotLabel}</span></td>
           <td>PICK</td>
-          <td>—</td>
-          <td>—</td>
-          <td>${slotLabel}</td>
-          <td class="val">${rtg}</td>
+          <td title="Pick treated as age-equivalent">≈${eqAge}</td>
+          <td><span class="v2-mult ${multClass(mult)}">${multStr(mult)}</span></td>
+          <td class="val">${raw}</td>
+          <td class="val adj">${adj.toFixed(1)}</td>
         </tr>`;
       }
       return `<tr>
-        <td class="nm">${a.n}</td>
+        <td class="nm">${a.n} <span style="color:var(--ink-3);font-size:11px">${a.t}</span></td>
         <td>${a.p}</td>
-        <td>${a.t}</td>
         <td>${a.a}</td>
-        <td>—</td>
-        <td class="val">${rtg}</td>
+        <td><span class="v2-mult ${multClass(mult)}">${multStr(mult)}</span></td>
+        <td class="val">${raw}</td>
+        <td class="val adj">${adj.toFixed(1)}</td>
       </tr>`;
     }).join("");
   }
-  const rDeltaAbs = Math.abs(v.ratingGet - v.ratingGive);
-  const dCls = v.ratingGet > v.ratingGive + 2 ? "pos" : v.ratingGet < v.ratingGive - 2 ? "neg" : "even";
-  const dSign = v.ratingGet > v.ratingGive ? "+" : v.ratingGet < v.ratingGive ? "−" : "±";
-  const dLabel = v.ratingGet !== v.ratingGive ? `${dSign}${rDeltaAbs.toFixed(1)} pts TO ${v.ratingGet > v.ratingGive ? "YOU" : "THEM"}` : "EVEN";
+  const rawDeltaCls = rawDiff > 2 ? "pos" : rawDiff < -2 ? "neg" : "even";
+  const adjDeltaCls = adjDiff > 2 ? "pos" : adjDiff < -2 ? "neg" : "even";
+  const rawDeltaLabel = rawDiff > 0 ? `+${rawDiff.toFixed(1)}` : rawDiff < 0 ? rawDiff.toFixed(1) : "EVEN";
+  const adjDeltaLabel = adjDiff > 0 ? `+${adjDiff.toFixed(1)}` : adjDiff < 0 ? adjDiff.toFixed(1) : "EVEN";
   const breakdownHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">RATING BREAKDOWN <span class="sub">0–100 scale per asset</span></div>
+      <div class="v2-section-head">📊 RATING BREAKDOWN <span class="sub">raw rating vs age-adjusted · the grade runs on the adjusted column</span></div>
       <div class="v2-section-body" style="padding:0">
-        <table class="v2-table">
-          <thead><tr><th>ASSET</th><th>POS</th><th>TM</th><th>AGE</th><th>NOTE</th><th style="text-align:right">RTG</th></tr></thead>
+        <table class="v2-table v2-table-adj">
+          <thead><tr><th>ASSET</th><th>POS</th><th>AGE</th><th>AGE MULT</th><th style="text-align:right">RAW RTG</th><th style="text-align:right">ADJ RTG</th></tr></thead>
           <tbody>
             <tr class="v2-side-label you"><td colspan="6">YOU GET</td></tr>
             ${rowsForSide("get") || `<tr><td colspan="6" style="color:var(--ink-3);font-style:italic">No assets</td></tr>`}
-            <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GET</td><td class="val">${v.ratingGet.toFixed(1)}</td></tr>
+            <tr class="subtotal"><td colspan="4">SUBTOTAL — YOU GET</td><td class="val">${v.ratingGet.toFixed(1)}</td><td class="val adj">${v.adjGet.toFixed(1)}</td></tr>
             <tr class="v2-side-label them"><td colspan="6">YOU GIVE</td></tr>
             ${rowsForSide("give") || `<tr><td colspan="6" style="color:var(--ink-3);font-style:italic">No assets</td></tr>`}
-            <tr class="subtotal"><td colspan="5">SUBTOTAL — YOU GIVE</td><td class="val">${v.ratingGive.toFixed(1)}</td></tr>
-            <tr class="delta-row"><td colspan="5">NET DELTA</td><td class="${dCls}" style="text-align:right;font-family:'JetBrains Mono',monospace">${dLabel}</td></tr>
+            <tr class="subtotal"><td colspan="4">SUBTOTAL — YOU GIVE</td><td class="val">${v.ratingGive.toFixed(1)}</td><td class="val adj">${v.adjGive.toFixed(1)}</td></tr>
+            <tr class="delta-row"><td colspan="4">NET DELTA</td><td class="${rawDeltaCls}" style="text-align:right;font-family:'JetBrains Mono',monospace">${rawDeltaLabel}</td><td class="${adjDeltaCls} adj" style="text-align:right;font-family:'JetBrains Mono',monospace">${adjDeltaLabel}</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   `;
 
-  // === Section C — AGE & DYNASTY ===
+  // === Section C — AGE IMPACT ===
+  // Now uses the canonical ageAdjustedRating. The flip flag is the headline
+  // the new system exists to surface: when raw and adjusted disagree.
   const youGetPlayers = state.get.filter(a => a.type !== "pick");
   const youGivePlayers = state.give.filter(a => a.type !== "pick");
   const avgAgeGet = youGetPlayers.length ? (youGetPlayers.reduce((s,p)=>s+p.a,0)/youGetPlayers.length) : 0;
   const avgAgeGive = youGivePlayers.length ? (youGivePlayers.reduce((s,p)=>s+p.a,0)/youGivePlayers.length) : 0;
   const ageDelta = avgAgeGet - avgAgeGive;
 
-  // Short-term (1-2 yrs) vs Long-term (3+ yrs) heuristics:
-  // short = sum of (current adjusted values) — already what we have
-  // long  = age-decayed estimate: subtract player decline penalty + future picks (gain)
-  function longTermValue(side){
-    let sum = 0;
-    for(const a of state[side]){
-      if(a.type === "pick"){
-        // closer picks are slightly less valuable long-term
-        const yrs = (a.year || 2026) - 2026;
-        sum += assetValue(a) * (1 + yrs*0.05);
-      } else {
-        // age 22-25 holds value; 26-28 mild decline; 29+ steep
-        const age = a.a || 26;
-        let mult = 1.0;
-        if(age <= 23) mult = 1.20;
-        else if(age <= 25) mult = 1.10;
-        else if(age <= 27) mult = 0.95;
-        else if(age <= 29) mult = 0.75;
-        else if(age <= 31) mult = 0.50;
-        else mult = 0.30;
-        sum += assetValue(a) * mult;
-      }
-    }
-    return Math.round(sum);
-  }
-  const ltGet = longTermValue("get");
-  const ltGive = longTermValue("give");
-  const stWinner = v.totGet > v.totGive + 100 ? "YOU" : v.totGive > v.totGet + 100 ? "THEM" : "EVEN";
-  const ltWinner = ltGet > ltGive + 100 ? "YOU" : ltGive > ltGet + 100 ? "THEM" : "EVEN";
+  const rawWinner = v.ratingGet > v.ratingGive + 1 ? "YOU" : v.ratingGive > v.ratingGet + 1 ? "THEM" : "EVEN";
+  const adjWinner = v.adjGet    > v.adjGive   + 1 ? "YOU" : v.adjGive    > v.adjGet   + 1 ? "THEM" : "EVEN";
+  const flipFlag  = rawWinner !== adjWinner && rawWinner !== "EVEN" && adjWinner !== "EVEN";
 
   let ageFlag = "";
-  if(ageDelta >= 2){
-    ageFlag = `<div class="v2-flag age-alert">⚠ <span><b>VETERAN ASSETS</b> — incoming players average ${ageDelta.toFixed(1)} yrs older. Value peaks in 1–2 seasons.</span></div>`;
+  if(flipFlag){
+    ageFlag = `<div class="v2-flag dynasty">🔄 <span><b>AGE CURVE FLIPS THIS:</b> raw rating favors <b>${rawWinner}</b>, age-adjusted favors <b>${adjWinner}</b>. The grade trusts the adjusted column.</span></div>`;
+  } else if(ageDelta >= 2){
+    ageFlag = `<div class="v2-flag age-alert">⚠ <span><b>VETERAN-HEAVY RETURN</b> — incoming players average ${ageDelta.toFixed(1)} yrs older. Window peaks in 1–2 seasons.</span></div>`;
   } else if(ageDelta <= -2){
     ageFlag = `<div class="v2-flag dynasty">📈 <span><b>DYNASTY UPSIDE</b> — incoming players average ${Math.abs(ageDelta).toFixed(1)} yrs younger. Long-term value likely rises.</span></div>`;
   } else if(youGetPlayers.length || youGivePlayers.length){
@@ -2692,13 +2897,13 @@ function renderVerdict(v){
 
   const ageHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">AGE &amp; DYNASTY IMPACT <span class="sub">window analysis</span></div>
+      <div class="v2-section-head">🗓 AGE IMPACT <span class="sub">how the age curve reshapes each side</span></div>
       <div class="v2-section-body">
         <div class="v2-kv">
           <div class="v2-kv-cell"><div class="k">YOU GET — AVG AGE</div><div class="v">${avgAgeGet ? avgAgeGet.toFixed(1) : "—"}</div><div class="sub">${youGetPlayers.length} player${youGetPlayers.length===1?"":"s"}</div></div>
           <div class="v2-kv-cell"><div class="k">YOU GIVE — AVG AGE</div><div class="v">${avgAgeGive ? avgAgeGive.toFixed(1) : "—"}</div><div class="sub">${youGivePlayers.length} player${youGivePlayers.length===1?"":"s"}</div></div>
-          <div class="v2-kv-cell"><div class="k">SHORT-TERM (1–2 YRS)</div><div class="v" style="color:${stWinner==="YOU"?"var(--green)":stWinner==="THEM"?"var(--red)":"var(--blue)"}">${stWinner}</div><div class="sub">${num(v.totGet)} vs ${num(v.totGive)}</div></div>
-          <div class="v2-kv-cell"><div class="k">LONG-TERM (3+ YRS)</div><div class="v" style="color:${ltWinner==="YOU"?"var(--green)":ltWinner==="THEM"?"var(--red)":"var(--blue)"}">${ltWinner}</div><div class="sub">${num(ltGet)} vs ${num(ltGive)} (age-adj)</div></div>
+          <div class="v2-kv-cell"><div class="k">RAW RTG WINNER</div><div class="v" style="color:${rawWinner==="YOU"?"var(--green)":rawWinner==="THEM"?"var(--red)":"var(--blue)"}">${rawWinner}</div><div class="sub">${v.ratingGet.toFixed(1)} vs ${v.ratingGive.toFixed(1)}</div></div>
+          <div class="v2-kv-cell"><div class="k">AGE-ADJ WINNER</div><div class="v" style="color:${adjWinner==="YOU"?"var(--green)":adjWinner==="THEM"?"var(--red)":"var(--blue)"}">${adjWinner}</div><div class="sub">${v.adjGet.toFixed(1)} vs ${v.adjGive.toFixed(1)} (grade)</div></div>
         </div>
         ${ageFlag}
       </div>
@@ -2779,44 +2984,58 @@ function renderVerdict(v){
     </div>
   `;
 
-  // === Section F — CONTEXT VERDICT ===
-  const diff = v.totGet - v.totGive;
-  const mode = (PROFILE.mode === "winnow") ? "contender" : PROFILE.mode;
-  const modeLabel = mode === "rebuilder" ? "REBUILDER" : "CONTENDER";
-  let ctxVerdict;
-  if(mode === "contender"){
-    if(rDiff >= 2){
-      ctxVerdict = `As a Contender, this is a <b>green light</b>. You're getting more current production than you're giving up — exactly the shape you need to push for a title window.`;
-    } else if(rDiff > -2){
-      ctxVerdict = `As a Contender, the value is roughly even. The deciding question: does the incoming production fit a <b>starting lineup hole</b>? If yes, accept. If just depth, pass.`;
-    } else if(rDiff > -15){
-      ctxVerdict = `As a Contender, paying a small premium is sometimes correct for the right plug-and-play piece. <b>Counter</b> if the fit is marginal — accept if it's a clear lineup upgrade.`;
+  // === Section F — ARCHETYPE READ ===
+  // Archetype-specific interpretation of the grade. Replaces the old
+  // mode-based CONTEXT VERDICT — zero team context required.
+  const archReadHTML = (() => {
+    const a = v.archetype;
+    if(!a) return "";
+    const winSide = adjDiff >= 2 ? "you" : adjDiff <= -2 ? "them" : "even";
+    let bodyTxt = "";
+    if(a.key === "winnow"){
+      if(winSide === "you") bodyTxt = `Both sides shipped proven vets and you came out ahead on production. <b>Take it.</b>`;
+      else if(winSide === "even") bodyTxt = `Two sides of proven production, basically level. Accept if your starting lineup actually upgrades — otherwise it's lateral.`;
+      else bodyTxt = `You shipped more production than you got back. In a vet-for-vet swap with no future capital, <b>pass</b> unless the incoming player is a clear lineup fit.`;
+    } else if(a.key === "ceiling-grab"){
+      const youAreGettingVet = !state.get.some(x => x.type === "pick") && state.give.some(x => x.type === "pick");
+      if(youAreGettingVet){
+        if(winSide === "you" || winSide === "even") bodyTxt = `You shipped picks and youth for a proven player and the math checks out. Certainty over upside is a fine bet at this price.`;
+        else bodyTxt = `You paid a premium in picks and youth for proven production. Only run this back if the player is a needle-mover for your lineup — otherwise the upside cost is too high.`;
+      } else {
+        if(winSide === "you" || winSide === "even") bodyTxt = `You banked picks and youth for a vet. Good shape — you converted near-term certainty into long-term swings.`;
+        else bodyTxt = `You shipped a vet but didn't extract enough pick/youth value. The certainty you gave up should have cost the other side more.`;
+      }
+    } else if(a.key === "sell-high"){
+      const youngerIsYou = a.label.startsWith("BUY LOW");
+      if(youngerIsYou){
+        if(winSide === "you" || winSide === "even") bodyTxt = `You bought younger and the age curve rewards it. Long-term, this is the move.`;
+        else bodyTxt = `You got younger but paid a premium to do it. Acceptable if your window is still 2+ years out — otherwise you overpaid for runway.`;
+      } else {
+        if(winSide === "you" || winSide === "even") bodyTxt = `You sold an older asset and extracted enough youth/picks to justify it. <b>Textbook sell-high.</b>`;
+        else bodyTxt = `You sold an older asset but didn't get enough back in youth or picks. Aging production needs to come with a discount.`;
+      }
+    } else if(a.key === "position-pivot"){
+      if(winSide === "you" || winSide === "even") bodyTxt = `Clean position swap at fair adjusted value. Take it if it shores up a starting lineup hole.`;
+      else bodyTxt = `Position swap that costs you adjusted value. Only worth it if your roster genuinely needs the shape change.`;
     } else {
-      ctxVerdict = `As a Contender, you're paying a steep premium. Even contending teams shouldn't burn this much equity unless this is a needle-moving acquisition. <b>Counter or pass.</b>`;
+      if(winSide === "you") bodyTxt = `Balanced trade and you came out ahead on adjusted value. <b>Take it.</b>`;
+      else if(winSide === "even") bodyTxt = `Balanced trade, fair both ways. Decide on roster fit, not the grade.`;
+      else bodyTxt = `Balanced trade but you're paying a premium. <b>Pass</b> unless this fills a starting lineup hole.`;
     }
-  } else {
-    if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
-      ctxVerdict = `As a Rebuilder, banking <b>future picks</b> is the correct shape of move. Long-term capital is your most valuable asset right now.`;
-    } else if(rDiff >= 2){
-      ctxVerdict = `As a Rebuilder, you're winning on raw value. Even better if the incoming pieces are young enough to still be on the roster when your window opens.`;
-    } else if(rDiff > -2){
-      ctxVerdict = `As a Rebuilder, even-value trades only matter if you're getting <b>younger</b>. If the age picture above doesn't favor you, this is a pass.`;
-    } else {
-      ctxVerdict = `As a Rebuilder, paying a premium for <b>now</b> assets is exactly what you shouldn't be doing. <b>Counter</b> by replacing aging pieces with future picks or younger players.`;
-    }
-  }
-  const ctxHTML = `
-    <div class="v2-section">
-      <div class="v2-section-head">CONTEXT VERDICT <span class="sub">graded against your team mode</span></div>
-      <div class="v2-section-body">
-        <div class="v2-context-card ${mode === "rebuilder" ? "rebuild" : ""}">
-          <span class="mode-badge">${modeLabel}</span>${ctxVerdict}
+    return `
+      <div class="v2-section">
+        <div class="v2-section-head">🎯 ARCHETYPE READ <span class="sub">how this trade plays out for the ${a.label} shape</span></div>
+        <div class="v2-section-body">
+          <div class="v2-context-card" data-arch="${a.key}">
+            <span class="mode-badge">${a.icon} ${a.label}</span>${bodyTxt}
+            <div style="margin-top:10px;font-size:11px;color:var(--ink-3);letter-spacing:.04em">Your side grade: <b style="color:var(--gold)">${v.yourGrade.l}</b> · ${v.yourGrade.tier}</div>
+          </div>
         </div>
       </div>
-    </div>
-  `;
+    `;
+  })();
 
-  // === Section: market spread band (carried from old) ===
+  // Market spread band
   const marketBand = `
     <div class="ind ${v.market.kind === 'agree' ? 'agree' : v.market.kind === 'buylow' ? 'buylow' : 'contested'}" style="margin-bottom:18px">
       <span class="ico">SPRD ${num(v.maxSpread)}</span>
@@ -2824,7 +3043,7 @@ function renderVerdict(v){
     </div>
   `;
 
-  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + spreadHTML + marketBand + ctxHTML;
+  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + spreadHTML + marketBand + archReadHTML;
 
   // attach last analysis for share
   window.__lastAnalysis = v;
@@ -2875,8 +3094,27 @@ function drawShareCard(){
   ctx.font = "600 18px Inter, sans-serif";
   ctx.fillText("DYNASTY TRADE VERDICT • EST. 2026", 60, 145);
 
+  // Archetype banner — the SHAPE of the trade, prominently above the grade boxes
+  const arch = v.archetype || { icon:"⚖️", label:"EVEN SWAP", tagline:"" };
+  const archColor =
+    arch.key === "winnow" ? "#ffd700" :
+    arch.key === "ceiling-grab" ? "#ff9f43" :
+    arch.key === "sell-high" ? "#3ee68f" :
+    arch.key === "position-pivot" ? "#ba6bff" : "#4a9eff";
+  const archY = 175;
+  ctx.fillStyle = "rgba(255,255,255,0.04)";
+  roundRect(ctx, 60, archY, W-120, 56, 12, true);
+  ctx.fillStyle = archColor;
+  ctx.fillRect(60, archY, 5, 56);
+  ctx.fillStyle = archColor;
+  ctx.font = "800 22px Inter, sans-serif";
+  ctx.fillText(`${arch.icon} ${arch.label}`, 90, archY+25);
+  ctx.fillStyle = "#a3b1cc";
+  ctx.font = "500 13px Inter, sans-serif";
+  ctx.fillText(arch.tagline || "", 90, archY+46);
+
   // grade boxes
-  const boxY = 220;
+  const boxY = 260;
   const boxH = 280;
   drawGradeBox(ctx, 60, boxY, (W-180)/2, boxH, "YOU GET", v.yourGrade, v.totGet);
   ctx.fillStyle = "#6b7796";
