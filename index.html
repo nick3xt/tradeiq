@@ -567,14 +567,19 @@ body{padding-bottom:56px}
   border:1px solid var(--line);border-left:3px solid var(--green);border-radius:10px;
   font-size:14px;line-height:1.6;color:var(--ink)
 }
-.v2-context-card.rebuild{border-left-color:#7ab8ff}
-.v2-context-card.winnow{border-left-color:#ffb547}
+.v2-context-card[data-arch="winnow"]{border-left-color:#ffd700}
+.v2-context-card[data-arch="ceiling-grab"]{border-left-color:#ff9f43}
+.v2-context-card[data-arch="sell-high"]{border-left-color:#3ee68f}
+.v2-context-card[data-arch="position-pivot"]{border-left-color:#ba6bff}
+.v2-context-card[data-arch="even-swap"]{border-left-color:#4a9eff}
 .v2-context-card .mode-badge{
   display:inline-block;padding:3px 9px;border-radius:5px;font-size:10px;font-weight:800;
-  letter-spacing:.16em;text-transform:uppercase;background:rgba(0,210,106,.12);color:#3ee68f;margin-right:8px
+  letter-spacing:.16em;text-transform:uppercase;background:rgba(74,158,255,.14);color:#7ab8ff;margin-right:8px
 }
-.v2-context-card.rebuild .mode-badge{background:rgba(74,158,255,.12);color:#7ab8ff}
-.v2-context-card.winnow .mode-badge{background:rgba(255,181,71,.14);color:#ffb547}
+.v2-context-card[data-arch="winnow"] .mode-badge{background:rgba(255,215,0,.14);color:#ffd700}
+.v2-context-card[data-arch="ceiling-grab"] .mode-badge{background:rgba(255,159,67,.14);color:#ff9f43}
+.v2-context-card[data-arch="sell-high"] .mode-badge{background:rgba(62,230,143,.14);color:#3ee68f}
+.v2-context-card[data-arch="position-pivot"] .mode-badge{background:rgba(186,107,255,.14);color:#ba6bff}
 
 /* Toast */
 .toast{
@@ -1413,14 +1418,6 @@ body{padding-bottom:56px}
           <button class="opt" data-val="superflex">Superflex</button>
         </div>
       </div>
-      <div class="field">
-        <label>Team Mode</label>
-        <div class="opts" data-group="mode">
-          <button class="opt" data-val="rebuilder">Rebuilder</button>
-          <button class="opt sel" data-val="contender">Contender</button>
-          <button class="opt" data-val="winnow">Win-Now</button>
-        </div>
-      </div>
     </div>
     <div class="footer">
       <button class="btn ghost" data-close>Cancel</button>
@@ -2132,7 +2129,7 @@ const PLAYERS = [
 const PROFILE_KEY = "tradeiq.profile.v1";
 const ROSTER_KEY = "tradeiq.roster.v1";
 const DEFAULT_PROFILE = {
-  teams:12, scoring:"ppr", tep:"0", format:"standard", mode:"contender"
+  teams:12, scoring:"ppr", tep:"0", format:"standard"
 };
 
 function loadProfile(){
@@ -2249,40 +2246,6 @@ function pickValue(pick){
   // Superflex premium applies only to 1st/2nd round picks
   if(PROFILE.format === "superflex" && (round === 1 || round === 2)) v *= 1.10;
   return Math.round(v);
-}
-
-// Mode-aware multipliers — these reshape the trade math, not just the verdict text.
-// Applied AFTER consensus/format adjustments so mode shifts which side actually wins.
-function modeAdjust(asset, val){
-  const mode = PROFILE.mode || "contender";
-  if(mode === "rebuilder"){
-    if(asset.type === "pick") return Math.round(val * 1.10);
-    if(asset.a <= 22) return Math.round(val * 1.15);
-    if(asset.a >= 30) return Math.round(val * 0.85);
-    if((asset.p === "RB" || asset.p === "WR") && asset.a >= 27 && asset.a <= 29){
-      return Math.round(val * 0.92);
-    }
-    return val;
-  }
-  if(mode === "winnow"){
-    if(asset.type === "pick"){
-      if(asset.year >= 2027) return Math.round(val * 0.75);
-      return Math.round(val * 0.92);
-    }
-    if(asset.a >= 25 && asset.a <= 29) val = Math.round(val * 1.18);
-    if(asset.a <= 22) val = Math.round(val * 0.80);
-    if(asset.a >= 26 && asset.a <= 30 && val >= 7500) val = Math.round(val * 1.15);
-    return val;
-  }
-  // contender (default)
-  if(asset.type === "pick"){
-    if(asset.year >= 2027) return Math.round(val * 0.88);
-    return val;
-  }
-  if(asset.a >= 25 && asset.a <= 29) val = Math.round(val * 1.12);
-  if(asset.a <= 22 && val < 4000) val = Math.round(val * 0.90);
-  if((asset.p === "WR" || asset.p === "RB") && val >= 7500) val = Math.round(val * 1.08);
-  return val;
 }
 
 // =================================================================
@@ -2544,7 +2507,6 @@ function renderTicker(){
 function profileBar(){
   const fmtMap = { standard:"Standard", superflex:"Superflex" };
   const scoreMap = { standard:"Non-PPR", half:"Half PPR", ppr:"Full PPR" };
-  const modeMap = { contender:"Contender", winnow:"Win-Now", rebuilder:"Rebuilder" };
   const tepMap = { "0":"No TEP", "0.5":"0.5 TEP", "1":"1.0 TEP" };
   const bar = $("#profile-bar");
   bar.innerHTML = `
@@ -2553,7 +2515,6 @@ function profileBar(){
     <div class="chip">Format: <b>${fmtMap[PROFILE.format]}</b></div>
     <div class="chip">Scoring: <b>${scoreMap[PROFILE.scoring]}</b></div>
     <div class="chip">${tepMap[PROFILE.tep]}</div>
-    <div class="chip">Mode: <b>${modeMap[PROFILE.mode] || "Contender"}</b></div>
     <button class="edit" id="edit-profile">Edit</button>
   `;
   $("#edit-profile").onclick = openProfile;
@@ -3218,7 +3179,6 @@ function openProfile(){
   setGroupVal("profile-modal","scoring",PROFILE.scoring);
   setGroupVal("profile-modal","tep",PROFILE.tep);
   setGroupVal("profile-modal","format",PROFILE.format);
-  setGroupVal("profile-modal","mode", PROFILE.mode);
   openModal("#profile-modal");
 }
 $("#btn-profile").onclick = openProfile;
@@ -3229,7 +3189,6 @@ $("#btn-save-profile").onclick = () => {
     scoring: getGroupVal("profile-modal","scoring"),
     tep: getGroupVal("profile-modal","tep"),
     format: getGroupVal("profile-modal","format"),
-    mode: getGroupVal("profile-modal","mode"),
   };
   saveProfile(PROFILE);
   profileBar();
@@ -3237,7 +3196,7 @@ $("#btn-save-profile").onclick = () => {
   closeModal("#profile-modal");
   showToast("League profile saved", "ok");
 };
-["teams","scoring","tep","format","mode"].forEach(g => bindOptGroup("profile-modal", g));
+["teams","scoring","tep","format"].forEach(g => bindOptGroup("profile-modal", g));
 
 // =================================================================
 // PICK MODAL
@@ -3810,27 +3769,23 @@ function analyze(){
   }
 
   // observations
-  const observations = buildObservations(totGet, totGive);
+  const observations = buildObservations();
 
-  // contextual note
-  const note = contextNote(totGet, totGive);
-
-  // verdict text
-  const verdict = verdictText(totGet, totGive, yourGrade, oppGrade, market);
+  // verdict text — archetype-aware, runs on age-adjusted totals
+  const verdict = verdictText(totRawGet, totRawGive, totAdjGet, totAdjGive, yourGrade, oppGrade, market, archetype);
 
   return {
     totGet, totGive,
     totRawGet, totRawGive, totAdjGet, totAdjGive,
     avg: avgAdj, youDiff, oppDiff,
     archetype,
-    yourGrade, oppGrade, market, observations, note, verdict, maxSpread, avgSpread,
+    yourGrade, oppGrade, market, observations, verdict, maxSpread, avgSpread,
     needWeighted
   };
 }
 
-function buildObservations(totGet, totGive){
+function buildObservations(){
   const obs = [];
-  // age picture
   const youGetPlayers = state.get.filter(a => a.type !== "pick");
   const youGivePlayers = state.give.filter(a => a.type !== "pick");
   const avgAgeGet = youGetPlayers.length ? youGetPlayers.reduce((s,p)=>s+p.a,0)/youGetPlayers.length : 0;
@@ -3841,10 +3796,8 @@ function buildObservations(totGet, totGive){
     else if(dAge <= -2) obs.push(`<b>Getting younger:</b> Incoming avg age ${avgAgeGet.toFixed(1)} vs outgoing ${avgAgeGive.toFixed(1)}. Future-equity move.`);
     else obs.push(`<b>Age neutral:</b> Both sides cluster around the same age band (${avgAgeGet.toFixed(1)} vs ${avgAgeGive.toFixed(1)}).`);
   }
-  // position concentration
   const posCount = (arr) => arr.filter(a => a.type !== "pick").reduce((m,p)=>{m[p.p]=(m[p.p]||0)+1; return m;}, {});
   const inPos = posCount(state.get);
-  const outPos = posCount(state.give);
   const heaviest = Object.entries(inPos).sort((a,b)=>b[1]-a[1])[0];
   if(heaviest && heaviest[1] >= 2){
     obs.push(`<b>Position stack:</b> You're loading ${heaviest[1]} ${heaviest[0]}s. Make sure your starting lineup actually needs them.`);
@@ -3853,71 +3806,47 @@ function buildObservations(totGet, totGive){
   } else if(!state.get.some(a=>a.type==="pick") && state.give.some(a=>a.type==="pick")){
     obs.push(`<b>Cashing picks:</b> Picks → players. Locks value now, gives up future flexibility.`);
   } else {
-    const teGet = (inPos.TE||0), teGive = (outPos.TE||0);
-    if(teGet > teGive && PROFILE.tep !== "0"){
-      obs.push(`<b>TEP edge:</b> You're loading TE in a ${PROFILE.tep === "1" ? "1.0" : "0.5"} TEP league — premium scoring already priced in above.`);
-    } else {
-      obs.push(`<b>Roster mix:</b> No single-position concentration. Trade is positional-balanced.`);
-    }
+    obs.push(`<b>Roster mix:</b> No single-position concentration. Trade is positional-balanced.`);
   }
   return obs;
 }
 
-function contextNote(totGet, totGive){
-  const diff = totGet - totGive;
-  const mode = PROFILE.mode;
-  const player = state.get.find(a => a.type !== "pick" && a.a >= 27);
-  const youngPick = state.give.find(a => a.type === "pick" && a.year >= 2027);
-  if(mode === "rebuilder" && player){
-    return `As a <b>Rebuilder</b>, taking <b>${player.n}</b> at age ${player.a} grades lower — you're paying veteran prices for a window you're not in.`;
-  }
-  if(mode === "rebuilder" && youngPick){
-    return `As a <b>Rebuilder</b>, the future ${youngPick.year} ${youngPick.round===1?"1st":youngPick.round+"th"} you're sending is a key building block. Make sure the acquisition justifies it.`;
-  }
-  if(mode === "winnow"){
-    const incomingFuturePick = state.get.some(a=>a.type==="pick" && a.year >= 2027);
-    const incomingRookiePick = state.get.some(a=>a.type==="pick" && a.round === 1 && a.year <= 2026);
-    if(incomingFuturePick){
-      return `As a <b>Win-Now</b> team, future picks are dead weight — they don't help you THIS year. Only acceptable if you're flipping them again before the deadline.`;
-    }
-    if(incomingRookiePick){
-      return `As a <b>Win-Now</b> team, even current rookie picks are a gamble — you need plug-and-play production now, not a developmental swing.`;
-    }
-    if(diff < 0){
-      return `As a <b>Win-Now</b> team, paying a premium for proven, immediate-impact starters is correct. Your window is now — equity is meaningless if you don't cash it in.`;
-    }
-    return `As a <b>Win-Now</b> team, you're acquiring immediate production at fair-or-better value. Exactly the move.`;
-  }
-  if(mode === "contender"){
-    if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
-      return `As a <b>Contender</b>, accepting future picks for current production grades softer — distant picks are illiquid.`;
-    }
-    if(diff < 0){
-      return `As a <b>Contender</b>, paying a small premium for the right plug-and-play piece can still be correct. Don't grade purely on raw value.`;
-    }
-    return `As a <b>Contender</b>, you're moving toward proven production. That's the right shape of trade for your window.`;
-  }
-  return `Profile context: <b>${mode}</b> · ${PROFILE.format} · ${PROFILE.scoring}.`;
-}
-
-function verdictText(totGet, totGive, you, opp, market){
-  const diff = totGet - totGive;
+// Archetype-aware verdict text — describes the deal in the archetype's
+// language, then closes with the grade. Used in the share card and the
+// final-line summary shown to the user.
+function verdictText(totRawGet, totRawGive, totAdjGet, totAdjGive, you, opp, market, archetype){
+  const rawDiff = totRawGet - totRawGive;
+  const adjDiff = totAdjGet - totAdjGive;
   const lines = [];
-  if(Math.abs(diff) < 200){
-    lines.push(`This trade is <b>essentially even</b> on consensus value (${num(totGet)} vs ${num(totGive)}).`);
-  } else if(diff > 0){
-    lines.push(`You come out ahead by <b>${num(diff)}</b> consensus points (+${(((totGet/totGive)-1)*100).toFixed(1)}%).`);
+
+  // Lead with the SHAPE of the trade.
+  const arch = archetype || { key:"even-swap", label:"EVEN SWAP", tagline:"" };
+  lines.push(`<b>${arch.label}</b> — ${arch.tagline}`);
+
+  // Then the headline numbers: raw vs adjusted.
+  if(Math.abs(adjDiff) < 200){
+    lines.push(`Age-adjusted value is essentially even (${num(totAdjGet)} vs ${num(totAdjGive)}).`);
+  } else if(adjDiff > 0){
+    const pct = (((totAdjGet/Math.max(1,totAdjGive))-1)*100).toFixed(1);
+    lines.push(`You come out ahead by <b>${num(adjDiff)}</b> age-adjusted pts (+${pct}%).`);
   } else {
-    lines.push(`You give up <b>${num(-diff)}</b> consensus points (${(((totGive/totGet)-1)*100).toFixed(1)}% premium paid).`);
+    const pct = (((totAdjGive/Math.max(1,totAdjGet))-1)*100).toFixed(1);
+    lines.push(`You give up <b>${num(-adjDiff)}</b> age-adjusted pts (${pct}% premium paid).`);
   }
-  lines.push(market.text + ".");
+  // Surface when raw and adjusted disagree — that's the whole point of the new system.
+  if(Math.sign(rawDiff) !== Math.sign(adjDiff) && Math.abs(rawDiff) > 400 && Math.abs(adjDiff) > 400){
+    lines.push(`Raw value flips the other way (${rawDiff>0?"+":""}${num(rawDiff)}) — the age curve reshaped this one.`);
+  }
+
+  lines.push(market.text);
+
   const youLbl = gradeLabel(you);
   if(you.l[0] === "A" || you.l === "S"){
     lines.push(`Your side grades <b>${youLbl}</b> — accept it.`);
   } else if(you.l[0] === "B"){
-    lines.push(`Your side grades <b>${youLbl}</b> — fair, but consider whether the fit improves on the margin.`);
+    lines.push(`Your side grades <b>${youLbl}</b> — fair deal, no edge either way.`);
   } else {
-    lines.push(`Your side grades <b>${youLbl}</b> — pass unless the roster fit is unusually clean.`);
+    lines.push(`Your side grades <b>${youLbl}</b> — pass.`);
   }
   return lines.join(" ");
 }
@@ -4066,45 +3995,23 @@ function renderVerdict(v){
   `;
 
   // === Section C — AGE & DYNASTY ===
+  // Now uses the canonical ageAdjustedValue (the same number that drives the grade).
+  // Raw value = "what it's worth today"; adjusted = "what it's worth on a dynasty timeline."
   const youGetPlayers = state.get.filter(a => a.type !== "pick");
   const youGivePlayers = state.give.filter(a => a.type !== "pick");
   const avgAgeGet = youGetPlayers.length ? (youGetPlayers.reduce((s,p)=>s+p.a,0)/youGetPlayers.length) : 0;
   const avgAgeGive = youGivePlayers.length ? (youGivePlayers.reduce((s,p)=>s+p.a,0)/youGivePlayers.length) : 0;
   const ageDelta = avgAgeGet - avgAgeGive;
 
-  // Short-term (1-2 yrs) vs Long-term (3+ yrs) heuristics:
-  // short = sum of (current adjusted values) — already what we have
-  // long  = age-decayed estimate: subtract player decline penalty + future picks (gain)
-  function longTermValue(side){
-    let sum = 0;
-    for(const a of state[side]){
-      if(a.type === "pick"){
-        // closer picks are slightly less valuable long-term
-        const yrs = (a.year || 2026) - 2026;
-        sum += assetValue(a) * (1 + yrs*0.05);
-      } else {
-        // age 22-25 holds value; 26-28 mild decline; 29+ steep
-        const age = a.a || 26;
-        let mult = 1.0;
-        if(age <= 23) mult = 1.20;
-        else if(age <= 25) mult = 1.10;
-        else if(age <= 27) mult = 0.95;
-        else if(age <= 29) mult = 0.75;
-        else if(age <= 31) mult = 0.50;
-        else mult = 0.30;
-        sum += assetValue(a) * mult;
-      }
-    }
-    return Math.round(sum);
-  }
-  const ltGet = longTermValue("get");
-  const ltGive = longTermValue("give");
-  const stWinner = v.totGet > v.totGive + 100 ? "YOU" : v.totGive > v.totGet + 100 ? "THEM" : "EVEN";
-  const ltWinner = ltGet > ltGive + 100 ? "YOU" : ltGive > ltGet + 100 ? "THEM" : "EVEN";
+  const rawWinner = v.totRawGet > v.totRawGive + 100 ? "YOU" : v.totRawGive > v.totRawGet + 100 ? "THEM" : "EVEN";
+  const adjWinner = v.totAdjGet > v.totAdjGive + 100 ? "YOU" : v.totAdjGive > v.totAdjGet + 100 ? "THEM" : "EVEN";
+  const flipFlag = rawWinner !== adjWinner && rawWinner !== "EVEN" && adjWinner !== "EVEN";
 
   let ageFlag = "";
-  if(ageDelta >= 2){
-    ageFlag = `<div class="v2-flag age-alert">⚠ <span><b>VETERAN ASSETS</b> — incoming players average ${ageDelta.toFixed(1)} yrs older. Value peaks in 1–2 seasons.</span></div>`;
+  if(flipFlag){
+    ageFlag = `<div class="v2-flag dynasty">🔄 <span><b>AGE CURVE FLIPS THIS:</b> raw value favors <b>${rawWinner}</b>, age-adjusted favors <b>${adjWinner}</b>. The grade trusts the adjusted column.</span></div>`;
+  } else if(ageDelta >= 2){
+    ageFlag = `<div class="v2-flag age-alert">⚠ <span><b>VETERAN-HEAVY RETURN</b> — incoming players average ${ageDelta.toFixed(1)} yrs older. Window peaks in 1–2 seasons.</span></div>`;
   } else if(ageDelta <= -2){
     ageFlag = `<div class="v2-flag dynasty">📈 <span><b>DYNASTY UPSIDE</b> — incoming players average ${Math.abs(ageDelta).toFixed(1)} yrs younger. Long-term value likely rises.</span></div>`;
   } else if(youGetPlayers.length || youGivePlayers.length){
@@ -4113,13 +4020,13 @@ function renderVerdict(v){
 
   const ageHTML = `
     <div class="v2-section">
-      <div class="v2-section-head">🗓 AGE &amp; DYNASTY IMPACT <span class="sub">how each side ages · what it does to your contention window</span></div>
+      <div class="v2-section-head">🗓 AGE IMPACT <span class="sub">how the age curve reshapes each side's value</span></div>
       <div class="v2-section-body">
         <div class="v2-kv">
           <div class="v2-kv-cell"><div class="k">YOU GET — AVG AGE</div><div class="v">${avgAgeGet ? avgAgeGet.toFixed(1) : "—"}</div><div class="sub">${youGetPlayers.length} player${youGetPlayers.length===1?"":"s"}</div></div>
           <div class="v2-kv-cell"><div class="k">YOU GIVE — AVG AGE</div><div class="v">${avgAgeGive ? avgAgeGive.toFixed(1) : "—"}</div><div class="sub">${youGivePlayers.length} player${youGivePlayers.length===1?"":"s"}</div></div>
-          <div class="v2-kv-cell"><div class="k">SHORT-TERM (1–2 YRS)</div><div class="v" style="color:${stWinner==="YOU"?"var(--green)":stWinner==="THEM"?"var(--red)":"var(--blue)"}">${stWinner}</div><div class="sub">${num(v.totGet)} vs ${num(v.totGive)}</div></div>
-          <div class="v2-kv-cell"><div class="k">LONG-TERM (3+ YRS)</div><div class="v" style="color:${ltWinner==="YOU"?"var(--green)":ltWinner==="THEM"?"var(--red)":"var(--blue)"}">${ltWinner}</div><div class="sub">${num(ltGet)} vs ${num(ltGive)} (age-adj)</div></div>
+          <div class="v2-kv-cell"><div class="k">RAW VALUE WINNER</div><div class="v" style="color:${rawWinner==="YOU"?"var(--green)":rawWinner==="THEM"?"var(--red)":"var(--blue)"}">${rawWinner}</div><div class="sub">${num(v.totRawGet)} vs ${num(v.totRawGive)}</div></div>
+          <div class="v2-kv-cell"><div class="k">AGE-ADJ WINNER</div><div class="v" style="color:${adjWinner==="YOU"?"var(--green)":adjWinner==="THEM"?"var(--red)":"var(--blue)"}">${adjWinner}</div><div class="sub">${num(v.totAdjGet)} vs ${num(v.totAdjGive)} (grade)</div></div>
         </div>
         ${ageFlag}
       </div>
@@ -4200,60 +4107,59 @@ function renderVerdict(v){
     </div>
   `;
 
-  // === Section F — CONTEXT VERDICT ===
-  // Context commentary still uses the headline diff (age-adjusted) so it
-  // stays consistent with the grade above.
-  const diff = adjDiff;
-  const mode = PROFILE.mode;
-  const modeLabel = mode === "rebuilder" ? "REBUILDER" : mode === "winnow" ? "WIN-NOW" : "CONTENDER";
-  let ctxVerdict;
-  if(mode === "winnow"){
-    const incomingFuturePick = state.get.some(a=>a.type==="pick" && a.year >= 2027);
-    if(incomingFuturePick){
-      ctxVerdict = `As Win-Now, accepting <b>future picks</b> is the wrong direction — they don't score points THIS year. Only run this back if you're flipping them again before the deadline.`;
-    } else if(diff >= 200){
-      ctxVerdict = `As Win-Now, this is a <b>full green light</b>. You're getting more immediate production than you're giving up — cash in your equity, that's what it's for.`;
-    } else if(diff > -200){
-      ctxVerdict = `As Win-Now, the value is roughly even — but the only question that matters is <b>does this win you games NOW?</b> If yes, accept. Equity left on the table at season's end is wasted equity.`;
-    } else if(diff > -2500){
-      ctxVerdict = `As Win-Now, paying a real premium for proven, immediate-impact production is <b>exactly the move</b>. Your window is open. Don't grade this purely on raw value.`;
+  // === Section F — ARCHETYPE READ ===
+  // Archetype-specific interpretation of the grade. Replaces the old mode-based
+  // CONTEXT VERDICT — no team context required.
+  const archReadHTML = (() => {
+    const arch = v.archetype;
+    if(!arch) return "";
+    const youLbl = gradeLabel(v.yourGrade);
+    const winSide = adjDiff >= 200 ? "you" : adjDiff <= -200 ? "them" : "even";
+    let body = "";
+    if(arch.key === "winnow"){
+      if(winSide === "you") body = `Both sides shipped proven vets and you came out ahead on production. <b>Take it.</b>`;
+      else if(winSide === "even") body = `Two sides of proven production, basically level. Accept if your starting lineup actually upgrades — otherwise it's lateral.`;
+      else body = `You shipped more production than you got back. In a vet-for-vet swap with no future capital, <b>pass</b> unless the incoming player is a clear lineup fit.`;
+    } else if(arch.key === "ceiling-grab"){
+      const youAreGettingVet = !state.get.some(a => a.type === "pick") && state.give.some(a => a.type === "pick");
+      if(youAreGettingVet){
+        if(winSide === "you" || winSide === "even") body = `You shipped picks and youth for a proven player and the math checks out. Certainty over upside is a fine bet at this price.`;
+        else body = `You paid a premium in picks and youth for proven production. Only run this back if the player is a needle-mover for your lineup — otherwise the upside cost is too high.`;
+      } else {
+        if(winSide === "you" || winSide === "even") body = `You banked picks and youth for a vet. Good shape — you converted near-term certainty into long-term swings.`;
+        else body = `You shipped a vet but didn't extract enough pick/youth value. The certainty you gave up should have cost the other side more.`;
+      }
+    } else if(arch.key === "sell-high"){
+      const youngerIsYou = arch.label.startsWith("BUY LOW");
+      if(youngerIsYou){
+        if(winSide === "you" || winSide === "even") body = `You bought younger and the age curve rewards it. Long-term, this is the move.`;
+        else body = `You got younger but paid a premium to do it. Acceptable if your window is still 2+ years out — otherwise you overpaid for runway.`;
+      } else {
+        if(winSide === "you" || winSide === "even") body = `You sold an older asset and extracted enough youth/picks to justify it. <b>Textbook sell-high.</b>`;
+        else body = `You sold an older asset but didn't get enough back in youth or picks. Aging production needs to come with a discount.`;
+      }
+    } else if(arch.key === "position-pivot"){
+      if(winSide === "you" || winSide === "even") body = `Clean position swap at fair adjusted value. Take it if it shores up a starting lineup hole.`;
+      else body = `Position swap that costs you adjusted value. Only worth it if your roster genuinely needs the shape change.`;
     } else {
-      ctxVerdict = `As Win-Now, even in win-now mode there's a price ceiling. This much overpay only works if the incoming piece is genuinely needle-moving. <b>Pass</b> unless that's clearly the case.`;
+      if(winSide === "you") body = `Balanced trade and you came out ahead on adjusted value. <b>Take it.</b>`;
+      else if(winSide === "even") body = `Balanced trade, fair both ways. Decide on roster fit, not the grade.`;
+      else body = `Balanced trade but you're paying a premium. <b>Pass</b> unless this fills a starting lineup hole.`;
     }
-  } else if(mode === "contender"){
-    if(diff >= 200){
-      ctxVerdict = `As a Contender, this is a <b>green light</b>. You're getting more current production than you're giving up — exactly the shape you need to push for a title window.`;
-    } else if(diff > -200){
-      ctxVerdict = `As a Contender, the value is roughly even. The deciding question: does the incoming production fit a <b>starting lineup hole</b>? If yes, accept. If just depth, pass.`;
-    } else if(diff > -1500){
-      ctxVerdict = `As a Contender, paying a small premium is sometimes correct for the right plug-and-play piece. Accept only if it's a clear lineup upgrade — <b>otherwise pass</b>.`;
-    } else {
-      ctxVerdict = `As a Contender, you're paying a steep premium. Even contending teams shouldn't burn this much equity unless this is a needle-moving acquisition. <b>Pass.</b>`;
-    }
-  } else {
-    if(state.get.some(a=>a.type==="pick" && a.year >= 2027)){
-      ctxVerdict = `As a Rebuilder, banking <b>future picks</b> is the correct shape of move. Long-term capital is your most valuable asset right now.`;
-    } else if(diff >= 200){
-      ctxVerdict = `As a Rebuilder, you're winning on raw value. Even better if the incoming pieces are young enough to still be on the roster when your window opens.`;
-    } else if(diff > -200){
-      ctxVerdict = `As a Rebuilder, even-value trades only matter if you're getting <b>younger</b>. If the age picture above doesn't favor you, this is a pass.`;
-    } else {
-      ctxVerdict = `As a Rebuilder, paying a premium for <b>now</b> assets is exactly what you shouldn't be doing. <b>Pass</b> — your shape needs future picks and younger players, not the other way around.`;
-    }
-  }
-  const ctxClass = mode === "rebuilder" ? "rebuild" : mode === "winnow" ? "winnow" : "";
-  const ctxHTML = `
-    <div class="v2-section">
-      <div class="v2-section-head">🎯 CONTEXT VERDICT <span class="sub">your trade graded against your team mode</span></div>
-      <div class="v2-section-body">
-        <div class="v2-context-card ${ctxClass}">
-          <span class="mode-badge">${modeLabel}</span>${ctxVerdict}
+    return `
+      <div class="v2-section">
+        <div class="v2-section-head">🎯 ARCHETYPE READ <span class="sub">how this trade plays out for the ${arch.label} shape</span></div>
+        <div class="v2-section-body">
+          <div class="v2-context-card" data-arch="${arch.key}">
+            <span class="mode-badge">${arch.icon} ${arch.label}</span>${body}
+            <div style="margin-top:10px;font-size:11px;color:var(--ink-3);letter-spacing:.04em">Your side grade: <b style="color:var(--gold)">${youLbl}</b> · ${v.yourGrade.tier}</div>
+          </div>
         </div>
       </div>
-    </div>
-  `;
+    `;
+  })();
 
-  // === Section: market spread band (carried from old) ===
+  // Market spread band
   const marketBand = `
     <div class="ind ${v.market.kind === 'agree' ? 'agree' : v.market.kind === 'buylow' ? 'buylow' : 'contested'}" style="margin-bottom:18px">
       <span class="ico">SPRD ${num(v.maxSpread)}</span>
@@ -4311,7 +4217,7 @@ function renderVerdict(v){
     }
   }
 
-  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + rosterFitHTML + spreadHTML + marketBand + ctxHTML;
+  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + rosterFitHTML + spreadHTML + marketBand + archReadHTML;
 
   // attach last analysis for share
   window.__lastAnalysis = v;
