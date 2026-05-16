@@ -899,6 +899,52 @@ img{display:block;max-width:100%}
   .tiers-grid { grid-template-columns: 1fr; }
 }
 
+.rankings-section{margin-top:18px;background:linear-gradient(135deg,rgba(15,21,36,.92) 0%,rgba(10,15,26,.92) 100%);border:1px solid rgba(74,158,255,.18);border-radius:14px;padding:18px 16px}
+.rankings-section h3{margin:0;font-size:18px;font-weight:800;letter-spacing:.04em;color:var(--ink);text-transform:uppercase}
+.rankings-section .subtitle{font-size:11px;font-weight:500;color:var(--ink-3);margin-left:8px;letter-spacing:.02em;text-transform:none}
+.rankings-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+.rankings-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.rk-tab{background:rgba(255,255,255,.04);border:1px solid rgba(74,158,255,.16);color:var(--ink-2);padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:.14em;cursor:pointer;text-transform:uppercase;transition:all .15s}
+.rk-tab:hover{border-color:rgba(74,158,255,.45);color:var(--ink)}
+.rk-tab.sel{background:rgba(74,158,255,.16);border-color:var(--blue);color:var(--blue)}
+.rankings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
+.rk-row{display:grid;grid-template-columns:36px 38px 1fr 60px 60px;align-items:center;gap:10px;padding:8px 10px;background:rgba(255,255,255,.02);border:1px solid rgba(74,158,255,.10);border-radius:8px;font-size:12px;transition:border-color .15s}
+.rk-row:hover{border-color:rgba(74,158,255,.4)}
+.rk-rank{font-family:'JetBrains Mono',monospace;font-weight:800;color:var(--ink-3);font-size:13px;text-align:center}
+.rk-pos{font-weight:800;font-size:10px;letter-spacing:.08em;text-align:center;padding:3px 0;border-radius:4px}
+.rk-pos.QB{background:rgba(255,90,90,.16);color:#ff8080}
+.rk-pos.RB{background:rgba(70,210,140,.16);color:#5fe2a8}
+.rk-pos.WR{background:rgba(74,158,255,.18);color:#7fb8ff}
+.rk-pos.TE{background:rgba(255,200,90,.18);color:#ffd470}
+.rk-name{font-weight:700;color:var(--ink);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk-name .meta{color:var(--ink-3);font-weight:500;font-size:11px;margin-left:6px}
+.rk-val{font-family:'JetBrains Mono',monospace;font-weight:800;color:var(--gold);text-align:right;font-size:13px}
+.rk-adj{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink-2);text-align:right;font-size:12px}
+.rk-adj.up{color:#5fe2a8}
+.rk-adj.down{color:#ff8080}
+.analytics-section{margin-top:18px;background:linear-gradient(135deg,rgba(15,21,36,.92) 0%,rgba(10,15,26,.92) 100%);border:1px solid rgba(74,158,255,.18);border-radius:14px;padding:18px 16px}
+.analytics-section h3{margin:0;font-size:18px;font-weight:800;letter-spacing:.04em;color:var(--ink);text-transform:uppercase}
+.analytics-section .subtitle{font-size:11px;font-weight:500;color:var(--ink-3);margin-left:8px;letter-spacing:.02em;text-transform:none}
+.analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:14px}
+.an-card{background:rgba(0,0,0,.20);border:1px solid rgba(74,158,255,.16);border-radius:10px;padding:14px}
+.an-card .h{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase;margin-bottom:10px}
+.an-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(74,158,255,.06);font-size:13px}
+.an-row:last-child{border-bottom:none}
+.an-row .lbl{color:var(--ink)}
+.an-row .val{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold)}
+.an-bar{height:6px;background:rgba(74,158,255,.10);border-radius:3px;margin:6px 0;overflow:hidden}
+.an-bar .fill{height:100%;background:linear-gradient(90deg,#4a9eff,#00d26a);border-radius:3px}
+.an-hist{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;height:60px;align-items:end;margin-top:6px}
+.an-hist-bar{background:linear-gradient(180deg,#4a9eff,#1f4d80);border-radius:2px 2px 0 0;position:relative;min-height:3px}
+.an-hist-bar:hover::after{content:attr(data-tip);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#0a1322;border:1px solid var(--blue);padding:4px 6px;border-radius:4px;font-size:10px;color:var(--ink);white-space:nowrap;z-index:5;pointer-events:none}
+.an-hist-labels{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin-top:4px;font-size:9px;color:var(--ink-3);text-align:center;font-family:'JetBrains Mono',monospace}
+.v2-needs{margin:14px;padding:14px;background:rgba(74,158,255,.12);border:1px solid rgba(74,158,255,.4);border-radius:10px;font-size:13px;color:var(--ink);display:flex;gap:10px;align-items:center}
+.v2-needs.v2-needs-even{background:rgba(0,210,106,.10);border-color:rgba(0,210,106,.4)}
+.v2-needs b{color:var(--gold)}
+.v2-table-adj td.pos{color:#5fe2a8}
+.v2-table-adj td.neg{color:#ff8080}
+.v2-table-adj td.even{color:var(--ink-2)}
+
 </style>
 </head>
 <body>
@@ -1047,6 +1093,29 @@ img{display:block;max-width:100%}
     <div class="featured-card" id="featured-card"></div>
   </section>
 
+  <!-- TOP 40 RANKINGS -->
+  <section class="rankings-section" id="rankings-section">
+    <header class="rankings-head">
+      <h3>Top 40 Rankings <span class="subtitle">FantasyCalc 0.00–9.90 scale · age-adjusted · live on league setting changes</span></h3>
+      <div class="rankings-tabs" id="rankings-tabs">
+        <button class="rk-tab sel" data-pos="ALL">All</button>
+        <button class="rk-tab" data-pos="QB">QB</button>
+        <button class="rk-tab" data-pos="RB">RB</button>
+        <button class="rk-tab" data-pos="WR">WR</button>
+        <button class="rk-tab" data-pos="TE">TE</button>
+      </div>
+    </header>
+    <div class="rankings-grid" id="rankings-grid"></div>
+  </section>
+
+  <!-- ANALYTICS -->
+  <section class="analytics-section" id="analytics-section">
+    <header class="analytics-head">
+      <h3>Analytics <span class="subtitle">League-wide value snapshot · refreshes when settings change</span></h3>
+    </header>
+    <div class="analytics-grid" id="analytics-grid"></div>
+  </section>
+
 </main>
 
 <!-- PROFILE MODAL -->
@@ -1118,12 +1187,25 @@ img{display:block;max-width:100%}
         </div>
       </div>
       <div class="field">
-        <label>Original Team Record (pick origin)</label>
-        <div class="opts" data-group="pslot">
-          <button class="opt" data-val="top3">Top 3 (Bottom of standings)</button>
-          <button class="opt sel" data-val="mid">Mid (4–9)</button>
-          <button class="opt" data-val="late">Late (Top 3 standings)</button>
+        <label>Pick Slot <span style="color:var(--ink-3);font-size:11px;font-weight:500;letter-spacing:0;text-transform:none">— pick exact slot for precise value, or "Future" for unknown</span></label>
+        <div class="opts" data-group="ppicknum" id="ppicknum-grid" style="flex-wrap:wrap;gap:6px">
+          <button class="opt" data-val="future-top3">Future · Top-3 origin</button>
+          <button class="opt sel" data-val="future-mid">Future · Mid (1.04–1.09)</button>
+          <button class="opt" data-val="future-late">Future · Late (1.10–1.12)</button>
+          <button class="opt" data-val="1">1.01</button>
+          <button class="opt" data-val="2">1.02</button>
+          <button class="opt" data-val="3">1.03</button>
+          <button class="opt" data-val="4">1.04</button>
+          <button class="opt" data-val="5">1.05</button>
+          <button class="opt" data-val="6">1.06</button>
+          <button class="opt" data-val="7">1.07</button>
+          <button class="opt" data-val="8">1.08</button>
+          <button class="opt" data-val="9">1.09</button>
+          <button class="opt" data-val="10">1.10</button>
+          <button class="opt" data-val="11">1.11</button>
+          <button class="opt" data-val="12">1.12</button>
         </div>
+        <div id="ppicknum-preview" style="margin-top:8px;font-size:12px;color:var(--ink-2)"></div>
       </div>
     </div>
     <div class="footer">
@@ -1609,35 +1691,45 @@ const PLAYERS = [
   {n:"Tahj Washington",p:"WR",t:"MIA",a:25,v:0.16,fc:1,sid:"11821",tr:2},
 ];
 
-// 2026 baseline pick values (round, slot) → 0.00-9.90
-const PICK_BASE_2026 = {
-  "1.top3": 7.33,
-  "1.mid": 5.96,
-  "1.late": 5.26,
-  "2.top3": 4.91,
-  "2.mid": 4.51,
-  "2.late": 4.18,
-  "3.top3": 4.01,
-  "3.mid": 3.79,
-  "3.late": 3.60,
-  "4.top3": 3.49,
-  "4.mid": 3.34,
-  "4.late": 3.21,
-  "5.top3": 2.55,
-  "5.mid": 2.33,
-  "5.late": 2.08,
-  "6.top3": 1.89,
-  "6.mid": 1.69,
-  "6.late": 1.47,
+// 2026 per-slot pick values (round × slot_num 1..12) on the 0.00–9.90 scale.
+// Pulled directly from FantasyCalc rankings, normalized through the same
+// power curve as players. Within-round spread is steep: 1.01 ≫ 1.06 ≫ 1.12.
+const PICK_SLOT_2026 = {
+  1: {1:8.33, 2:6.87, 3:6.66, 4:6.41, 5:6.30, 6:6.05, 7:5.80, 8:5.62, 9:5.54, 10:5.39, 11:5.26, 12:5.13},
+  2: {1:5.02, 2:4.91, 3:4.81, 4:4.71, 5:4.62, 6:4.54, 7:4.46, 8:4.38, 9:4.31, 10:4.25, 11:4.18, 12:4.12},
+  3: {1:4.06, 2:4.01, 3:3.95, 4:3.90, 5:3.85, 6:3.81, 7:3.76, 8:3.72, 9:3.68, 10:3.64, 11:3.60, 12:3.56},
+  4: {1:3.52, 2:3.49, 3:3.45, 4:3.42, 5:3.39, 6:3.36, 7:3.33, 8:3.30, 9:3.27, 10:3.24, 11:3.21, 12:3.19},
+  5: {1:2.69, 2:2.66, 3:2.64, 4:2.61, 5:2.59, 6:2.57, 7:2.54, 8:2.52, 9:2.50, 10:2.48, 11:2.45, 12:2.43},
+  6: {1:2.05, 2:2.03, 3:2.01, 4:1.99, 5:1.97, 6:1.95, 7:1.94, 8:1.92, 9:1.90, 10:1.89, 11:1.87, 12:1.85},
 };
 
-// Year decay ratios from generic 1st-rounders
+// Per-bucket averages — used when a pick is specified as a "Future 1st"
+// without an exact slot. Top3 = 1.01–1.03 · Mid = 1.04–1.09 · Late = 1.10–1.12.
+const PICK_BUCKET_2026 = (() => {
+  const o = {};
+  for(const [rnd, slots] of Object.entries(PICK_SLOT_2026)){
+    const avg = (lo, hi) => {
+      let s = 0, n = 0;
+      for(let i = lo; i <= hi; i++){ if(slots[i] !== undefined){ s += slots[i]; n++; } }
+      return n ? s / n : 0;
+    };
+    o[rnd] = {
+      top3: +avg(1, 3).toFixed(2),
+      mid:  +avg(6, 7).toFixed(2),  // mid bucket is centered on 1.06–1.07
+      late: +avg(10, 12).toFixed(2),
+    };
+  }
+  return o;
+})();
+
+// Year discount: each year out is ~10–15% off (per the FC consensus market).
+// Future picks carry uncertainty premium that compounds over time.
 const PICK_YEAR_RATIOS = {
-  2026: 1.0000,
-  2027: 0.9479,
-  2028: 0.6754,
-  2029: 0.6390,
-  2030: 0.5879,
+  2026: 1.000,
+  2027: 0.900,
+  2028: 0.770,
+  2029: 0.660,
+  2030: 0.560,
 };
 
 
@@ -1701,12 +1793,24 @@ function playerValue(p){
   return applyFormat(p, playerBaseValue(p));
 }
 
-// Picks → 0.00-9.90 via baseline table + year-decay ratio, then format scaling.
+// Picks → 0.00-9.90 via per-slot table + year-decay ratio, then format scaling.
+// Accepts either {round, pickNum:1..12} (exact slot) or {round, slot:"top3"|"mid"|"late"}
+// (averaged bucket — used for "Future 1st"-style picks without a known slot).
 function pickBaseValue(pick){
-  const key = pick.round + "." + pick.slot;
-  let base = PICK_BASE_2026[key];
-  if(base === undefined) base = PICK_BASE_2026["6.mid"] * 0.5; // 7th+ fallback
-  const ratio = PICK_YEAR_RATIOS[pick.year] || 0.55;
+  const rnd = pick.round;
+  let base;
+  if(typeof pick.pickNum === "number" && PICK_SLOT_2026[rnd] && PICK_SLOT_2026[rnd][pick.pickNum] !== undefined){
+    base = PICK_SLOT_2026[rnd][pick.pickNum];
+  } else {
+    const bucket = PICK_BUCKET_2026[rnd];
+    if(bucket){
+      base = bucket[pick.slot] !== undefined ? bucket[pick.slot] : bucket.mid;
+    } else {
+      // 7th+ rounds (not in CSV): half of round-6 mid.
+      base = PICK_BUCKET_2026[6].mid * 0.5;
+    }
+  }
+  const ratio = PICK_YEAR_RATIOS[pick.year] !== undefined ? PICK_YEAR_RATIOS[pick.year] : 0.50;
   return Math.max(0, base * ratio);
 }
 
@@ -1798,6 +1902,68 @@ function pickRating(p){ return pickValue(p); }
 function assetRating(a){ return assetValue(a); }
 
 // =================================================================
+// KTC-STYLE TRADE ADJUSTMENTS
+// 10 bench scrubs that sum to 9.5 are NOT equal to one player worth 9.5.
+// Apply two real-world corrections on top of the age-adjusted side total:
+//   stud factor   — concentration premium when most value lives in 1 asset
+//   depth penalty — drag when a side is wide and tail-heavy
+// The letter grade runs on the resulting "adjusted side value".
+// =================================================================
+function studFactor(side){
+  if(!side.length) return 1.0;
+  const vals = side.map(assetValue).sort((a,b)=>b-a);
+  const total = vals.reduce((s,v)=>s+v, 0);
+  if(total <= 0.01) return 1.0;
+  const share = vals[0] / total;
+  // share = 1.00 (solo) → +9%   share = 0.70 (clear stud) → +4.5%
+  // share = 0.50 (balanced pair) → +1.5%   share <= 0.40 → 0%
+  return 1.0 + 0.15 * Math.max(0, share - 0.40);
+}
+
+function depthPenalty(side){
+  const n = side.length;
+  if(n <= 1) return 0;
+  // Each asset beyond the 2nd costs 5% of the side. Each asset valued < 2.5
+  // adds another 7% (roster cloggers hurt). Cap the total at 55%.
+  const overflow = Math.max(0, n - 2);
+  let pen = overflow * 0.05;
+  const lowCount = side.filter(a => assetValue(a) < 2.5).length;
+  pen += lowCount * 0.07;
+  return Math.min(0.55, pen);
+}
+
+function adjustedSideValue(side){
+  // Sum the age-adjusted values, then apply stud factor and depth penalty.
+  const sum  = side.reduce((s,a)=>s + ageAdjustedRating(a), 0);
+  const stud = studFactor(side);
+  const pen  = depthPenalty(side);
+  return Math.max(0, sum * stud * (1 - pen));
+}
+
+// "What would even this out?" — return how much adjusted value the losing
+// side needs, plus the best in-database single-player suggestion at that
+// approximate value.
+function tradeNeeds(getSide, giveSide){
+  const a = adjustedSideValue(getSide);
+  const b = adjustedSideValue(giveSide);
+  const diff = a - b;
+  if(Math.abs(diff) < 0.15) return { side: null, gap: 0, suggestion: null };
+  const losingSide = diff > 0 ? "give" : "get"; // side that needs MORE value
+  const gap = Math.abs(diff);
+  // Find an in-database player whose age-adjusted value is closest to `gap`
+  // and roughly within ±20%.
+  let best = null;
+  for(const p of PLAYERS){
+    const av = ageAdjustedRating(p);
+    if(av <= 0) continue;
+    const d = Math.abs(av - gap);
+    if(!best || d < best.d) best = { p, d, av };
+  }
+  return { side: losingSide, gap, suggestion: best && best.d < gap * 0.50 ? best : null };
+}
+
+
+// =================================================================
 // STATE
 // =================================================================
 const state = {
@@ -1815,6 +1981,13 @@ function num(n){ return Number(n).toLocaleString("en-US"); }
 function slug(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,""); }
 
 const POS_HUE = { QB:355, RB:142, WR:212, TE:48 };
+function pickSlotLabel(p){
+  if(typeof p.pickNum === "number") return `Slot 1.${String(p.pickNum).padStart(2,"0")}`;
+  if(p.slot === "top3") return "Future · Top-3";
+  if(p.slot === "late") return "Future · Late";
+  return "Future · Mid";
+}
+
 function avatarColor(name){
   let h=0; for(const c of name) h = (h*31 + c.charCodeAt(0)) % 360;
   return `hsl(${h} 50% 38%)`;
@@ -1966,14 +2139,17 @@ function renderAssets(side){
     el.innerHTML = list.map((a, i) => {
       const v = assetValue(a);
       if(a.type === "pick"){
-        const slotMap = { top3:"Top-3 Origin", mid:"Mid Pick", late:"Late Origin" };
+        const slotLabel = pickSlotLabel(a);
         const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
+        const headline = (typeof a.pickNum === "number")
+          ? `${a.year} Pick ${a.round}.${String(a.pickNum).padStart(2,"0")}`
+          : `${a.year} ${ord} Round Pick`;
         return `
           <div class="asset pick">
             ${avatarHTML(a)}
             <div class="info">
-              <div class="nm">${a.year} ${ord} Round Pick</div>
-              <div class="sub">${posTag("PICK")}${slotMap[a.slot]}</div>
+              <div class="nm">${headline}</div>
+              <div class="sub">${posTag("PICK")}${slotLabel}</div>
             </div>
             <div class="vl"><span class="num">${pickValue(a).toFixed(2)}</span><span class="src">VALUE</span></div>
             <button class="x" data-rm="${i}">×</button>
@@ -2208,6 +2384,124 @@ function renderFeatured(){
   };
 }
 
+
+// =================================================================
+// TOP 40 RANKINGS (new section)
+// =================================================================
+let RANKINGS_POS = "ALL";
+function renderRankings(){
+  const grid = document.getElementById("rankings-grid");
+  if(!grid) return;
+  let arr = PLAYERS.slice();
+  if(RANKINGS_POS !== "ALL") arr = arr.filter(p => p.p === RANKINGS_POS);
+  arr = arr.map(p => ({
+    p,
+    val: playerValue(p),
+    adj: ageAdjustedRating(p),
+    tr:  assetTrend(p)
+  })).sort((a,b)=>b.val - a.val).slice(0, 40);
+
+  grid.innerHTML = arr.map((row, i) => {
+    const rank = i + 1;
+    const trClass = row.tr >= 50 ? "up" : row.tr <= -50 ? "down" : "";
+    const trArrow = row.tr > 0 ? "▲" : row.tr < 0 ? "▼" : "";
+    const trDisplay = `${trArrow}${row.tr === 0 ? "—" : Math.abs(row.tr)}`;
+    return `<div class="rk-row" title="${row.p.n} · raw FC ${row.p.fc}">
+      <div class="rk-rank">${rank}</div>
+      <div class="rk-pos ${row.p.p}">${row.p.p}</div>
+      <div class="rk-name">${row.p.n}<span class="meta">${row.p.t} · ${row.p.a}</span></div>
+      <div class="rk-val">${row.val.toFixed(2)}</div>
+      <div class="rk-adj ${trClass}" title="age-adjusted">${row.adj.toFixed(2)}</div>
+    </div>`;
+  }).join("");
+}
+function bindRankingTabs(){
+  const tabs = document.querySelectorAll(".rk-tab");
+  tabs.forEach(t => {
+    t.onclick = () => {
+      tabs.forEach(x => x.classList.remove("sel"));
+      t.classList.add("sel");
+      RANKINGS_POS = t.dataset.pos;
+      renderRankings();
+    };
+  });
+}
+
+// =================================================================
+// ANALYTICS — value distribution, position averages, biggest age-cliff hits.
+// =================================================================
+function renderAnalytics(){
+  const grid = document.getElementById("analytics-grid");
+  if(!grid) return;
+  // 1) Histogram: count of players in each value bucket (0-1, 1-2, ..., 9-9.9)
+  const buckets = new Array(10).fill(0);
+  for(const p of PLAYERS){
+    const v = playerValue(p);
+    const idx = Math.min(9, Math.floor(v));
+    buckets[idx]++;
+  }
+  const maxBucket = Math.max(...buckets, 1);
+  const histBars = buckets.map((c, i) => {
+    const h = (c / maxBucket) * 100;
+    return `<div class="an-hist-bar" data-tip="${i}.0–${i+1}.0: ${c} players" style="height:${h}%"></div>`;
+  }).join("");
+  const histLabels = buckets.map((_, i) => `<div>${i}</div>`).join("");
+
+  // 2) Position averages — average value-by-position, top-3 average, sample size
+  const posStats = ["QB","RB","WR","TE"].map(pos => {
+    const arr = PLAYERS.filter(p => p.p === pos);
+    if(!arr.length) return { pos, avg: 0, top3: 0, n: 0 };
+    const vals = arr.map(playerValue).sort((a,b)=>b-a);
+    const avg = vals.reduce((s,v)=>s+v,0) / vals.length;
+    const top3 = vals.slice(0,3).reduce((s,v)=>s+v,0) / Math.min(3, vals.length);
+    return { pos, avg, top3, n: arr.length };
+  });
+
+  // 3) Age cliff biggest hits — players where age multiplier docks them the most.
+  // Show the top 5 "value lost to age" in absolute terms.
+  const cliffHits = PLAYERS.map(p => {
+    const base = playerValue(p);
+    const adj  = ageAdjustedRating(p);
+    return { p, base, adj, lost: base - adj };
+  }).filter(x => x.lost > 0.5).sort((a,b)=>b.lost - a.lost).slice(0, 6);
+
+  // 4) Biggest youth-boost beneficiaries
+  const boostHits = PLAYERS.map(p => {
+    const base = playerValue(p);
+    const adj  = ageAdjustedRating(p);
+    return { p, base, adj, gained: adj - base };
+  }).filter(x => x.gained > 0.3).sort((a,b)=>b.gained - a.gained).slice(0, 6);
+
+  grid.innerHTML = `
+    <div class="an-card" style="grid-column:span 2">
+      <div class="h">VALUE DISTRIBUTION · ${PLAYERS.length} active players</div>
+      <div class="an-hist">${histBars}</div>
+      <div class="an-hist-labels">${histLabels}</div>
+      <div style="font-size:11px;color:var(--ink-3);margin-top:6px">Bucket = 1.0-wide on the 0.00–9.90 scale (e.g., the 9 bucket is 9.0–9.9 — elite-only).</div>
+    </div>
+    <div class="an-card">
+      <div class="h">POSITION VALUE — AVG &amp; TOP-3</div>
+      ${posStats.map(s => `<div class="an-row"><span class="lbl">${s.pos} <span style="color:var(--ink-3);font-size:11px">(n=${s.n})</span></span><span class="val">${s.avg.toFixed(2)} · top3 ${s.top3.toFixed(2)}</span></div>`).join("")}
+    </div>
+    <div class="an-card">
+      <div class="h">BIGGEST AGE-CLIFF HITS</div>
+      ${cliffHits.length ? cliffHits.map(x => `<div class="an-row"><span class="lbl">${x.p.n} <span style="color:var(--ink-3);font-size:11px">${x.p.p} · ${x.p.a}</span></span><span class="val" style="color:#ff8080">−${x.lost.toFixed(2)}</span></div>`).join("") : `<div style="color:var(--ink-3);font-size:12px">No major age-cliff drops in this dataset.</div>`}
+    </div>
+    <div class="an-card">
+      <div class="h">YOUTH-BOOST WINNERS</div>
+      ${boostHits.length ? boostHits.map(x => `<div class="an-row"><span class="lbl">${x.p.n} <span style="color:var(--ink-3);font-size:11px">${x.p.p} · ${x.p.a}</span></span><span class="val" style="color:#5fe2a8">+${x.gained.toFixed(2)}</span></div>`).join("") : `<div style="color:var(--ink-3);font-size:12px">No major youth-boost recipients in this dataset.</div>`}
+    </div>
+    <div class="an-card">
+      <div class="h">SCALE LEGEND</div>
+      <div class="an-row"><span class="lbl">9.50–9.90</span><span class="val">Elite (QB1 / WR1 / generational RB)</span></div>
+      <div class="an-row"><span class="lbl">7.00–9.50</span><span class="val">Foundation starter</span></div>
+      <div class="an-row"><span class="lbl">5.00–7.00</span><span class="val">Solid starter / mid-1st pick</span></div>
+      <div class="an-row"><span class="lbl">3.00–5.00</span><span class="val">Depth / mid-late pick</span></div>
+      <div class="an-row"><span class="lbl">0.00–3.00</span><span class="val">Bench / replacement / deep pick</span></div>
+    </div>
+  `;
+}
+
 function rerenderAll(){
   renderAssets("get");
   renderAssets("give");
@@ -2217,6 +2511,8 @@ function rerenderAll(){
   renderMovers();
   renderTiers();
   renderFeatured();
+  renderRankings();
+  renderAnalytics();
   refreshAnalyzeBtn();
 }
 
@@ -2286,17 +2582,36 @@ $$(".add-pick-btn").forEach(b => b.onclick = () => {
   pickSide = b.dataset.side;
   setGroupVal("pick-modal","pyear","2026");
   setGroupVal("pick-modal","pround","1");
-  setGroupVal("pick-modal","pslot","mid");
+  setGroupVal("pick-modal","ppicknum","future-mid");
+  updatePickPreview();
   openModal("#pick-modal");
 });
-["pyear","pround","pslot"].forEach(g => bindOptGroup("pick-modal", g));
+function updatePickPreview(){
+  const preview = document.getElementById("ppicknum-preview");
+  if(!preview) return;
+  const year  = parseInt(getGroupVal("pick-modal","pyear"), 10);
+  const round = parseInt(getGroupVal("pick-modal","pround"), 10);
+  const sel   = getGroupVal("pick-modal","ppicknum");
+  let pick;
+  if(sel.startsWith("future-")){
+    pick = { type:"pick", year, round, slot: sel.replace("future-","") };
+  } else {
+    pick = { type:"pick", year, round, pickNum: parseInt(sel, 10) };
+  }
+  const v = pickValue(pick);
+  preview.innerHTML = `Pick value preview: <b style="color:var(--gold)">${v.toFixed(2)}</b> · format-adjusted for current league settings`;
+}
+["pyear","pround","ppicknum"].forEach(g => bindOptGroup("pick-modal", g, updatePickPreview));
 $("#btn-add-pick").onclick = () => {
-  const pick = {
-    type: "pick",
-    year: parseInt(getGroupVal("pick-modal","pyear"),10),
-    round: parseInt(getGroupVal("pick-modal","pround"),10),
-    slot: getGroupVal("pick-modal","pslot")
-  };
+  const year  = parseInt(getGroupVal("pick-modal","pyear"), 10);
+  const round = parseInt(getGroupVal("pick-modal","pround"), 10);
+  const sel   = getGroupVal("pick-modal","ppicknum");
+  let pick;
+  if(sel.startsWith("future-")){
+    pick = { type:"pick", year, round, slot: sel.replace("future-","") };
+  } else {
+    pick = { type:"pick", year, round, pickNum: parseInt(sel, 10) };
+  }
   addAsset(pickSide, pick);
   closeModal("#pick-modal");
 };
@@ -2633,17 +2948,28 @@ function analyze(){
   const ratingGive = state.give.reduce((s,a)=>s+rawAssetRating(a),0);
 
   // AGE-ADJUSTED rating totals — what each side is worth on a dynasty timeline.
-  // This is the number the grade is computed from.
+  // These are the inputs to the stud/depth adjustments.
   const adjGet  = state.get.reduce((s,a)=>s+ageAdjustedRating(a),0);
   const adjGive = state.give.reduce((s,a)=>s+ageAdjustedRating(a),0);
+
+  // KTC-style trade adjustments: stud concentration premium + depth penalty.
+  // The letter grade runs on these adjusted totals, not raw sums.
+  const ktcGet  = adjustedSideValue(state.get);
+  const ktcGive = adjustedSideValue(state.give);
+  const studGet  = studFactor(state.get);
+  const studGive = studFactor(state.give);
+  const depthGet  = depthPenalty(state.get);
+  const depthGive = depthPenalty(state.give);
+  const needs = tradeNeeds(state.get, state.give);
 
   // Trade archetype — drives the fairness lens and the prominent label.
   const archetype = detectArchetype(state.get, state.give);
 
-  // Grade on the age-adjusted diff, scaled by archetype.
-  const adjAvg  = (adjGet + adjGive) / 2 || 1;
-  const youDiff = (adjGet - adjGive) / adjAvg;
-  const oppDiff = (adjGive - adjGet) / adjAvg;
+  // Grade runs on the KTC-adjusted diff (post stud factor + depth penalty),
+  // scaled by archetype. This is what the user sees as the grade.
+  const adjAvg  = (ktcGet + ktcGive) / 2 || 1;
+  const youDiff = (ktcGet - ktcGive) / adjAvg;
+  const oppDiff = (ktcGive - ktcGet) / adjAvg;
 
   const yourGrade = archetypeGradeFor(archetype.key, youDiff);
   const oppGrade  = archetypeGradeFor(archetype.key, oppDiff);
@@ -2675,6 +3001,10 @@ function analyze(){
     totGet, totGive,
     ratingGet, ratingGive,
     adjGet, adjGive,
+    ktcGet, ktcGive,
+    studGet, studGive,
+    depthGet, depthGive,
+    needs,
     avg: adjAvg, youDiff, oppDiff,
     archetype,
     yourGrade, oppGrade, market, observations, verdict, maxSpread, avgSpread
@@ -2746,8 +3076,10 @@ function verdictText(ratingGet, ratingGive, adjGet, adjGive, you, opp, market, a
 function side2html(side){
   return state[side].map(a => {
     if(a.type === "pick"){
-      const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
-      return `<div class="asset pick">${avatarHTML(a)}<div class="info"><div class="nm">${a.year} ${ord}</div><div class="sub">${posTag("PICK")}${a.slot==="top3"?"Top-3":a.slot==="late"?"Late":"Mid"}</div></div><div class="vl"><span class="num">${assetValue(a).toFixed(2)}</span></div></div>`;
+      const headline = (typeof a.pickNum === "number")
+        ? `${a.year} ${a.round}.${String(a.pickNum).padStart(2,"0")}`
+        : `${a.year} ${a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th"}`;
+      return `<div class="asset pick">${avatarHTML(a)}<div class="info"><div class="nm">${headline}</div><div class="sub">${posTag("PICK")}${pickSlotLabel(a)}</div></div><div class="vl"><span class="num">${assetValue(a).toFixed(2)}</span></div></div>`;
     }
     return `<div class="asset">${avatarHTML(a)}<div class="info"><div class="nm">${a.n}</div><div class="sub">${posTag(a.p)}${a.t} • Age ${a.a}</div></div><div class="vl"><span class="num">${assetValue(a).toFixed(2)}</span></div></div>`;
   }).join("");
@@ -2840,11 +3172,13 @@ function renderVerdict(v){
       const adj  = ageAdjustedRating(a);
       const mult = ageMultiplier(a);
       if(a.type === "pick"){
-        const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
-        const slotLabel = a.slot==="top3"?"Top-3":a.slot==="late"?"Late":"Mid";
+        const headline = (typeof a.pickNum === "number")
+          ? `${a.year} ${a.round}.${String(a.pickNum).padStart(2,"0")}`
+          : `${a.year} ${a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th"}`;
+        const slotLabel = pickSlotLabel(a);
         const eqAge = pickEquivalentAge(a);
         return `<tr>
-          <td class="nm">${a.year} ${ord} <span style="color:var(--ink-3);font-size:11px">${slotLabel}</span></td>
+          <td class="nm">${headline} <span style="color:var(--ink-3);font-size:11px">${slotLabel}</span></td>
           <td>PICK</td>
           <td title="Pick treated as age-equivalent">≈${eqAge}</td>
           <td><span class="v2-mult ${multClass(mult)}">${multStr(mult)}</span></td>
@@ -3106,7 +3440,61 @@ function renderVerdict(v){
     </div>
   `;
 
-  body.innerHTML = heroHTML + reactionHTML + breakdownHTML + ageHTML + posHTML + spreadHTML + marketBand + archReadHTML;
+  // === Section — TRADE ADJUSTMENT (KTC-style stud + depth) ===
+  function pctStr(p){ const x = Math.round(p * 100); return x > 0 ? `+${x}%` : `${x}%`; }
+  function multCls(p){
+    if(p >=  0.06) return "mult-up";
+    if(p <= -0.06) return "mult-down";
+    return "mult-flat";
+  }
+  const studGetPct  = v.studGet  - 1.0;
+  const studGivePct = v.studGive - 1.0;
+  const depthGetPct  = -v.depthGet;
+  const depthGivePct = -v.depthGive;
+  const ktcDiff = v.ktcGet - v.ktcGive;
+  let needsLine = "";
+  if(v.needs && v.needs.side){
+    const sideName = v.needs.side === "get" ? "YOUR side" : "THEIR side";
+    let sug = "";
+    if(v.needs.suggestion){
+      sug = ` (about <b>${v.needs.suggestion.p.n}</b>'s age-adjusted value)`;
+    }
+    needsLine = `<div class="v2-needs">⚖ <span>${sideName} needs <b>+${v.needs.gap.toFixed(2)}</b> adjusted value to even this trade${sug}.</span></div>`;
+  } else {
+    needsLine = `<div class="v2-needs v2-needs-even">≈ <span>Adjusted values are essentially equal — this is a fair trade as-is.</span></div>`;
+  }
+  const ktcGetLabel  = ktcDiff > 0.15 ? "pos" : ktcDiff < -0.15 ? "neg" : "even";
+  const ktcGiveLabel = ktcDiff < -0.15 ? "pos" : ktcDiff > 0.15 ? "neg" : "even";
+  const adjustHTML = `
+    <div class="v2-section">
+      <div class="v2-section-head">⚖ TRADE ADJUSTMENT <span class="sub">KTC-style stud premium &amp; depth penalty · letter grade runs on this column</span></div>
+      <div class="v2-section-body" style="padding:0">
+        <table class="v2-table v2-table-adj">
+          <thead><tr><th>SIDE</th><th>AGE-ADJ SUM</th><th>STUD FACTOR</th><th>DEPTH PENALTY</th><th style="text-align:right">ADJUSTED VALUE</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="nm" style="color:var(--green);font-weight:800">YOU GET</td>
+              <td>${v.adjGet.toFixed(2)} <span style="color:var(--ink-3);font-size:11px">(${state.get.length} asset${state.get.length===1?"":"s"})</span></td>
+              <td><span class="v2-mult ${multCls(studGetPct)}">${pctStr(studGetPct)}</span></td>
+              <td><span class="v2-mult ${multCls(depthGetPct)}">${pctStr(depthGetPct)}</span></td>
+              <td class="val adj ${ktcGetLabel}">${v.ktcGet.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td class="nm" style="color:var(--red);font-weight:800">YOU GIVE</td>
+              <td>${v.adjGive.toFixed(2)} <span style="color:var(--ink-3);font-size:11px">(${state.give.length} asset${state.give.length===1?"":"s"})</span></td>
+              <td><span class="v2-mult ${multCls(studGivePct)}">${pctStr(studGivePct)}</span></td>
+              <td><span class="v2-mult ${multCls(depthGivePct)}">${pctStr(depthGivePct)}</span></td>
+              <td class="val adj ${ktcGiveLabel}">${v.ktcGive.toFixed(2)}</td>
+            </tr>
+            <tr class="delta-row"><td colspan="4">NET ADJUSTED DELTA</td><td class="${ktcDiff > 0.15 ? "pos" : ktcDiff < -0.15 ? "neg" : "even"} adj" style="text-align:right;font-family:'JetBrains Mono',monospace">${ktcDiff > 0 ? "+" : ""}${ktcDiff.toFixed(2)}</td></tr>
+          </tbody>
+        </table>
+        ${needsLine}
+      </div>
+    </div>
+  `;
+
+    body.innerHTML = heroHTML + reactionHTML + breakdownHTML + adjustHTML + ageHTML + posHTML + spreadHTML + marketBand + archReadHTML;
 
   const copyBtn = body.querySelector(".v2-reaction-copy");
   if(copyBtn){
@@ -3291,9 +3679,14 @@ function drawAssetList(ctx, list, x, y, w, accent){
     ctx.font = "700 16px Inter, sans-serif";
     let nm, sub;
     if(a.type === "pick"){
-      const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
-      nm = `${a.year} ${ord} Pick`;
-      sub = a.slot==="top3"?"Top-3 Origin":a.slot==="late"?"Late Origin":"Mid Origin";
+      if(typeof a.pickNum === "number"){
+        nm = `${a.year} Pick ${a.round}.${String(a.pickNum).padStart(2,"0")}`;
+        sub = `Round ${a.round} · slot ${a.pickNum}`;
+      } else {
+        const ord = a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th";
+        nm = `${a.year} ${ord} Pick`;
+        sub = a.slot==="top3"?"Top-3 Origin":a.slot==="late"?"Late Origin":"Mid Origin";
+      }
     } else {
       nm = a.n;
       sub = `${a.p} • ${a.t} • Age ${a.a}`;
@@ -3370,6 +3763,7 @@ function boot(){
   setupSearch("get");
   setupSearch("give");
   profileBar();
+  bindRankingTabs();
   rerenderAll();
   // first-run profile prompt
   if(!localStorage.getItem(PROFILE_KEY)){
