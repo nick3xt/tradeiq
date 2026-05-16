@@ -1096,7 +1096,7 @@ img{display:block;max-width:100%}
   <!-- TOP 40 RANKINGS -->
   <section class="rankings-section" id="rankings-section">
     <header class="rankings-head">
-      <h3>Top 40 Rankings <span class="subtitle">FantasyCalc 0.00–9.90 scale · age-adjusted · live on league setting changes</span></h3>
+      <h3>Top 40 Rankings <span class="subtitle">FantasyCalc 0.00–10.00 scale · age-adjusted · live on league setting changes</span></h3>
       <div class="rankings-tabs" id="rankings-tabs">
         <button class="rk-tab sel" data-pos="ALL">All</button>
         <button class="rk-tab" data-pos="QB">QB</button>
@@ -1272,7 +1272,7 @@ img{display:block;max-width:100%}
 
 <footer class="foot">
   <div>TRADEIQ • Dynasty Fantasy Football Trade Analyzer • EST. 2026</div>
-  <div style="margin-top:6px">Values derived from the FantasyCalc dynasty rankings (0.00–9.90 scale). Not affiliated.</div>
+  <div style="margin-top:6px">Values derived from the FantasyCalc dynasty rankings (0.00–10.00 scale). Not affiliated.</div>
 </footer>
 
 <script>
@@ -1288,15 +1288,16 @@ const LOGO_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAFACAYAAADN
 // values: { ktc, fc, dp, sleeper } — 0-10000 scale
 // =================================================================
 // AUTO-GENERATED from FantasyCalc rankings CSV — calibrated piecewise curve.
-// Top 5 → 9.85-9.90 · Top 10-15 → 9.50-9.70 · Mid → 5.0-7.0 · Scrubs → 1.0-3.0
+// Scale: 0.00–10.00 · Josh Allen = 10.00 (sole) · top 5 → 9.80-10.00
+// Top 10-15 → 9.45-9.55 · Mid → 5.0-7.0 · Scrubs → 1.0-3.0
 const PLAYERS = [
-  {n:"Josh Allen",p:"QB",t:"BUF",a:30,v:9.90,fc:10143,sid:"4984",tr:89},
-  {n:"Bijan Robinson",p:"RB",t:"ATL",a:24,v:9.89,fc:9953,sid:"9509",tr:-227},
-  {n:"Ja'Marr Chase",p:"WR",t:"CIN",a:26,v:9.85,fc:9704,sid:"7564",tr:82},
-  {n:"Jahmyr Gibbs",p:"RB",t:"DET",a:24,v:9.83,fc:9574,sid:"9221",tr:-151},
-  {n:"Jaxon Smith-Njigba",p:"WR",t:"SEA",a:24,v:9.79,fc:9325,sid:"9488",tr:316},
-  {n:"Drake Maye",p:"QB",t:"NE",a:24,v:9.68,fc:8673,sid:"11564",tr:168},
-  {n:"Puka Nacua",p:"WR",t:"LAR",a:25,v:9.66,fc:8531,sid:"9493",tr:-228},
+  {n:"Josh Allen",p:"QB",t:"BUF",a:30,v:10.00,fc:10143,sid:"4984",tr:89},
+  {n:"Bijan Robinson",p:"RB",t:"ATL",a:24,v:9.93,fc:9953,sid:"9509",tr:-227},
+  {n:"Ja'Marr Chase",p:"WR",t:"CIN",a:26,v:9.88,fc:9704,sid:"7564",tr:82},
+  {n:"Jahmyr Gibbs",p:"RB",t:"DET",a:24,v:9.86,fc:9574,sid:"9221",tr:-151},
+  {n:"Jaxon Smith-Njigba",p:"WR",t:"SEA",a:24,v:9.81,fc:9325,sid:"9488",tr:316},
+  {n:"Drake Maye",p:"QB",t:"NE",a:24,v:9.69,fc:8673,sid:"11564",tr:168},
+  {n:"Puka Nacua",p:"WR",t:"LAR",a:25,v:9.67,fc:8531,sid:"9493",tr:-228},
   {n:"Brock Bowers",p:"TE",t:"LV",a:23,v:9.56,fc:7572,sid:"11604",tr:205},
   {n:"Amon-Ra St. Brown",p:"WR",t:"DET",a:27,v:9.54,fc:7409,sid:"7547",tr:409},
   {n:"Malik Nabers",p:"WR",t:"NYG",a:23,v:9.51,fc:7111,sid:"11632",tr:-65},
@@ -1690,7 +1691,7 @@ const PLAYERS = [
   {n:"Tahj Washington",p:"WR",t:"MIA",a:25,v:0.15,fc:1,sid:"11821",tr:2},
 ];
 
-// 2026 per-slot pick values (round × slot_num 1..12) on the 0.00–9.90 scale.
+// 2026 per-slot pick values (round × slot_num 1..12) on the 0.00–10.00 scale.
 // Pulled directly from FantasyCalc rankings, normalized through the same
 // piecewise curve as players. Within-round spread is steep: 1.01 ≫ 1.06 ≫ 1.12.
 const PICK_SLOT_2026 = {
@@ -1748,11 +1749,11 @@ function saveProfile(p){ localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); }
 let PROFILE = loadProfile();
 
 // =================================================================
-// VALUE ENGINE — single canonical 0.00-9.90 scale, FantasyCalc-derived,
+// VALUE ENGINE — single canonical 0.00–10.00 scale, FantasyCalc-derived,
 // with format multipliers (superflex / TEP / scoring / team-count).
 // =================================================================
 function playerBaseValue(p){
-  // p.v is the pre-format normalized value (0.00-9.90).
+  // p.v is the pre-format normalized value (0.00–10.00).
   return p.v;
 }
 
@@ -1784,14 +1785,14 @@ function applyFormat(player, base){
   if(tc === 14 && player.p === "RB") v *= 1.04;
   if(tc === 8  && player.p === "RB") v *= 0.92;
 
-  return Math.min(9.90, Math.max(0, v));
+  return Math.min(10.00, Math.max(0, v));
 }
 
 function playerValue(p){
   return applyFormat(p, playerBaseValue(p));
 }
 
-// Picks → 0.00-9.90 via per-slot table + year-decay ratio, then format scaling.
+// Picks → 0.00–10.00 via per-slot table + year-decay ratio, then format scaling.
 // Accepts either {round, pickNum:1..12} (exact slot) or {round, slot:"top3"|"mid"|"late"}
 // (averaged bucket — used for "Future 1st"-style picks without a known slot).
 function pickBaseValue(pick){
@@ -1818,7 +1819,7 @@ function pickValue(pick){
   if(tc === 14) v *= 1.08;
   if(tc === 8)  v *= 0.94;
   if(PROFILE.format === "superflex") v *= 1.05;
-  return Math.min(9.90, Math.max(0, v));
+  return Math.min(10.00, Math.max(0, v));
 }
 
 function assetValue(asset){
@@ -2012,7 +2013,7 @@ function showToast(msg, kind){
 // TICKER
 // =================================================================
 function renderTicker(){
-  // Show top 40 by current 0.00-9.90 value, annotated with the real 30-day
+  // Show top 40 by current 0.00–10.00 value, annotated with the real 30-day
   // FantasyCalc trend converted to a "% of value" approximation.
   const top = [...PLAYERS]
     .map(p => ({...p, _v: playerValue(p), _tr: assetTrend(p)}))
@@ -2284,29 +2285,29 @@ function renderMovers(){
 function renderTiers(){
   const grid = document.getElementById("tiers-grid");
   if(!grid) return;
-  // bucket players by position on the 0.00-9.90 scale (format-adjusted)
+  // bucket players by position on the 0.00–10.00 scale (format-adjusted)
   const byPos = { QB:[], RB:[], WR:[], TE:[] };
   for(const p of PLAYERS){
     if(byPos[p.p]) byPos[p.p].push({ n:p.n, v:playerValue(p) });
   }
   for(const k of Object.keys(byPos)) byPos[k].sort((a,b)=>b.v-a.v);
 
-  // Tier bands on the 0.00-9.90 scale. QB bands shift in superflex.
+  // Tier bands on the 0.00–10.00 scale. QB bands shift in superflex.
   const fmtSF = PROFILE.format === "superflex";
   const tierDefs = {
     QB: fmtSF
-      ? [["QB1",8.0,9.9],["QB2",6.0,8.0],["QB3",4.0,6.0],["QBSTREAM",0,4.0]]
-      : [["QB1",6.5,9.9],["QB2",4.5,6.5],["QB3",2.5,4.5],["QBSTREAM",0,2.5]],
-    RB: [["RB1",7.5,9.9],["RB2",5.5,7.5],["RB3",3.5,5.5],["RB4+",0,3.5]],
-    WR: [["WR1",7.5,9.9],["WR2",5.5,7.5],["WR3",3.5,5.5],["WR4+",0,3.5]],
-    TE: [["TE1",6.0,9.9],["TE2",4.0,6.0],["TE3",2.0,4.0],["TE4+",0,2.0]]
+      ? [["QB1",8.0,10.0],["QB2",6.0,8.0],["QB3",4.0,6.0],["QBSTREAM",0,4.0]]
+      : [["QB1",6.5,10.0],["QB2",4.5,6.5],["QB3",2.5,4.5],["QBSTREAM",0,2.5]],
+    RB: [["RB1",7.5,10.0],["RB2",5.5,7.5],["RB3",3.5,5.5],["RB4+",0,3.5]],
+    WR: [["WR1",7.5,10.0],["WR2",5.5,7.5],["WR3",3.5,5.5],["WR4+",0,3.5]],
+    TE: [["TE1",6.0,10.0],["TE2",4.0,6.0],["TE3",2.0,4.0],["TE4+",0,2.0]]
   };
   function colHTML(pos, defs){
     const ctx = pos === "QB" ? (fmtSF ? "Superflex" : "1QB") : "all formats";
     const rows = defs.map(([lbl, lo, hi]) => {
       const inTier = byPos[pos].filter(x => x.v >= lo && x.v < hi + 0.0001);
       const top = inTier.slice(0,3).map(x=>x.n).join(" · ");
-      const range = hi >= 9.9 ? `${lo.toFixed(2)}–9.90` : `${lo.toFixed(2)}–${hi.toFixed(2)}`;
+      const range = hi >= 9.99 ? `${lo.toFixed(2)}–10.00` : `${lo.toFixed(2)}–${hi.toFixed(2)}`;
       return `<div class="tier-row">
         <div>
           <div class="lbl">${lbl}</div>
@@ -2431,7 +2432,7 @@ function bindRankingTabs(){
 function renderAnalytics(){
   const grid = document.getElementById("analytics-grid");
   if(!grid) return;
-  // 1) Histogram: count of players in each value bucket (0-1, 1-2, ..., 9-9.9)
+  // 1) Histogram: count of players in each value bucket (0-1, 1-2, ..., 9-10)
   const buckets = new Array(10).fill(0);
   for(const p of PLAYERS){
     const v = playerValue(p);
@@ -2475,7 +2476,7 @@ function renderAnalytics(){
       <div class="h">VALUE DISTRIBUTION · ${PLAYERS.length} active players</div>
       <div class="an-hist">${histBars}</div>
       <div class="an-hist-labels">${histLabels}</div>
-      <div style="font-size:11px;color:var(--ink-3);margin-top:6px">Bucket = 1.0-wide on the 0.00–9.90 scale (e.g., the 9 bucket is 9.0–9.9 — elite-only).</div>
+      <div style="font-size:11px;color:var(--ink-3);margin-top:6px">Bucket = 1.0-wide on the 0.00–10.00 scale (e.g., the 9 bucket is 9.0–10.0 — elite-only).</div>
     </div>
     <div class="an-card">
       <div class="h">POSITION VALUE — AVG &amp; TOP-3</div>
@@ -2491,7 +2492,7 @@ function renderAnalytics(){
     </div>
     <div class="an-card">
       <div class="h">SCALE LEGEND</div>
-      <div class="an-row"><span class="lbl">9.50–9.90</span><span class="val">Elite (QB1 / WR1 / generational RB)</span></div>
+      <div class="an-row"><span class="lbl">9.50–10.00</span><span class="val">Elite (QB1 / WR1 / generational RB)</span></div>
       <div class="an-row"><span class="lbl">7.00–9.50</span><span class="val">Foundation starter</span></div>
       <div class="an-row"><span class="lbl">5.00–7.00</span><span class="val">Solid starter / mid-1st pick</span></div>
       <div class="an-row"><span class="lbl">3.00–5.00</span><span class="val">Depth / mid-late pick</span></div>
@@ -2721,7 +2722,7 @@ async function loadSleeperRoster(leagueId, leagueName){
       if(match){
         myPlayers.push({...match, type:"player"});
       } else if(["QB","RB","WR","TE"].includes(sp.position)){
-        // Unknown player — synthesize stub on the new 0.00-9.90 scale.
+        // Unknown player — synthesize stub on the new 0.00–10.00 scale.
         myPlayers.push({
           n: fullName,
           p: sp.position,
@@ -2917,7 +2918,7 @@ function detectArchetype(getSide, giveSide){
 }
 
 function gradeFor(diffPct){
-  // diffPct = (adj_value_get - adj_value_give) / avg. On the 0.00-9.90 scale,
+  // diffPct = (adj_value_get - adj_value_give) / avg. On the 0.00–10.00 scale,
   // the A band is wide so any reasonably even trade still grades A.
   if(diffPct >=  0.15) return {l:"A+", c:"Aplus", tier:"STRONG SURPLUS"};
   if(diffPct >= -0.08) return {l:"A",  c:"A",     tier:"FAIR VALUE"};
@@ -3085,7 +3086,7 @@ function side2html(side){
 
 function renderVerdict(v){
   const body = $("#verdict-body");
-  // Headline reflects the age-ADJUSTED diff on the 0.00-9.90 scale.
+  // Headline reflects the age-ADJUSTED diff on the 0.00–10.00 scale.
   // "Essentially even" threshold: 0.20 value-pts (≈ a rank-50 player swing).
   const rawDiff = v.ratingGet - v.ratingGive;
   const adjDiff = v.adjGet    - v.adjGive;
