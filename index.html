@@ -46,8 +46,10 @@ img{display:block;max-width:100%}
   height:32px;display:flex;align-items:center;
 }
 .ticker .label{
-  background:var(--green);color:#04140a;font-weight:800;font-size:11px;letter-spacing:.12em;
+  position:relative;z-index:10;
+  background:#00d26a;color:#04140a;font-weight:800;font-size:11px;letter-spacing:.12em;
   padding:0 12px;height:100%;display:flex;align-items:center;flex:0 0 auto;text-transform:uppercase;
+  box-shadow:2px 0 6px rgba(0,0,0,.45);
 }
 .ticker .track{
   display:flex;gap:32px;white-space:nowrap;animation:scroll 60s linear infinite;padding-left:16px;
@@ -557,6 +559,29 @@ img{display:block;max-width:100%}
 .v2-table-adj tr.delta-row td.pos.adj{color:var(--green)}
 .v2-table-adj tr.delta-row td.neg.adj{color:var(--red)}
 .v2-table-adj tr.delta-row td.even.adj{color:var(--blue)}
+
+/* Verdict reaction */
+.v2-reaction{
+  margin-bottom:18px;background:#0a0f1d;border:1px solid var(--line);border-radius:12px;
+  border-top:2px solid var(--green-dim);overflow:hidden
+}
+.v2-reaction-title{
+  padding:11px 16px;background:#06091a;border-bottom:1px solid var(--line);
+  font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)
+}
+.v2-reaction-body{padding:18px 18px;text-align:center}
+.v2-reaction-hero{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.v2-reaction-hero .emoji{font-size:32px;line-height:1}
+.v2-reaction-hero .label{font-size:20px;font-weight:900;letter-spacing:.06em;color:var(--ink)}
+.v2-reaction-quip{font-size:13px;color:var(--ink-2);margin-bottom:14px;line-height:1.5}
+.v2-reaction-quip .arch{font-weight:800;color:var(--green);letter-spacing:.06em;text-transform:uppercase;font-size:11px;margin-right:4px}
+.v2-reaction-copy{
+  background:transparent;border:1px solid var(--line-2);color:var(--ink-2);padding:8px 14px;border-radius:6px;
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  transition:border-color .15s,color .15s,background .15s
+}
+.v2-reaction-copy:hover{border-color:var(--green);color:var(--green)}
+.v2-reaction-copy.copied{border-color:var(--green);color:var(--green);background:rgba(0,210,106,.08)}
 
 /* Toast */
 .toast{
@@ -1899,7 +1924,7 @@ function renderAssets(side){
               <div class="nm">${a.year} ${ord} Round Pick</div>
               <div class="sub">${posTag("PICK")}${slotMap[a.slot]}</div>
             </div>
-            <div class="vl"><span class="num">${(+v).toFixed(1)}</span><span class="src">RATING</span></div>
+            <div class="vl"><span class="num">${pickRating(a)}</span><span class="src">RATING</span></div>
             <button class="x" data-rm="${i}">×</button>
           </div>`;
       }
@@ -3043,7 +3068,71 @@ function renderVerdict(v){
     </div>
   `;
 
-  body.innerHTML = heroHTML + breakdownHTML + ageHTML + posHTML + spreadHTML + marketBand + archReadHTML;
+  // === Section: VERDICT REACTION ===
+  const ARCHETYPE_NAMES = {
+    "winnow":          "Win Now",
+    "ceiling-grab":    "Ceiling Grab",
+    "sell-high":       "Sell High/Buy Low",
+    "position-pivot":  "Position Pivot",
+    "even-swap":       "Even Swap"
+  };
+  const REACTION_QUIPS = {
+    "Win Now":           {A:"You just swindled a contender.",                 B:"Fair deal for a team chasing rings.",            C:"Even swap, neither team gains an edge.",        D:"You weakened a contender for nothing special.",   F:"Congrats on tanking your championship window."},
+    "Ceiling Grab":      {A:"You cashed veterans for the next superstar.",    B:"Nice pickup of upside without overpaying.",      C:"Picks for vets — time will tell.",              D:"Overpaid for ceiling that may never hit.",        F:"You handed over proven players for lottery tickets."},
+    "Sell High/Buy Low": {A:"Perfect timing. Sold the peak, bought the dip.", B:"Good sell. The value gap worked in your favor.", C:"Reasonable age arbitrage.",                     D:"You sold low and bought high.",                   F:"Market 1, You 0."},
+    "Position Pivot":    {A:"Scheme upgrade at a steal.",                     B:"Smart positional shift, reasonable price.",      C:"Even value, different positions.",              D:"Traded scheme fit for a positional hole.",        F:"You gave up a strength for a weakness."},
+    "Even Swap":         {A:"Clean win on a balanced-looking trade. Sharp eye.", B:"Fair deal with a slight edge your way.",       C:"Nobody's bragging about this one. It's fine.",  D:"Lost a coin flip.",                               F:"Somehow lost a fair trade. Impressive."}
+  };
+  const REACTION_TITLES = {
+    A: {emoji:"🎉", label:"HIGHWAY ROBBERY"},
+    B: {emoji:"👍", label:"SOLID MOVE"},
+    C: {emoji:"⚖️", label:"YOU'LL LIVE"},
+    D: {emoji:"😬", label:"QUESTIONABLE..."},
+    F: {emoji:"💀", label:"GET HELP"}
+  };
+  const reactionArchetype = ARCHETYPE_NAMES[v.archetype && v.archetype.key] || "Even Swap";
+  const gradeLetter = (v.yourGrade && v.yourGrade.l) || "C";
+  const reactionTier =
+    /^[SA]/.test(gradeLetter) ? "A" :
+    gradeLetter[0] === "B"    ? "B" :
+    gradeLetter[0] === "C"    ? "C" :
+    gradeLetter[0] === "D"    ? "D" : "F";
+  const reactTitle = REACTION_TITLES[reactionTier];
+  const reactQuip  = REACTION_QUIPS[reactionArchetype][reactionTier];
+  const reactLabelTitle = reactTitle.label.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+  const reactCopyText = `TradeIQ Grade: ${gradeLetter} ${reactTitle.emoji}\n${reactionArchetype} — ${reactLabelTitle}\ndynastytradeiq.vercel.app`;
+  const reactionHTML = `
+    <div class="v2-reaction">
+      <div class="v2-reaction-title">VERDICT REACTION</div>
+      <div class="v2-reaction-body">
+        <div class="v2-reaction-hero">
+          <span class="emoji">${reactTitle.emoji}</span>
+          <span class="label">${reactTitle.label}</span>
+        </div>
+        <div class="v2-reaction-quip"><span class="arch">${reactionArchetype}</span>${reactQuip}</div>
+        <button class="v2-reaction-copy" type="button">📋 COPY RESULT</button>
+      </div>
+    </div>
+  `;
+
+  body.innerHTML = heroHTML + reactionHTML + breakdownHTML + ageHTML + posHTML + spreadHTML + marketBand + archReadHTML;
+
+  const copyBtn = body.querySelector(".v2-reaction-copy");
+  if(copyBtn){
+    copyBtn.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(reactCopyText);
+        copyBtn.classList.add("copied");
+        copyBtn.textContent = "✓ COPIED";
+        setTimeout(() => {
+          copyBtn.classList.remove("copied");
+          copyBtn.textContent = "📋 COPY RESULT";
+        }, 1800);
+      } catch(e){
+        showToast("Copy failed — select the text instead", "err");
+      }
+    };
+  }
 
   // attach last analysis for share
   window.__lastAnalysis = v;
