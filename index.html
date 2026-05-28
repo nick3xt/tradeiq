@@ -945,6 +945,43 @@ img{display:block;max-width:100%}
 .v2-table-adj td.neg{color:#ff8080}
 .v2-table-adj td.even{color:var(--ink-2)}
 
+
+/* ── Player context chips (side2html + renderAssets) ────── */
+.ctx-line { display:flex; align-items:center; flex-wrap:wrap; gap:4px; margin-top:3px; font-size:10px; }
+.ctx-chip { display:inline-block; padding:1px 6px; border-radius:3px; font-size:9px; font-weight:700; letter-spacing:.04em; }
+.ctx-chip.sell  { background:rgba(255,71,87,.18); color:#ff6b78; border:1px solid rgba(255,71,87,.3); }
+.ctx-chip.cliff { background:rgba(255,159,67,.18); color:#ffb347; border:1px solid rgba(255,159,67,.3); }
+.ctx-chip.hold  { background:rgba(0,210,106,.15); color:#00d26a; border:1px solid rgba(0,210,106,.3); }
+.ctx-ceiling { color:var(--ink-3); font-size:10px; font-style:italic; }
+
+/* ── Named Narrative section ────────────────────────────── */
+.nc-players { display:flex; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+.nc-player { flex:1; min-width:160px; background:rgba(255,255,255,.03); border-radius:8px; padding:12px 14px; border:1px solid rgba(255,255,255,.07); }
+.nc-player.get  { border-left:3px solid var(--green); }
+.nc-player.give { border-left:3px solid var(--red); }
+.nc-player-label { font-size:9px; font-weight:800; letter-spacing:.1em; color:var(--ink-3); margin-bottom:4px; }
+.nc-player.get  .nc-player-label { color:var(--green); }
+.nc-player.give .nc-player-label { color:var(--red); }
+.nc-player-name { font-size:16px; font-weight:800; color:var(--ink-1); margin-bottom:2px; }
+.nc-player-meta { font-size:11px; color:var(--ink-3); margin-bottom:6px; }
+.nc-badges { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px; }
+.nc-badge { display:inline-block; padding:2px 7px; border-radius:3px; font-size:9px; font-weight:700; letter-spacing:.05em; }
+.nc-badge.sell  { background:rgba(255,71,87,.18);  color:#ff6b78; border:1px solid rgba(255,71,87,.3); }
+.nc-badge.cliff { background:rgba(255,159,67,.18); color:#ffb347; border:1px solid rgba(255,159,67,.3); }
+.nc-badge.hold  { background:rgba(0,210,106,.15);  color:#00d26a; border:1px solid rgba(0,210,106,.3); }
+.nc-ceiling { font-size:11px; color:var(--gold); font-weight:600; margin-bottom:4px; }
+.nc-note    { font-size:11px; color:var(--ink-3); font-style:italic; }
+.nc-para    { font-size:13px; color:var(--ink-2); line-height:1.6; background:rgba(255,255,255,.02); border-radius:6px; padding:12px 14px; border:1px solid rgba(255,255,255,.06); }
+.nc-para b  { color:var(--ink-1); }
+.nc-para em { color:var(--gold); font-style:normal; }
+
+/* ── Negotiation Framing section ─────────────────────────── */
+.v2-negotiation { border:1px solid rgba(74,158,255,.2); }
+.v2-negotiation .v2-section-head { color:#4a9eff; }
+.neg-bullets { margin:0; padding:0 0 0 18px; display:flex; flex-direction:column; gap:10px; }
+.neg-bullets li { font-size:13px; color:var(--ink-2); line-height:1.6; }
+.neg-bullets li b { color:var(--ink-1); }
+
 </style>
 </head>
 <body>
@@ -3010,6 +3047,78 @@ function analyze(){
   };
 }
 
+
+// ================================================================
+// PLAYER_CONTEXT — dynasty context for ~75 top assets
+// Keys must match the player name string exactly (a.n)
+// ================================================================
+const PLAYER_CONTEXT = {
+  // ── QBs ──────────────────────────────────────────────────────
+  "Josh Allen":          { age:28, pos:"QB", team:"BUF", ovr:100, sell:false, cliff:false, ceiling:"Dynasty QB1 for 4+ seasons", note:"The ceiling player — elite rushing+passing combo" },
+  "Lamar Jackson":       { age:28, pos:"QB", team:"BAL", ovr:98,  sell:false, cliff:false, ceiling:"Top-2 QB through 2028",        note:"Dual-threat elite, back-to-back MVPs" },
+  "Patrick Mahomes":     { age:29, pos:"QB", team:"KC",  ovr:97,  sell:false, cliff:false, ceiling:"Elite starter through 2027",   note:"Dynasty cornerstone; approaching 30 threshold" },
+  "Caleb Williams":      { age:23, pos:"QB", team:"CHI", ovr:88,  sell:false, cliff:false, ceiling:"Franchise QB1 if scheme clicks",note:"Top overall pick 2024; enormous upside" },
+  "Jayden Daniels":      { age:24, pos:"QB", team:"WSH", ovr:90,  sell:false, cliff:false, ceiling:"Top-5 dynasty QB by 2026",     note:"Rookie sensation 2024; elite rushing floor" },
+  "Drake Maye":          { age:22, pos:"QB", team:"NE",  ovr:85,  sell:false, cliff:false, ceiling:"Franchise QB1 in 2-3 years",   note:"Elite arm talent; NE situation improving" },
+  "CJ Stroud":           { age:23, pos:"QB", team:"HOU", ovr:89,  sell:false, cliff:false, ceiling:"Top-3 dynasty QB by 2026",     note:"Back-to-back elite seasons; elite WR room" },
+  "Brock Purdy":         { age:24, pos:"QB", team:"SF",  ovr:82,  sell:false, cliff:true,  ceiling:"Elite QB1 if SF scheme intact",note:"System-dependent; Shanahan OC key variable" },
+  "Jalen Hurts":         { age:26, pos:"QB", team:"PHI", ovr:90,  sell:false, cliff:false, ceiling:"Top-3 dynasty QB through 2027",note:"Rushing floor + elite arm; dynasty hold" },
+  // ── RBs ──────────────────────────────────────────────────────
+  "Ashton Jeanty":       { age:21, pos:"RB", team:"LV",  ovr:95,  sell:false, cliff:false, ceiling:"Perennial top-3 dynasty RB",   note:"Generational prospect; Heisman winner" },
+  "Saquon Barkley":      { age:28, pos:"RB", team:"PHI", ovr:84,  sell:true,  cliff:true,  ceiling:"Fading significantly after 2026",note:"Peak-now back; 2-year window at best" },
+  "Breece Hall":         { age:24, pos:"RB", team:"NYJ", ovr:88,  sell:false, cliff:false, ceiling:"Top-5 dynasty RB for 3+ years", note:"Elite youth + talent combo; buy and hold" },
+  "Bijan Robinson":      { age:23, pos:"RB", team:"ATL", ovr:90,  sell:false, cliff:false, ceiling:"Dynasty RB1 for 4+ years",      note:"Elite prospect realized; ATL scheme heavy" },
+  "Jahmyr Gibbs":        { age:23, pos:"RB", team:"DET", ovr:89,  sell:false, cliff:false, ceiling:"Top-5 dynasty RB by 2026",      note:"Electric receiving + rushing in elite offense" },
+  "De'Von Achane":       { age:23, pos:"RB", team:"MIA", ovr:88,  sell:false, cliff:false, ceiling:"Elite RB1 if durability holds", note:"Speed freak; RB1 upside when healthy" },
+  "Jonathan Taylor":     { age:26, pos:"RB", team:"IND", ovr:80,  sell:true,  cliff:true,  ceiling:"Top-10 RB if healthy; cliff risk", note:"Injury history is real concern; monitor" },
+  "Josh Jacobs":         { age:27, pos:"RB", team:"GB",  ovr:78,  sell:true,  cliff:true,  ceiling:"Solid RB2; sell window is now", note:"Entering decline window at 27" },
+  "Travis Etienne":      { age:26, pos:"RB", team:"JAX", ovr:79,  sell:true,  cliff:false, ceiling:"RB2 starter if scheme fits",    note:"Talent is real but JAX situation in flux" },
+  "James Cook":          { age:25, pos:"RB", team:"BUF", ovr:83,  sell:false, cliff:false, ceiling:"Top-10 dynasty RB for 3 years", note:"Elite receiving back in Buffalo's offense" },
+  "Tony Pollard":        { age:28, pos:"RB", team:"TEN", ovr:74,  sell:true,  cliff:true,  ceiling:"Declining — sell ASAP",          note:"Age 28 on rebuilding TEN — cliff incoming" },
+  "Najee Harris":        { age:27, pos:"RB", team:"LAC", ovr:72,  sell:true,  cliff:true,  ceiling:"Bridge back; dynasty fade",      note:"High volume but below-average efficiency" },
+  "David Montgomery":    { age:27, pos:"RB", team:"DET", ovr:74,  sell:true,  cliff:true,  ceiling:"Rotational role; limited upside",note:"Shares backfield with Gibbs; sell window closed" },
+  "Rhamondre Stevenson": { age:26, pos:"RB", team:"NE",  ovr:73,  sell:true,  cliff:false, ceiling:"Streaming RB2 only",            note:"Volume back in improving NE offense" },
+  "Kyren Williams":      { age:25, pos:"RB", team:"LAR", ovr:80,  sell:false, cliff:false, ceiling:"RB1 if healthy in LAR system",  note:"McVay scheme workhorse; ankle durability key" },
+  "Aaron Jones":         { age:30, pos:"RB", team:"MIN", ovr:68,  sell:true,  cliff:true,  ceiling:"Dynasty irrelevant at 30",       note:"Nearly off dynasty boards; cut bait" },
+  "Chuba Hubbard":       { age:26, pos:"RB", team:"CAR", ovr:71,  sell:true,  cliff:false, ceiling:"Streaming back; sell on value", note:"Volume on bad team; limited upside" },
+  "Blake Corum":         { age:23, pos:"RB", team:"LAR", ovr:74,  sell:false, cliff:false, ceiling:"RB2 with RB1 upside if Williams out", note:"Competes with Kyren; boom-bust dart" },
+  "Bucky Irving":        { age:23, pos:"RB", team:"TB",  ovr:78,  sell:false, cliff:false, ceiling:"Top-20 dynasty RB within a year",note:"Efficient back in TB system; dynasty buy" },
+  "Ray Davis":           { age:24, pos:"RB", team:"BUF", ovr:72,  sell:false, cliff:false, ceiling:"RB2 upside in elite offense",   note:"Potential beneficiary if Cook value dips" },
+  // ── WRs ──────────────────────────────────────────────────────
+  "Ja'Marr Chase":       { age:24, pos:"WR", team:"CIN", ovr:99,  sell:false, cliff:false, ceiling:"Perennial dynasty WR1 for 5+ years", note:"Dynasty WR1A — elite talent + elite QB" },
+  "Justin Jefferson":    { age:25, pos:"WR", team:"MIN", ovr:98,  sell:false, cliff:false, ceiling:"Dynasty WR1 through 2029",      note:"Dynasty WR1B — elite routes, elite target share" },
+  "CeeDee Lamb":         { age:25, pos:"WR", team:"DAL", ovr:97,  sell:false, cliff:false, ceiling:"Dynasty WR1 for 4+ years",      note:"Dynasty WR1C — elite volume + efficiency" },
+  "Amon-Ra St. Brown":   { age:25, pos:"WR", team:"DET", ovr:92,  sell:false, cliff:false, ceiling:"Dynasty WR1 for 3+ years",      note:"Route running maestro; elite target share in DET" },
+  "Malik Nabers":        { age:22, pos:"WR", team:"NYG", ovr:90,  sell:false, cliff:false, ceiling:"Dynasty WR1 once QB stabilizes",note:"Elite 2024 rookie; massive upside ahead" },
+  "Marvin Harrison Jr.": { age:22, pos:"WR", team:"ARI", ovr:89,  sell:false, cliff:false, ceiling:"Elite dynasty WR1 in 2-3 years",note:"Top 2024 pick; dynasty buy while developing" },
+  "Brian Thomas Jr.":    { age:23, pos:"WR", team:"JAX", ovr:87,  sell:false, cliff:false, ceiling:"Dynasty WR1 upside if JAX improves", note:"Elite speed; breakout 2024 rookie" },
+  "Travis Hunter":       { age:21, pos:"WR", team:"JAX", ovr:88,  sell:false, cliff:false, ceiling:"Dynasty WR1 ceiling if role primary", note:"Elite 2025 prospect; two-sport star" },
+  "Rashee Rice":         { age:25, pos:"WR", team:"KC",  ovr:85,  sell:false, cliff:false, ceiling:"Dynasty WR1 with Mahomes if eligible", note:"Mahomes WR1; legal status is dynasty risk" },
+  "Puka Nacua":          { age:24, pos:"WR", team:"LAR", ovr:84,  sell:false, cliff:false, ceiling:"Dynasty WR2/flex for 4+ years", note:"McVay slot monster; elite YAC + routes" },
+  "Davante Adams":       { age:32, pos:"WR", team:"NYJ", ovr:72,  sell:true,  cliff:true,  ceiling:"1-2 years left; sell for any value", note:"All-time great but age 32 — dynasty fade" },
+  "Stefon Diggs":        { age:31, pos:"WR", team:"HOU", ovr:70,  sell:true,  cliff:true,  ceiling:"Near end of dynasty relevance",  note:"Age 31 + injury history — cut bait" },
+  "Tyreek Hill":         { age:31, pos:"WR", team:"MIA", ovr:76,  sell:true,  cliff:true,  ceiling:"1-2 elite years left, then cliff",note:"Still elite; sell-high window was 2023" },
+  "Garrett Wilson":      { age:25, pos:"WR", team:"NYJ", ovr:88,  sell:false, cliff:false, ceiling:"Dynasty WR1 with stable QB",     note:"Elite talent; QB chaos is the buy signal" },
+  "Drake London":        { age:24, pos:"WR", team:"ATL", ovr:85,  sell:false, cliff:false, ceiling:"Dynasty WR1 with QB upgrade",    note:"Physical freak in Bijan's offense" },
+  "Chris Olave":         { age:24, pos:"WR", team:"NO",  ovr:83,  sell:false, cliff:false, ceiling:"Dynasty WR1 with healthy QB",    note:"Elite route runner; buy low on NO situation" },
+  "Zay Flowers":         { age:24, pos:"WR", team:"BAL", ovr:84,  sell:false, cliff:false, ceiling:"Dynasty WR1 for 3+ years",       note:"Lamar's WR1; dynamic YAC in elite offense" },
+  // ── TEs ──────────────────────────────────────────────────────
+  "Sam LaPorta":         { age:24, pos:"TE", team:"DET", ovr:86,  sell:false, cliff:false, ceiling:"Dynasty TE1 for 4+ years",      note:"Elite 2023 TE rookie; huge target share" },
+  "Trey McBride":        { age:25, pos:"TE", team:"ARI", ovr:88,  sell:false, cliff:false, ceiling:"Dynasty TE1 through 2029",      note:"Breakout TE1 — ascending fast" },
+  "TJ Hockenson":        { age:27, pos:"TE", team:"MIN", ovr:82,  sell:false, cliff:false, ceiling:"Dynasty TE1 if durability holds",note:"Elite when healthy; injury history concern" },
+  "Tucker Kraft":        { age:24, pos:"TE", team:"GB",  ovr:80,  sell:false, cliff:false, ceiling:"Dynasty TE1 upside within 2 years", note:"Jordan Love's security blanket; ascending" },
+  "Kyle Pitts":          { age:25, pos:"TE", team:"ATL", ovr:80,  sell:false, cliff:false, ceiling:"Elite TE1 if targets ever click",note:"Elite athleticism never unlocked; lottery" },
+  "Jake Ferguson":       { age:25, pos:"TE", team:"DAL", ovr:78,  sell:false, cliff:false, ceiling:"Dynasty TE2 with TE1 upside",   note:"DAL's go-to TE; solid target share" },
+  "Evan Engram":         { age:30, pos:"TE", team:"JAX", ovr:72,  sell:true,  cliff:true,  ceiling:"1-2 years of TE1 value, then done", note:"Age 30 on rebuilding JAX; sell now" },
+  "Mark Andrews":        { age:29, pos:"TE", team:"BAL", ovr:80,  sell:false, cliff:true,  ceiling:"2-3 more TE1 seasons, then fade",note:"Still elite with Lamar; know the window" },
+  "Dalton Kincaid":      { age:25, pos:"TE", team:"BUF", ovr:75,  sell:false, cliff:false, ceiling:"Dynasty TE2; streaming upside",  note:"Josh Allen's TE; limited by WR depth" },
+  "Dallas Goedert":      { age:29, pos:"TE", team:"PHI", ovr:82,  sell:true,  cliff:true,  ceiling:"Top-5 TE; window closing fast", note:"Elite when healthy; injury history at 29" },
+};
+
+function playerContext(name){
+  return PLAYER_CONTEXT[name] || null;
+}
+
 function buildObservations(){
   const obs = [];
   const youGetPlayers = state.get.filter(a => a.type !== "pick");
@@ -3037,37 +3146,69 @@ function buildObservations(){
   return obs;
 }
 
-// Archetype-aware verdict text. Leads with the trade shape, quotes raw and
-// adjusted rating totals, flags when the age curve flips which side wins,
-// closes with the grade. Used by the share card.
+// Named-narrative verdict: calls out specific players, cites age/ceiling
+// from PLAYER_CONTEXT, gives "what this trade means" framing.
+// Used by the share card canvas.
 function verdictText(ratingGet, ratingGive, adjGet, adjGive, you, opp, market, archetype){
   const rawDiff = ratingGet - ratingGive;
   const adjDiff = adjGet - adjGive;
   const lines = [];
   const arch = archetype || { label:"EVEN SWAP", tagline:"" };
+
+  // Lead with archetype shape
   lines.push(`<b>${arch.label}</b> — ${arch.tagline}`);
 
+  // Named player narrative
+  const getPlayers = state.get.filter(a => a.type !== "pick");
+  const givePlayers = state.give.filter(a => a.type !== "pick");
+  const topGet  = getPlayers.sort((a,b)=>assetValue(b)-assetValue(a))[0];
+  const topGive = givePlayers.sort((a,b)=>assetValue(b)-assetValue(a))[0];
+
+  if(topGet && topGive){
+    const ctxGet  = playerContext(topGet.n);
+    const ctxGive = playerContext(topGive.n);
+    const ageGet  = ctxGet  ? ctxGet.age  : topGet.a;
+    const ageGive = ctxGive ? ctxGive.age : topGive.a;
+    const ageDelta = ageGet - ageGive;
+
+    if(ageDelta <= -3 && !ctxGet?.sell){
+      lines.push(`You're trading a ${ageGive}-year-old (${topGive.n}) for a ${ageGet}-year-old (${topGet.n}). That's a dynasty investment — you're buying years, not just wins.`);
+      if(ctxGet) lines.push(`${topGet.n}'s ceiling: ${ctxGet.ceiling}.`);
+      if(ctxGive?.sell || ctxGive?.cliff) lines.push(`${topGive.n}'s window is closing — now is the time to convert that value.`);
+    } else if(ageDelta >= 3){
+      lines.push(`You're getting proven production (${topGet.n}, age ${ageGet}) for younger upside (${topGive.n}, age ${ageGive}). Contender move — you're trading runway for wins now.`);
+      if(ctxGive) lines.push(`${topGive.n}'s ceiling: ${ctxGive.ceiling}.`);
+    } else {
+      lines.push(`${topGet.n} for ${topGive.n} — close in age (${ageGet} vs ${ageGive}), this one lives and dies on the value math.`);
+    }
+  } else if(topGet){
+    const ctx = playerContext(topGet.n);
+    lines.push(`You're adding ${topGet.n}${ctx ? ` (age ${ctx.age})` : ""}. ${ctx ? ctx.ceiling + "." : ""}`);
+  } else if(topGive){
+    const ctx = playerContext(topGive.n);
+    lines.push(`You're trading away ${topGive.n}${ctx ? ` (age ${ctx.age})` : ""}. ${ctx && (ctx.sell || ctx.cliff) ? "Good timing if you can extract value here." : ""}`);
+  }
+
+  // Value delta
   if(Math.abs(adjDiff) < 0.20){
     lines.push(`Age-adjusted values are essentially even (${adjGet.toFixed(2)} vs ${adjGive.toFixed(2)}).`);
   } else if(adjDiff > 0){
     const pct = (((adjGet/Math.max(0.01,adjGive))-1)*100).toFixed(1);
-    lines.push(`You come out ahead by <b>${adjDiff.toFixed(2)}</b> age-adjusted value pts (+${pct}%).`);
+    lines.push(`You come out ahead by <b>${adjDiff.toFixed(2)}</b> age-adjusted pts (+${pct}%).`);
   } else {
     const pct = (((adjGive/Math.max(0.01,adjGet))-1)*100).toFixed(1);
-    lines.push(`You give up <b>${(-adjDiff).toFixed(2)}</b> age-adjusted value pts (${pct}% premium paid).`);
+    lines.push(`You give up <b>${(-adjDiff).toFixed(2)}</b> age-adjusted pts (${pct}% premium paid).`);
   }
-  // When raw and adjusted disagree, the age curve is doing the work — say so.
   if(Math.sign(rawDiff) !== Math.sign(adjDiff) && Math.abs(rawDiff) > 0.15 && Math.abs(adjDiff) > 0.15){
     lines.push(`Raw value flips the other way (${rawDiff>0?"+":""}${rawDiff.toFixed(2)}) — the age curve reshaped this one.`);
   }
   lines.push(market.text);
-
   if(you.l === "A+"){
     lines.push(`Your side grades <b>${you.l}</b> — accept it.`);
   } else if(you.l === "A"){
-    lines.push(`Your side grades <b>${you.l}</b> — fair deal, no edge either way.`);
+    lines.push(`Your side grades <b>${you.l}</b> — fair deal.`);
   } else {
-    lines.push(`Your side grades <b>${you.l}</b> — pass unless the roster fit is unusually clean.`);
+    lines.push(`Your side grades <b>${you.l}</b> — pass unless roster fit is unusually clean.`);
   }
   return lines.join(" ");
 }
@@ -3080,7 +3221,15 @@ function side2html(side){
         : `${a.year} ${a.round===1?"1st":a.round===2?"2nd":a.round===3?"3rd":a.round+"th"}`;
       return `<div class="asset pick">${avatarHTML(a)}<div class="info"><div class="nm">${headline}</div><div class="sub">${posTag("PICK")}${pickSlotLabel(a)}</div></div><div class="vl"><span class="num">${assetValue(a).toFixed(2)}</span></div></div>`;
     }
-    return `<div class="asset">${avatarHTML(a)}<div class="info"><div class="nm">${a.n}</div><div class="sub">${posTag(a.p)}${a.t} • Age ${a.a}</div></div><div class="vl"><span class="num">${assetValue(a).toFixed(2)}</span></div></div>`;
+    const ctx = playerContext(a.n);
+    const chipHTML = ctx ? (() => {
+      const flags = [];
+      if(ctx.sell)  flags.push(`<span class="ctx-chip sell">⚠ Sell window</span>`);
+      if(ctx.cliff) flags.push(`<span class="ctx-chip cliff">📉 Cliff risk</span>`);
+      if(!ctx.sell && !ctx.cliff) flags.push(`<span class="ctx-chip hold">⬆ Hold</span>`);
+      return `<div class="ctx-line">Age ${ctx.age} · ${flags.join("")} <span class="ctx-ceiling">${ctx.ceiling}</span></div>`;
+    })() : "";
+    return `<div class="asset">${avatarHTML(a)}<div class="info"><div class="nm">${a.n}</div><div class="sub">${posTag(a.p)}${a.t} • Age ${a.a}</div>${chipHTML}</div><div class="vl"><span class="num">${assetValue(a).toFixed(2)}</span></div></div>`;
   }).join("");
 }
 
@@ -3493,7 +3642,152 @@ function renderVerdict(v){
     </div>
   `;
 
-    body.innerHTML = heroHTML + reactionHTML + breakdownHTML + adjustHTML + ageHTML + posHTML + spreadHTML + marketBand + archReadHTML;
+    // === Section G — NAMED NARRATIVE VERDICT ===
+  const narrativeHTML = (() => {
+    const getPlayers  = state.get.filter(a => a.type !== "pick");
+    const givePlayers = state.give.filter(a => a.type !== "pick");
+    const topGet  = [...getPlayers].sort((a,b)=>assetValue(b)-assetValue(a))[0];
+    const topGive = [...givePlayers].sort((a,b)=>assetValue(b)-assetValue(a))[0];
+    if(!topGet && !topGive) return "";
+
+    // Build player profile chips
+    function profileChip(player, dir){
+      const ctx = playerContext(player.n);
+      const age = ctx ? ctx.age : player.a;
+      const cliffBadge  = ctx && ctx.cliff ? `<span class="nc-badge cliff">📉 Cliff Risk</span>` : "";
+      const sellBadge   = ctx && ctx.sell  ? `<span class="nc-badge sell">⚠ Sell High</span>`  : "";
+      const holdBadge   = ctx && !ctx.sell && !ctx.cliff ? `<span class="nc-badge hold">⬆ Hold Asset</span>` : "";
+      const ceilingLine = ctx ? `<div class="nc-ceiling">${ctx.ceiling}</div>` : "";
+      const noteLine    = ctx ? `<div class="nc-note">${ctx.note}</div>` : "";
+      const dirCls = dir === "get" ? "get" : "give";
+      const dirLabel = dir === "get" ? "↑ YOU GET" : "↓ YOU GIVE";
+      return `
+        <div class="nc-player ${dirCls}">
+          <div class="nc-player-label">${dirLabel}</div>
+          <div class="nc-player-name">${player.n}</div>
+          <div class="nc-player-meta">Age ${age} · ${player.p} · ${player.t}</div>
+          <div class="nc-badges">${sellBadge}${cliffBadge}${holdBadge}</div>
+          ${ceilingLine}
+          ${noteLine}
+        </div>`;
+    }
+
+    // Build narrative paragraph
+    let narrativePara = "";
+    if(topGet && topGive){
+      const ctxGet  = playerContext(topGet.n);
+      const ctxGive = playerContext(topGive.n);
+      const ageGet  = ctxGet  ? ctxGet.age  : topGet.a;
+      const ageGive = ctxGive ? ctxGive.age : topGive.a;
+      const ageDelta = ageGet - ageGive;
+
+      if(ageDelta <= -3 && !(ctxGet?.sell)){
+        narrativePara = `You're trading a <b>${ageGive}-year-old</b> (${topGive.n}) for a <b>${ageGet}-year-old</b> (${topGet.n}). That's a dynasty rebuild move — you're buying <em>years</em>, not just wins. `;
+        if(ctxGet && ctxGive){
+          if(ctxGive.sell || ctxGive.cliff){
+            narrativePara += `${topGive.n} is peak-value-now; ${topGet.n} is the long-term upside play. `;
+          } else {
+            narrativePara += `Both have value — this is about when you want to compete. `;
+          }
+          narrativePara += `${topGet.n}'s ceiling: <em>${ctxGet.ceiling}</em>.`;
+        }
+      } else if(ageDelta >= 3){
+        narrativePara = `You're giving up younger upside (${topGive.n}, age ${ageGive}) for proven production (${topGet.n}, age ${ageGet}). `;
+        if(ctxGive?.cliff || ctxGive?.sell){
+          narrativePara += `${topGive.n}'s dynasty clock is ticking — cashing that in now is defensible. `;
+        }
+        narrativePara += `This is a contender move: trading runway for wins right now. `;
+        if(ctxGive) narrativePara += `Note: ${topGive.n} projects as <em>${ctxGive.ceiling}</em>.`;
+      } else {
+        narrativePara = `${topGet.n} (age ${ageGet}) for ${topGive.n} (age ${ageGive}) — ages are close, so this one comes down to pure value math and roster fit. `;
+        if(ctxGet && ctxGive){
+          narrativePara += `${topGet.n}: <em>${ctxGet.ceiling}</em>. ${topGive.n}: <em>${ctxGive.ceiling}</em>.`;
+        }
+      }
+    } else if(topGet){
+      const ctx = playerContext(topGet.n);
+      narrativePara = `You're adding <b>${topGet.n}</b>${ctx ? ` (age ${ctx.age})` : ""}. ${ctx ? `Ceiling: <em>${ctx.ceiling}</em>. ${ctx.note}.` : ""}`;
+    } else if(topGive){
+      const ctx = playerContext(topGive.n);
+      narrativePara = `You're sending out <b>${topGive.n}</b>${ctx ? ` (age ${ctx.age})` : ""}. ${ctx && (ctx.sell || ctx.cliff) ? "Sell-high timing is good — market value may be near peak." : ctx ? `Ceiling: <em>${ctx.ceiling}</em>.` : ""}`;
+    }
+
+    const playerChips = [
+      topGet  ? profileChip(topGet, "get")   : "",
+      topGive ? profileChip(topGive, "give") : ""
+    ].join("");
+
+    return `
+      <div class="v2-section">
+        <div class="v2-section-head">📝 NAMED NARRATIVE <span class="sub">what this trade actually means</span></div>
+        <div class="v2-section-body">
+          <div class="nc-players">${playerChips}</div>
+          <div class="nc-para">${narrativePara}</div>
+        </div>
+      </div>
+    `;
+  })();
+
+  // === Section H — NEGOTIATION FRAMING ===
+  const negotiationHTML = (() => {
+    const getPlayers  = state.get.filter(a => a.type !== "pick");
+    const givePlayers = state.give.filter(a => a.type !== "pick");
+    const topGet  = [...getPlayers].sort((a,b)=>assetValue(b)-assetValue(a))[0];
+    const topGive = [...givePlayers].sort((a,b)=>assetValue(b)-assetValue(a))[0];
+    if(!topGet && !topGive) return "";
+
+    const ctxGet  = topGet  ? playerContext(topGet.n)  : null;
+    const ctxGive = topGive ? playerContext(topGive.n) : null;
+    const ageGet  = ctxGet  ? ctxGet.age  : (topGet  ? topGet.a  : 0);
+    const ageGive = ctxGive ? ctxGive.age : (topGive ? topGive.a : 0);
+
+    const bullets = [];
+
+    // Bullet 1: What YOU are sending (make it appealing to them)
+    if(topGive){
+      if(ctxGive?.sell || ctxGive?.cliff){
+        bullets.push(`Tell them: <b>${topGive.n} is producing at peak value right now</b> — this is the exact window to capitalize. Dynasty value rarely holds this long on a ${ageGive}-year-old ${topGive.p}.`);
+      } else if(ctxGive && !ctxGive.sell && !ctxGive.cliff){
+        bullets.push(`Pitch: <b>${topGive.n} is a proven, reliable asset</b> at age ${ageGive}. They're getting known production — zero guesswork required.`);
+      } else {
+        bullets.push(`Emphasize: <b>${topGive.n} has real dynasty value right now</b> — this isn't a flyer, it's a proven commodity.`);
+      }
+    }
+
+    // Bullet 2: What THEY are giving up (why it's fair from their view)
+    if(topGet){
+      if(ctxGet && ageGet <= 23){
+        bullets.push(`Frame: <b>${topGet.n} is a high-risk, high-reward bet</b> — age ${ageGet} with upside, but no guaranteed production. They're getting a lottery ticket, not a sure thing.`);
+      } else if(ctxGet?.sell || ctxGet?.cliff){
+        bullets.push(`Argue: <b>${topGet.n} has legitimate dynasty concerns</b> — age ${ageGet} is not a dynasty asset you build around. This is a fair price to pay for proven value.`);
+      } else {
+        bullets.push(`Point out: <b>${topGet.n} brings real value</b> at age ${ageGet}, but the math should support why this is fair for both sides.`);
+      }
+    }
+
+    // Bullet 3: Value delta framing
+    const adjDiff = v.adjGet - v.adjGive;
+    if(Math.abs(adjDiff) < 0.30){
+      bullets.push(`Close with: <b>The adjusted value is essentially even</b> — this trade is fair market. They're not being robbed; they're getting accurate value for their asset.`);
+    } else if(adjDiff > 0.30){
+      bullets.push(`Soften it: <b>You understand you might be getting a slight edge</b>, but remind them that dynasty value and current-year production don't always align — and your asset fills their lineup need today.`);
+    } else {
+      bullets.push(`Concede: <b>You're paying a slight premium</b>, and you're OK with that — the fit on your roster makes it worth it. Let them feel like they won.`);
+    }
+
+    const bulletHTML = bullets.map(b => `<li>${b}</li>`).join("");
+
+    return `
+      <div class="v2-section v2-negotiation">
+        <div class="v2-section-head">💬 NEGOTIATION FRAMING <span class="sub">how to pitch this trade to your opponent</span></div>
+        <div class="v2-section-body">
+          <ul class="neg-bullets">${bulletHTML}</ul>
+        </div>
+      </div>
+    `;
+  })();
+
+    body.innerHTML = heroHTML + reactionHTML + narrativeHTML + negotiationHTML + breakdownHTML + adjustHTML + ageHTML + posHTML + spreadHTML + marketBand + archReadHTML;
 
   const copyBtn = body.querySelector(".v2-reaction-copy");
   if(copyBtn){
